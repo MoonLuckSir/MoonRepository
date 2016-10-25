@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="lscxSqhis">
+
+	<typeAlias type="com.yitong.commons.model.judicial.LscxSqhis"
+		alias="lscxsqhis" />
+
+	<!-- 使用LscxMb装载结果集 -->
+	<resultMap id="lscxmb" class="lscxsqhis">
+		<result column="SQHISID" property="SQHISID" />
+		<result column="REQ_NO" property="REQ_NO" />
+		<result column="ACTION" property="ACTION" />
+		<result column="OPERATOR" property="OPERATOR" />
+		<result column="OPERTIME" property="OPERTIME" />
+		<result column="OPERORG" property="OPERORG" />
+		<result column="HIS_DESC" property="HIS_DESC" />
+		
+	</resultMap>
+	
+	<!-- 动态查询 and 列表分页 -->
+	<sql id="queryDynSql">
+	    <isNotEmpty prepend="and" property="REQ_NO">
+			u.REQ_NO = '$REQ_NO$'
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="OPERATOR">
+			u.OPERATOR = '$OPERATOR$'
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="OPERORG">
+			u.OPERORG = '$OPERORG$'
+		</isNotEmpty>
+	</sql>
+	
+	
+	<!-- 查询SQL -->
+	<sql id="coreSql">
+		<![CDATA[ select SQHISID, REQ_NO, ACTION, OPERATOR, OPERTIME, OPERORG , HIS_DESC ,ROW_NUMBER() OVER(ORDER BY SQHISID DESC) 
+		AS rn  from ${PUB}.REP_SQHIS u ]]>
+		<dynamic prepend="where">
+			<include refid="queryDynSql" />
+		</dynamic>
+		<![CDATA[ ORDER BY OPERTIME ASC ]]>
+	</sql>
+	
+	<!-- 分页查询 -->
+	<select id="pageQuery" parameterClass="map"
+		resultClass="java.util.HashMap">
+		<include refid="public.pageBegin" />
+		<include refid="coreSql" />
+		<include refid="public.pageEnd" />
+	</select>
+
+	<!-- 分页计数 -->
+	<select id="pageCount" parameterClass="map" resultClass="int">
+		<![CDATA[SELECT count(SQHISID) cnt FROM ${PUB}.REP_SQHIS u ]]>
+		<dynamic prepend="where">
+			<include refid="queryDynSql" />
+		</dynamic>
+	</select>
+	
+	
+	<!-- 新增 -->
+	<insert id="insert" parameterClass="map">
+		<![CDATA[
+		 insert into ${PUB}.REP_SQHIS(SQHISID,REQ_NO,ACTION,OPERATOR,OPERTIME,OPERORG,HIS_DESC)
+		 values(#SQHISID#,#REQ_NO#,#ACTION#,#OPERATOR#,#OPERTIME:TIMESTAMP:NULL#,#OPERORG:VARCHAR:NULL#,#HIS_DESC:VARCHAR:NULL#)
+		]]>
+	</insert>
+
+	
+	<!-- 加载 -->
+	<select id="loadById" parameterClass="string"
+		resultClass="java.util.HashMap">
+		<![CDATA[ select u.* from ${PUB}.REP_SQHIS u 
+		 			where SQHISID = #SQHISID:VARCHAR# ]]>
+	</select>
+	
+	
+	<!-- 查询 -->
+	<select id="query" parameterClass="map"
+		resultClass="java.util.HashMap">
+		<include refid="coreSql" />
+	</select>
+	
+	
+	<!-- 加载角色 -->
+	<select id="loadRoleById" parameterClass="map"
+		resultClass="java.util.HashMap">
+		<![CDATA[ select * from ${PUB}.REP_SQHIS u where REQ_NO = #REQ_NO:VARCHAR# ]]>
+	</select>
+</sqlMap>
+

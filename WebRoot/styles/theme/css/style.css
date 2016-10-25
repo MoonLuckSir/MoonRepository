@@ -1,0 +1,295 @@
+/* CSS Document */
+BODY {
+	margin: 10px;
+	font-size: 12px;
+}
+TD {
+	margin: 0px;
+	font-size: 12px;
+}
+TD.rowSplit {
+	height: 5px;
+}
+img,image{
+	border: 0;
+}
+form{
+	margin:0;border: 0;
+}
+a:link {
+	color: #000;
+	text-decoration: none;
+}
+a:visited {
+	color: #000;
+	text-decoration: none;
+}
+input.btn {
+	background-image: url(../images/main/button_bg.gif);
+	border: 1px solid #6daee2; 
+	padding: 2px;
+	height: 22px;
+	cursor: hand;
+}
+input.btnSelect {
+	background-image: url(../images/main/button_bg.gif);
+	border: 1px solid #6daee2;  
+	cursor: hand;
+}
+input.page_no{
+	width: 35px; 
+	padding: 0px 2px;
+	border: 0px;height: 18px;
+	border-bottom: 1px solid #66e;	
+}
+.fontRed {
+	color: red;
+}
+
+.fontGreen {
+	color: #090;
+}
+
+.fontBlue {
+	color: blue;
+}
+
+.fontBold {
+	font-weight: bold;
+}
+
+table.panel { 
+	background-color: #FAFAFF;
+}
+table.wz {
+	border: 1px solid #ccc;
+	background-image: url(../images/main/tab_buttom.gif);
+}
+label.wz_img{
+	width:24px;
+	padding: 2px;
+	background: url(../images/main/ipod.png) no-repeat 4px 2px;
+}
+
+table.qry { 
+}
+
+table.plst {
+	background-color: #F3F3F3; /**cbe9fd**/
+}
+
+table.lst {
+	background-color: #eee; /**cbe9fd**/
+}
+
+table.lst td {
+	padding: 2px;
+	background-color: #fff;
+	/**border-bottom: 1px dotted #eee;**/
+}
+
+table.lst th {
+	padding: 2px;
+	font-size: 12px;
+	font-weight: normal;
+	background-image: url(../images/main/tab_bg.gif);
+	/**border-bottom: 1px solid #ddd;**/
+}
+
+table.lst a:link {
+	padding: 0px 2px;
+	color: #06c;
+	text-decoration: none;
+}
+
+table.lst a:visited {
+	padding: 0px 2px;
+	color: #06c;
+	text-decoration: none;
+}
+
+tr.list_row0 td{	
+	background-color: #fff;
+}
+
+tr.list_row1 td{
+	background-color: #efe;	
+}
+td.row_no{
+	text-align: right;
+	background: #fff url(../images/main/tab_bg.gif);
+	border-right: 1 solid #fff;
+}
+tr.mover td{
+	background-color: #dcf;	
+}
+
+div.lst_title {
+	height: 100%;
+	padding: 5px;
+	border: 1 solid #DFDFDF;
+	background-image: url(../images/main/tab_title.gif);
+	/***tabletitle.gif**/
+}
+div.lst_area{
+	width: 100%; overflow-y: auto;overflow-x: auto; height: 100%;
+	border-top: 3px solid #6893cf;
+	border-left: 1px solid #6893cf;
+	border-right: 1px solid #6893cf;
+	border-bottom: 1px solid #6893cf;
+	background-color: #fff;
+}
+
+td.lst_content {
+	background-color: #fff;
+}
+
+td.lst_empty {
+	color: #f00;
+	background-color: #fff;
+}
+
+table.lst_toolbar {
+	background-color: #f3f3f3; /**EDF7FE**/
+	border-left: 1 solid #DFDFDF;
+	border-right: 1 solid #DFDFDF;
+	border-bottom: 1 solid #DFDFDF;
+}
+
+table.lst_toolbar td {
+	padding: 5px;
+}
+
+table.detail {
+	background-color: #EDF7FE;
+}
+
+td.detail2 {
+	background-color: #fff;
+}
+
+table.detail3 {
+	background-color: #DFF2FF;
+}
+
+td.msg_title {
+	color: #014F8A;
+	font-weight: bold;
+}
+
+td.detail_title {
+	color: #014F8A;
+	font-size: 16px;
+	font-weight: bold;
+}
+
+td.detail_label {
+	text-align: right;
+	background-color: #EDF7FE;
+}
+
+td.detail_content {
+	padding: 2px 5px;
+	background-color: #fff;
+}
+
+td.detail_toolbar {
+	background-color: #fff;
+}
+
+input.decimal {
+	text-align: right;
+}
+
+input.btnDate2{
+	background-image: url(/Judicial/images/theme/date.gif);
+	background-color: white;
+	border: 0px;
+	height:16px;
+	width:22px;
+	cursor:hand;
+}
+input.btnOrg2{
+	background-image: url(/JisRep/images/theme/home.gif);	
+	background-color: white;
+	border:0px;
+	height:16px;
+	width:22px;
+	cursor:hand;
+}
+input.readonly {
+	color: #555;
+	background-color: #eef;
+	border: 1 solid #DFDFDF;
+	padding: 2px;
+}
+
+textarea.readonly {
+	color: #555;
+	background-color: #eef;
+	border: 1 solid #DFDFDF;
+	overflow: hidden;
+	overflow-y: visible;
+}
+
+div.loading {
+	padding-left: 30px;
+	line-height: 30px;
+	background: #fbfbfb url(../images/main/wait.gif) no-repeat 5px 5px;
+}
+
+span.validate {
+	color: #f00;
+	text-decoration: none;
+	border-style: none;
+}
+
+div.toolbar {
+	border: 1px solid #360;
+	background-color: #ffc;
+	margin: 0 0 .5em 0;
+	padding: 0.2em;
+}
+
+.dirty-cell {
+	background: transparent url(../images/ext/grid/dirty.gif) no-repeat 0 0;
+}
+
+.invalid {
+	background: #fff url(../images/ext/grid/invalid_line.gif) repeat-x
+		bottom;
+	border: 1px solid #dd7870;
+}
+
+.gridToolbar {
+	background-color: #F0F0F0;
+}
+
+.mesWindow {
+	border-top: 3px solid #6893cf;
+	border-left: 1px solid #6893cf;
+	border-right: 1px solid #6893cf;
+	border-bottom: 1px solid #6893cf;
+	background: #fff;
+}
+
+.mesWindowTop {
+	border-bottom: #eee 1px solid;
+	margin: 0px 4px;
+	padding: 3px;
+	font-weight: bold;
+	text-align: left;
+	font-size: 12px;
+}
+
+.mesWindowContent {
+	margin: 4px;
+	font-size: 12px;
+}
+
+/* ¹Ì¶¨±íÍ· */
+.fixedRow {
+	position: relative;
+	top: expression(this . offsetParent . scrollTop);
+	z-index: 10;
+}

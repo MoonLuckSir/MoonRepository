@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="lscxRul">
+
+	<typeAlias type="com.yitong.commons.model.judicial.lscxRul"
+		alias="lscxRulInfo" />
+
+	<!-- 使用LscxRul装载结果集 -->
+	<resultMap id="lscxrul" class="lscxRulInfo">
+		<result column="RULE_ID" property="RULE_ID" />
+		<result column="RULE_NAME" property="RULE_NAME" />
+		<result column="RULE_VALUE" property="RULE_VALUE" />
+		<result column="RULE_DESC" property="RULE_DESC" />
+		<result column="CONMX_NO" property="CONMX_NO" />
+		
+	</resultMap>
+	
+	<!-- 动态查询 and 列表分页 -->
+	<sql id="queryDynSql">
+		<isNotEmpty prepend="and" property="RULE_NAME">
+			u.RULE_NAME like '%$RULE_NAME$%'
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="RULE_ID">
+			u.RULE_ID = '$RULE_ID$'
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="CONMX_NO">
+			u.CONMX_NO = '$CONMX_NO$'
+		</isNotEmpty>
+	</sql>
+	
+	<!-- 查询SQL -->
+	<sql id="coreSql">
+		<![CDATA[ select U.RULE_ID,U.RULE_NAME,U.RULE_VALUE,U.RULE_DESC,U.CONMX_NO,
+	   			O.CONMX_NAME, ORDERXH,ROW_NUMBER() OVER(ORDER BY RULE_ID DESC) AS rn 
+		 from ${PUB}.REP_RULE u left join ${PUB}.REP_CONMX o on u.CONMX_NO = o.CONMX_NO ]]>
+		<dynamic prepend="where">
+			<include refid="queryDynSql" />
+		</dynamic>
+	</sql>
+	<!-- 分页查询 -->
+	<select id="pageQuery" parameterClass="map"
+		resultClass="java.util.HashMap">
+		<include refid="public.pageBegin" />
+		<include refid="coreSql" />
+		<include refid="public.pageEnd" />
+	</select>
+
+	<!-- 分页计数 -->
+	<select id="pageCount" parameterClass="map" resultClass="int">
+		<![CDATA[SELECT count(RULE_ID) cnt FROM ${PUB}.REP_RULE u ]]>
+		<dynamic prepend="where">
+			<include refid="queryDynSql" />
+		</dynamic>
+	</select>
+	<!-- 计数记录数量 -->
+	<select id="maxIndex" parameterClass="string" resultClass="java.util.HashMap">
+		<![CDATA[select 
+		 (case when max(right(RULE_ID,3)) is null then '' else max(right(RULE_ID,3)) end)
+		maxIndex  from ${PUB}.REP_RULE u where CONMX_NO = #CONMX_NO:VARCHAR# ]]>
+	</select>
+	<!-- 新增 -->
+	<insert id="insert" parameterClass="map">
+		<![CDATA[
+		 insert into ${PUB}.REP_RULE(RULE_ID,RULE_NAME,RULE_VALUE,RULE_DESC,CONMX_NO)
+		 values(#RULE_ID#, #RULE_NAME#, #RULE_VALUE#,#RULE_DESC:VARCHAR:NULL#,#CONMX_NO:VARCHAR:NULL#)
+		]]>
+	</insert>
+
+	<update id="updateById" parameterClass="map">
+		<![CDATA[ update ${PUB}.REP_RULE ]]>
+		<!--  -->
+		<dynamic prepend="set">
+			<isNotNull property="RULE_NAME" prepend=","><![CDATA[RULE_NAME = #RULE_NAME#]]></isNotNull>
+			<isNotNull property="RULE_VALUE" prepend=","><![CDATA[RULE_VALUE = #RULE_VALUE#]]></isNotNull>
+			<isNotNull property="RULE_DESC" prepend=","><![CDATA[RULE_DESC = #RULE_DESC#]]></isNotNull>
+			
+		</dynamic>
+		<![CDATA[ where RULE_ID = #RULE_ID:VARCHAR# ]]>
+	</update>
+	<!-- 加载 -->
+	<select id="loadById" parameterClass="string"
+		resultClass="java.util.HashMap">
+		<![CDATA[ SELECT A.RULE_ID,A.RULE_NAME,A.RULE_VALUE,A.RULE_DESC,A.CONMX_NO,
+	   					U.CONMX_NAME,O.REPMOD_NO,O.REP_NO,O.REP_NAME
+  						FROM ${PUB}.REP_RULE A
+   					    LEFT JOIN ${PUB}.REP_CONMX U
+   						ON A.CONMX_NO = U.CONMX_NO
+    					LEFT JOIN ${PUB}.REP_MOD O
+    					on u.REPMOD_NO  =  O.REPMOD_NO
+		 				where A.RULE_ID = #RULE_ID:VARCHAR# ]]>
+	</select>	
+	
+	<select id="getZbxx" parameterClass="string"
+	resultClass="java.util.HashMap">
+	<![CDATA[ SELECT U.CONMX_NO,U.CONMX_NAME,O.REPMOD_NO,O.REP_NO,O.REP_NAME
+  					FROM ${PUB}.REP_CONMX U
+   					LEFT JOIN ${PUB}.REP_MOD O
+   					ON U.REPMOD_NO = O.REPMOD_NO
+	 				where U.CONMX_NO = #CONMX_NO:VARCHAR# ]]>
+	</select>	
+	
+	<!-- 查询 -->
+	<select id="query" parameterClass="map"
+		resultClass="java.util.HashMap">
+		<include refid="coreSql" />
+	</select>
+	<!-- 查询 -->
+	<select id="query1" parameterClass="map"
+		resultClass="java.util.HashMap">
+		<include refid="coreSql" />
+	</select>
+	<!-- 删除 -->
+	<delete id="delete" parameterClass="map">
+		<![CDATA[ delete from ${PUB}.REP_RULE  where RULE_ID = #RULE_ID# ]]>
+	</delete>
+
+
+</sqlMap>
+

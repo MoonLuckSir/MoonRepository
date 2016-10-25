@@ -1,0 +1,300 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="jymx">
+
+	<!-- 动态查询 and 列表分页 -->
+	 <sql id="queryDynSql">
+	 
+		 <isNotEmpty prepend="and" property="APPLICATIONID">
+			v.APPLICATIONID = #APPLICATIONID:VARCHAR:NULL# 
+		</isNotEmpty>
+	 	<isNotEmpty prepend="and" property="STATUS">
+			v.STATUS = #STATUS:VARCHAR:NULL# 
+		</isNotEmpty> 
+		<isNotEmpty prepend="and" property="ksr">
+			<![CDATA[
+				CHAR(DATE(v.QRY_DATE),ISO) >= #ksr:VARCHAR:NULL#
+			]]>
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="jsr">
+			<![CDATA[
+				CHAR(DATE(v.QRY_DATE),ISO) <= #jsr:VARCHAR:NULL#
+			]]>
+		</isNotEmpty>
+		
+	</sql>
+
+	<!-- 查询SQL -->
+	<sql id="coreSql">
+		<![CDATA[ select v.* ,ROW_NUMBER() OVER(ORDER BY v.QRY_DATE DESC) AS rn from ${DBO}.DXZP_JYMXQRY_TASK v ]]>
+		<dynamic prepend="where">
+			<include refid="queryDynSql" />
+		</dynamic> 
+		
+	</sql>
+
+	<!-- 分页查询 -->
+	<select id="pageQuery" parameterClass="map"
+		resultClass="java.util.HashMap">
+		<include refid="public.pageBegin" />
+		<include refid="coreSql" />
+		<include refid="public.pageEnd" />
+	</select>
+
+	<!-- 分页计数 -->
+	<select id="pageCount" parameterClass="map" resultClass="int">
+		<![CDATA[ SELECT count(APPLICATIONID) cnt FROM ${DBO}.DXZP_JYMXQRY_TASK v ]]>
+		 <dynamic prepend="where">
+			<include refid="queryDynSql" />
+		</dynamic> 
+	</select>
+	
+	<!-- 根据固定编号加载 -->
+	<select id="loadById" parameterClass="string"
+		resultClass="java.util.HashMap">
+		<![CDATA[ select * from ${DBO}.DXZP_JYMXQRY_TASK v where v.APPLICATIONID = #APPLICATIONID# ]]>
+	</select>
+	
+	<!-- 查询 -->
+	<select id="query" parameterClass="map"
+		resultClass="java.util.HashMap">
+		<include refid="coreSql" />
+	</select> 
+	
+	<!-- 持卡主体查询SQL -->
+	<sql id="coreSqlCkTask">
+		<![CDATA[ select v.* ,ROW_NUMBER() OVER(ORDER BY v.QRY_DATE DESC) AS rn from ${DBO}.DXZP_CKZTQRY_TASK v ]]>
+		<dynamic prepend="where">
+			<include refid="queryDynSql" />
+		</dynamic> 
+		
+	</sql>
+
+	<!-- 分页查询 -->
+	<select id="pageQueryCkTask" parameterClass="map"
+		resultClass="java.util.HashMap">
+		<include refid="public.pageBegin" />
+		<include refid="coreSqlCkTask" />
+		<include refid="public.pageEnd" />
+	</select>
+
+	<!-- 分页计数 -->
+	<select id="pageCountCkTask" parameterClass="map" resultClass="int">
+		<![CDATA[ SELECT count(APPLICATIONID) cnt FROM ${DBO}.DXZP_CKZTQRY_TASK v ]]>
+		 <dynamic prepend="where">
+			<include refid="queryDynSql" />
+		</dynamic> 
+	</select>
+	
+	<!-- 根据固定编号加载 -->
+	<select id="loadByCkId" parameterClass="string"
+		resultClass="java.util.HashMap">
+		<![CDATA[ select * from ${DBO}.DXZP_CKZTQRY_TASK v where v.APPLICATIONID = #APPLICATIONID# ]]>
+	</select>
+	
+	<!-- 客户全账户查询SQL -->
+	<sql id="coreSqlQzhTask">
+		<![CDATA[ select v.* ,ROW_NUMBER() OVER(ORDER BY v.QRY_DATE DESC) AS rn from ${DBO}.DXZP_QZHCXQRY_TASK v ]]>
+		<dynamic prepend="where">
+			<include refid="queryDynSql" />
+		</dynamic> 
+		
+	</sql>
+
+	<!-- 分页查询 -->
+	<select id="pageQueryQzhTask" parameterClass="map"
+		resultClass="java.util.HashMap">
+		<include refid="public.pageBegin" />
+		<include refid="coreSqlQzhTask" />
+		<include refid="public.pageEnd" />
+	</select>
+
+	<!-- 分页计数 -->
+	<select id="pageCountQzhTask" parameterClass="map" resultClass="int">
+		<![CDATA[ SELECT count(APPLICATIONID) cnt FROM ${DBO}.DXZP_QZHCXQRY_TASK v ]]>
+		 <dynamic prepend="where">
+			<include refid="queryDynSql" />
+		</dynamic> 
+	</select>
+	
+	<!-- 根据固定编号加载 -->
+	<select id="loadByQzhId" parameterClass="string"
+		resultClass="java.util.HashMap">
+		<![CDATA[ select * from ${DBO}.DXZP_QZHCXQRY_TASK v where v.APPLICATIONID = #APPLICATIONID# ]]>
+	</select>
+	
+	<!-- 全账户反馈查询SQL -->
+	<sql id="coreSqlFkTask">
+		<![CDATA[ select v.* ,ROW_NUMBER() OVER(ORDER BY APPLICATIONID DESC) AS rn from ${DBO}.DXZP_ACCTRES_INFO v WHERE v.APPLICATIONID = #APPLICATIONID:VARCHAR:NULL# ]]>		
+	</sql>
+
+	<!-- 分页查询 -->
+	<select id="pageQueryFkTask" parameterClass="map"
+		resultClass="java.util.HashMap">
+		<include refid="public.pageBegin" />
+		<include refid="coreSqlFkTask" />
+		<include refid="public.pageEnd" />
+	</select>
+
+	<!-- 分页计数 -->
+	<select id="pageCountFkTask" parameterClass="map" resultClass="int">
+		<![CDATA[ SELECT count(APPLICATIONID) cnt FROM ${DBO}.DXZP_ACCTRES_INFO v WHERE v.APPLICATIONID = #APPLICATIONID:VARCHAR:NULL# ]]>		 
+	</select>
+	
+	<!-- 根据固定编号加载 -->
+	<select id="loadByFkId" parameterClass="string"
+		resultClass="java.util.HashMap">
+		<![CDATA[ select * from ${DBO}.DXZP_ACCTRES_INFO v WHERE v.APPLICATIONID = #APPLICATIONID:VARCHAR:NULL# ]]>
+	</select>
+	
+	<!-- 账户查询明细反馈查询SQL -->
+	<sql id="coreSqlCxmxTask">
+		<![CDATA[ select v.* ,ROW_NUMBER() OVER(ORDER BY v.TRANSACTIONTIME  DESC) AS rn from ${DBO}.DXZP_TRANSRES_INFO v WHERE v.APPLICATIONID = #APPLICATIONID:VARCHAR:NULL# ]]>		
+	</sql>
+
+	<!-- 分页查询 -->
+	<select id="pageQueryCxmxTask" parameterClass="map"
+		resultClass="java.util.HashMap">
+		<include refid="public.pageBegin" />
+		<include refid="coreSqlCxmxTask" />
+		<include refid="public.pageEnd" />
+	</select>
+
+	<!-- 分页计数 -->
+	<select id="pageCountCxmxTask" parameterClass="map" resultClass="int">
+		<![CDATA[ SELECT count(APPLICATIONID) cnt FROM ${DBO}.DXZP_TRANSRES_INFO v WHERE v.APPLICATIONID = #APPLICATIONID:VARCHAR:NULL# ]]>		 
+	</select>
+	
+	<!-- 根据固定编号加载 -->
+	<select id="loadByCxmxId" parameterClass="map"
+		resultClass="java.util.HashMap"> 
+		<![CDATA[ select * from ${DBO}.DXZP_TRANSRES_INFO t 
+		WHERE t.APPLICATIONID = #APPLICATIONID:VARCHAR:NULL# 
+		AND t.TRANSACTIONTIME = #TRANSACTIONTIME:VARCHAR:NULL#  
+		AND t.TRANSACTIONSERIAL = #TRANSACTIONSERIAL:VARCHAR:NULL#  
+		]]>
+	</select>
+	
+	<!-- 账户持卡主体查询反馈反馈查询SQL -->
+	<sql id="coreSqlCkfkTask">
+		<![CDATA[ select v.* ,ROW_NUMBER() OVER(ORDER BY v.APPLICATIONID DESC) AS rn from ${DBO}.DXZP_CKZTRES_INFO v WHERE v.APPLICATIONID = #APPLICATIONID:VARCHAR:NULL# ]]>
+	</sql>
+
+	<!-- 分页查询 -->
+	<select id="pageQueryCkfkTask" parameterClass="map"
+		resultClass="java.util.HashMap">
+		<include refid="public.pageBegin" />
+		<include refid="coreSqlCkfkTask" />
+		<include refid="public.pageEnd" />
+	</select>
+
+	<!-- 分页计数 -->
+	<select id="pageCountCkfkTask" parameterClass="map" resultClass="int">
+		<![CDATA[ SELECT count(APPLICATIONID) cnt FROM ${DBO}.DXZP_CKZTRES_INFO v WHERE v.APPLICATIONID = #APPLICATIONID:VARCHAR:NULL# ]]>	 
+	</select>
+	
+	<!-- 根据固定编号加载 -->
+	<select id="loadByCkfkId" parameterClass="string"
+		resultClass="java.util.HashMap">
+		<![CDATA[ select * from ${DBO}.DXZP_CKZTRES_INFO v WHERE v.APPLICATIONID = #APPLICATIONID:VARCHAR:NULL# ]]>
+	</select>
+	
+	<!-- 查询账户反馈信息SQL -->
+	<sql id="coreSqlZhTask">
+		<![CDATA[ select v.* ,ROW_NUMBER() OVER(ORDER BY v.APPLICATIONID DESC) AS rn from ${DBO}.DXZP_QZHZHRES_INFO v WHERE v.APPLICATIONID = #APPLICATIONID:VARCHAR:NULL# ]]>	
+	</sql>
+
+	<!-- 分页查询 -->
+	<select id="pageQueryZhTask" parameterClass="map"
+		resultClass="java.util.HashMap">
+		<include refid="public.pageBegin" />
+		<include refid="coreSqlZhTask" />
+		<include refid="public.pageEnd" />
+	</select>
+
+	<!-- 分页计数 -->
+	<select id="pageCountZhTask" parameterClass="map" resultClass="int">
+		<![CDATA[ SELECT count(APPLICATIONID) cnt FROM ${DBO}.DXZP_QZHZHRES_INFO v WHERE v.APPLICATIONID = #APPLICATIONID:VARCHAR:NULL# ]]>		 
+	</select>
+	
+	<!-- 根据固定编号加载 -->
+	<select id="loadByZhId" parameterClass="map"
+		resultClass="java.util.HashMap">
+		<![CDATA[ select * from ${DBO}.DXZP_QZHZHRES_INFO v WHERE 
+			v.APPLICATIONID = #APPLICATIONID:VARCHAR:NULL#
+			
+			AND v.ACCOUNTSERIAL  = #ACCOUNTSERIAL:VARCHAR:NULL# 
+		
+			AND v.CARDNUMBER  = #CARDNUMBER:VARCHAR:NULL# 
+		]]>
+		
+	</select>
+	
+	<!-- 查询冻结信息SQL -->
+	<sql id="coreSqlDjTask">
+		<![CDATA[ select v.* ,ROW_NUMBER() OVER(ORDER BY v.APPLICATIONID) AS rn from ${DBO}.DXZP_QZHDJRES_INFO v WHERE v.APPLICATIONID = #APPLICATIONID:VARCHAR:NULL# ]]>
+	</sql>
+
+	<!-- 分页查询 -->
+	<select id="pageQueryDjTask" parameterClass="map"
+		resultClass="java.util.HashMap">
+		<include refid="public.pageBegin" />
+		<include refid="coreSqlDjTask" />
+		<include refid="public.pageEnd" />
+	</select>
+
+	<!-- 分页计数 -->
+	<select id="pageCountDjTask" parameterClass="map" resultClass="int">
+		<![CDATA[ SELECT count(APPLICATIONID) cnt FROM ${DBO}.DXZP_QZHDJRES_INFO v WHERE v.APPLICATIONID = #APPLICATIONID:VARCHAR:NULL# ]]>	 
+	</select>
+	
+	<!-- 查找交易明细请求 -->
+	<select id="findZhjyqqList" parameterClass="map"  
+		resultClass="java.util.HashMap">
+		<![CDATA[ SELECT * FROM ${DBO}.DXZP_JYMXQRY_TASK v WHERE v.APPLICATIONID IN ($appIds$) ORDER BY v.QRY_DATE desc]]>	 
+	</select>
+	
+	<!-- 查找账户信息结果 -->
+	<select id="findZhxxList" parameterClass="map"  
+		resultClass="java.util.HashMap">
+		<![CDATA[ select * from ${DBO}.DXZP_ACCTRES_INFO v WHERE v.APPLICATIONID IN ($appIds$) ORDER BY v.APPLICATIONID desc]]>	 
+	</select>
+	
+	<!-- 查找交易明细信息结果-->
+	<select id="findJymxList" parameterClass="map"  
+		resultClass="java.util.HashMap">
+		<![CDATA[ select * from ${DBO}.DXZP_TRANSRES_INFO v WHERE v.APPLICATIONID IN ($appIds$) ORDER BY v.APPLICATIONID desc]]>	 
+	</select>
+	
+	<!-- 查找持卡主体查询请求 -->
+	<select id="findCkztqqList" parameterClass="map"  
+		resultClass="java.util.HashMap">
+		<![CDATA[ SELECT * FROM ${DBO}.DXZP_CKZTQRY_TASK v WHERE v.APPLICATIONID IN ($appIds$) ORDER BY v.QRY_DATE desc]]>	 
+	</select>
+	
+	<!-- 查找持卡主体查询结果 -->
+	<select id="findCkztjgList" parameterClass="map"  
+		resultClass="java.util.HashMap">
+		<![CDATA[ SELECT * FROM ${DBO}.DXZP_CKZTRES_INFO v WHERE v.APPLICATIONID IN ($appIds$) ORDER BY v.APPLICATIONID desc]]>	 
+	</select>
+	
+	<!-- 查找全账户查询请求信息 -->
+	<select id="findQzhqqList" parameterClass="map"  
+		resultClass="java.util.HashMap">
+		<![CDATA[ SELECT * FROM ${DBO}.DXZP_QZHCXQRY_TASK v WHERE v.APPLICATIONID IN ($appIds$) ORDER BY v.QRY_DATE desc]]>	 
+	</select>
+	
+	<!-- 查找全账户账号信息 -->
+	<select id="findQzhzhxxList" parameterClass="map"  
+		resultClass="java.util.HashMap">
+		<![CDATA[ SELECT * FROM ${DBO}.DXZP_QZHZHRES_INFO v WHERE v.APPLICATIONID IN ($appIds$) ORDER BY v.APPLICATIONID desc]]>	 
+	</select>
+	
+	<!-- 查找全账户冻结信息 -->
+	<select id="findQzhdjxxList" parameterClass="map"  
+		resultClass="java.util.HashMap">
+		<![CDATA[ SELECT * FROM ${DBO}.DXZP_QZHDJRES_INFO v WHERE v.APPLICATIONID IN ($appIds$) ORDER BY v.APPLICATIONID desc]]>	 
+	</select>
+	
+</sqlMap>
+

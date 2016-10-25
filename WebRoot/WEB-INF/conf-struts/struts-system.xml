@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.2//EN" "http://struts.apache.org/dtds/struts-config_1_2.dtd">
+<struts-config>
+	<action-mappings>
+	
+		<!-- 登陆 -->
+		<action parameter="action" path="/login" scope="request"
+			type="org.springframework.web.struts.DelegatingActionProxy">
+			<forward name="indexGo" path="/pages/index/index.jsp" />
+			<forward name="logout" path="/pages/index/logout.jsp" />
+			<forward name="loginGo" path="/pages/index/login.jsp" />
+			<forward name="setPwd" path="/pages/99/02/990209_M.jsp" />
+		</action> 
+		
+		<action parameter="action" path="/system/menu" scope="request"
+			type="org.springframework.web.struts.DelegatingActionProxy">
+			<forward name="add" path="/pages/99/04/990401_A.jsp" />
+			<forward name="modi" path="/pages/99/04/990403_M.jsp" />
+			<forward name="view" path="/pages/99/04/990405_V.jsp" />
+			<forward name="list" path="/pages/99/04/990410_L.jsp" />
+			<forward name="query" path="/pages/99/04/990430_Q.jsp" /> 
+		</action> 
+		
+		<action parameter="action" path="/system/organ" scope="request"
+			type="org.springframework.web.struts.DelegatingActionProxy">
+			<forward name="list" path="/pages/99/01/990110_L.jsp" />
+		</action> 	
+
+		<action parameter="action" path="/system/role" scope="request"
+			type="org.springframework.web.struts.DelegatingActionProxy">
+			<forward name="add" path="/pages/99/03/990301_A.jsp" />
+			<forward name="modi" path="/pages/99/03/990303_M.jsp" />
+			<forward name="view" path="/pages/99/03/990305_V.jsp" />
+			<forward name="list" path="/pages/99/03/990310_L.jsp" /> 
+			<forward name="view" path="/pages/99/03/990305_V.jsp" />
+			
+			<forward name="alotRpt" path="/pages/99/03/990315_M.jsp" />
+			<forward name="alotUser" path="/pages/99/03/990317_M.jsp" />
+			<forward name="alotMenu" path="/pages/99/03/990319_M.jsp" />
+			
+			<forward name="loadOrgUsers" path="/pages/99/03/990320_L.jsp" />
+			<forward name="loadReports" path="/pages/99/03/990322_L.jsp" />
+			
+		</action> 
+				
+		<action parameter="action" path="/system/user" scope="request"
+			type="org.springframework.web.struts.DelegatingActionProxy">
+			<forward name="list" path="/pages/99/02/990210_L.jsp" />
+			<forward name="modi" path="/pages/99/02/990230_M.jsp" />
+			<forward name="selfM" path="/pages/99/02/990231_M.jsp" />
+			<forward name="setPwd" path="/pages/99/02/990232_M.jsp" />
+			<forward name="view" path="/pages/99/02/990230_V.jsp" />
+			<forward name="add" path="/pages/99/02/990230_A.jsp" />
+			<forward name="query" path="/pages/99/02/990230_Q.jsp" />
+			<forward name="alotRole" path="/pages/99/02/990215_M.jsp" />
+			<forward name="loadUserRoles" path="/pages/99/02/990222_L.jsp" />
+			<forward name="alotRpt" path="/pages/99/02/990217_M.jsp" />
+			<forward name="loadUserRpts" path="/pages/99/02/990232_L.jsp" />
+		</action>
+		
+		<action parameter="action" path="/system/sysvar" scope="request"
+			type="org.springframework.web.struts.DelegatingActionProxy">
+			<forward name="list" path="/pages/99/05/990510_L.jsp" />
+			<forward name="modi" path="/pages/99/05/990501_M.jsp" />
+			<forward name="view" path="/pages/99/05/990510_L.jsp" />
+			<forward name="add" path="/pages/99/05/990501_A.jsp" />
+			<forward name="query" path="/pages/99/05/990510_L.jsp" />
+		</action>		 
+		
+		<action parameter="action" path="/system/paramHis" scope="request"
+			type="org.springframework.web.struts.DelegatingActionProxy">
+			<forward name="list" path="/pages/99/06/990601_L.jsp" />
+			<forward name="modi" path="/pages/99/06/990601_M.jsp" />
+			<forward name="view" path="/pages/99/06/990601_V.jsp" />
+			<forward name="add" path="/pages/99/06/990601_A.jsp" />
+			<forward name="query" path="/pages/99/06/990601_Q.jsp" />
+		</action>
+		
+		<!-- 批量设置 -->
+		<action parameter="action" path="/judicial/batchset" scope="request"
+			type="org.springframework.web.struts.DelegatingActionProxy">
+
+			<forward name="list" path="/pages/judicial/batchset/batchset_L.jsp" />
+			<forward name="add" path="/pages/judicial/batchset/batchset_A.jsp" />
+			<forward name="modi" path="/pages/judicial/batchset/batchset_U.jsp" />
+			<forward name="view" path="/pages/judicial/batchset/batchset_V.jsp" />
+		</action>
+		
+	</action-mappings>
+</struts-config>
+

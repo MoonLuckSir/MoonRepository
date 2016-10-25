@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+           http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
+           http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd"
+	default-autowire="byName">	
+	
+	
+	
+	<bean id="lscxMbService"
+		class="com.yitong.app.service.judicial.lscxmb.LscxMbService">
+	</bean>
+	<bean id="DTBBZXService"
+		class="com.yitong.app.service.judicial.DTBBZXService">
+	</bean>
+	<bean id="mbTjSzService"
+		class="com.yitong.app.service.judicial.mbtjsz.MbTjSzService">
+	</bean>
+	<bean id="lscxSqService"
+		class="com.yitong.app.service.judicial.lscxsq.lscxSqService">
+	</bean>
+	<bean id="lscxColService"
+		class="com.yitong.app.service.judicial.lscxcol.LscxColService">
+	</bean>	
+	<bean id="lscxShService"
+		class="com.yitong.app.service.judicial.lscxsh.lscxShService">
+	</bean>
+	<bean id="lscxRulService"
+		class="com.yitong.app.service.judicial.lscxrul.LscxRulService">
+	</bean>
+	<bean id="lscxYshService"
+		class="com.yitong.app.service.judicial.lscxysh.lscxYshService">
+	</bean>
+	<bean id="selConService"
+		class="com.yitong.app.service.judicial.selConService">
+	</bean>
+	<bean id="lscxExpService"
+		class="com.yitong.app.service.judicial.lscxexp.LscxExpService">
+	</bean>
+	<bean id="lscxHeaService"
+		class="com.yitong.app.service.judicial.lscxhea.LscxHeaService">
+	</bean>
+	<bean id="batchQueryService"
+		class="com.yitong.app.service.judicial.plcx.BatchQueryService">
+	</bean>
+	
+	<bean id="gatsfckService"
+		class="com.yitong.app.service.judicial.gatsfck.GatsfckService">
+	</bean>
+	
+	<bean id="djcxService"
+		class="com.yitong.app.service.judicial.jcysfck.DjcxService">
+	</bean>
+	
+	<bean id="fysfckService"
+		class="com.yitong.app.service.judicial.fysfck.FysfckService">
+	</bean>
+	
+	<bean id="interfaceMethodService"
+		class="com.yitong.app.service.judicial.jcysfck.InterfaceMethodService">
+	</bean>
+	
+	<bean id="jymxService"
+		class="com.yitong.app.service.judicial.dxzpjymx.JymxService">
+	</bean>
+	
+	<bean id="zfdjService"
+		class="com.yitong.app.service.judicial.dxzpzfdj.ZfdjService">
+	</bean>
+</beans>

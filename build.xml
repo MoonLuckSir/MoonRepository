@@ -1,0 +1,107 @@
+﻿<project name="Judicial" default="clean-all" basedir=".">
+	<!-- ====================================================================== 
+	     2011-08-17  11:05 caihai                                                        
+
+	     project		:	Judicial.war
+	     description	:	征信Web
+	                   
+	     ====================================================================== -->
+	<!-- 工程根目录 -->
+	
+	<tstamp>
+			<format property="TODAY" pattern="yyyy-MM-dd"/>		
+	</tstamp>
+	
+	<property name="Judicial.home" value="."/>
+	<!-- 工程根名 -->
+	<property name="war.name" value="Judicial.war"/>
+	<!-- JAVA源文件路径 -->
+	<property name="src.home" value="${Judicial.home}/src"/>		
+	<property name="src.java.home" value="${src.home}/java" />
+	<property name="src.resources.home" value="${src.home}/resource/" />
+	
+	<!-- class文件存放位置 -->
+	<property name="classes.home" value="${Judicial.home}/classes"/>
+	<!-- 发布文件夹 -->
+	<property name="deploy.home" value="../Build/${TODAY}" />
+	<!-- WebRoot路径 -->
+	<property name="web.home" value="${Judicial.home}/WebRoot"/>
+	
+	<!-- 创建工程路径 -->
+	<property name="build.home" value="${Judicial.home}/build"/>
+	<!-- /WEB-INF/classes -->
+	<property name="build.classes" value="${Judicial.home}/WEB-INF/classes"/>
+	<!-- /WEB-INF/lib -->
+	<property name="build.lib" value="${Judicial.home}/WEB-INF/lib"/>
+	<!-- 工程引用包 -->
+	<property name="lib.home" value="${web.home}/WEB-INF/lib"/>
+	
+	
+	<!-- 编译工程所需的JAR包 -->
+	<path id="compile.classpath">
+		<pathelement location="${classes.home}"/>
+		<fileset dir="${lib.home}">
+				<include name="*.jar"/>
+				<include name="*.zip"/>
+		</fileset>
+		<fileset dir="../J2EE1.4_LIB">
+			<include name="*.jar"/>
+			<include name="*.zip"/>
+		</fileset>
+	</path>
+	
+	<!-- 准备工作 -->
+	<target name="prepare">
+		<mkdir dir="${classes.home}"/>
+		<mkdir dir="${deploy.home}"/>
+		<mkdir dir="${build.home}"/>
+		<mkdir dir="${build.home}/WEB-INF"/>
+		<mkdir dir="${build.home}/WEB-INF/classes"/>
+		<mkdir dir="${build.home}/WEB-INF/lib"/>
+	</target>
+	
+	
+	<!-- 编译
+	<target name="compile" depends="prepare">
+		<javac srcdir="${src.home}" destdir="${classes.home}" debug="on" encoding="UTF-8">
+			<classpath refid="compile.classpath"/>
+		</javac>
+	</target>
+ -->	
+	
+	<target name="compile" depends="prepare">
+		<javac destdir="${classes.home}"  debug="on"  deprecation="false" optimize="true" failonerror="true"  encoding="UTF-8">
+			<src path="${src.java.home}:${src.resources.home}"></src>
+			<classpath refid="compile.classpath" />
+		</javac>
+	</target>
+	
+	<!-- 构建临时工程 -->
+	<target name="build" depends="compile">
+		<copy todir="${build.home}">
+			<fileset dir="${web.home}"/>
+		</copy>
+		<copy todir="${build.home}/WEB-INF/classes">
+			<fileset dir="${classes.home}"/>
+		</copy>
+		
+		<copy todir="${build.home}/WEB-INF/classes">		
+			<fileset dir="${src.java.home}">
+				<include name="**/*.properties" />
+				<include name="**/*.xml" />
+			</fileset>
+			<fileset dir="${src.resources.home}">
+				<include name="**/*.properties" />
+				<include name="**/*.xml" />
+			</fileset>
+		</copy>
+		
+		<jar jarfile="${deploy.home}/${war.name}" basedir="${build.home}"/>
+	</target>
+	
+	<!-- 清除 -->
+	<target name="clean-all" depends="build">
+		<delete dir="${build.home}"/>
+		<delete dir="${classes.home}"/>
+	</target>	
+</project>

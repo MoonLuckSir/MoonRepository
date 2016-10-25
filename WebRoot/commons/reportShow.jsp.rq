@@ -1,0 +1,54 @@
+<%@ page contentType="text/html;charset=GBK" %>
+<%@ include file="/commons/taglibs.jsp"%>
+<%@ taglib uri="/WEB-INF/tlds/runqianReport4.tld" prefix="report"%>
+<%@ page import="java.io.*"%>
+<%@ page import="java.util.*"%>
+<%@ page import="com.runqian.report4.usermodel.Context"%>
+<html>
+	<head>
+		<link rel="stylesheet" type="text/css" href="${ctx}/styles/tools.css">
+	</head>
+	<body topmargin=0 leftmargin=0 rightmargin=0 bottomMargin=0>
+<%
+	request.setCharacterEncoding( "GBK" );
+	String report = request.getParameter( "raq" );
+	String excleName= request.getParameter("rptId" );
+	
+	StringBuffer param=new StringBuffer();
+	Enumeration paramNames = request.getParameterNames();
+	if(paramNames!=null){
+		while(paramNames.hasMoreElements()){
+			String paramName = (String) paramNames.nextElement();
+			String paramValue=request.getParameter(paramName);
+			if(paramValue!=null){
+				//把参数拼成name=value;name2=value2;.....的形式
+				param.append(paramName).append("=").append(paramValue).append(";");
+			}
+		}
+	}
+%>
+
+<table align=center>
+	<tr><td>
+		<report:html name="report1" reportFileName="<%=report %>"
+			srcType="file"
+			params="<%=param.toString() %>" scale="1.3" width="-1"
+			funcBarLocation="bottom" separator=" "
+			needSaveAsExcel="yes"
+			needSaveAsWord="no" 
+			needPrint="yes"
+			savePrintSetup="yes" printedRaq="<%=report %>"			
+			saveAsName="<%=excleName %>" needScroll="no" needPageMark="yes"
+			firstPageLabel="<input type='button' class='button' value='首 页'>"
+			prevPageLabel="<input  type='button' class='button' value='上一页'>"
+			nextPageLabel="<input  type='button' class='button' value='下一页'>"
+			lastPageLabel="<input  type='button' class='button' value='尾　页'>"
+			pageMarkLabel="第{currPage}页 共{totalPage}页"			
+			excelLabel="<input  type='button' class='button' value='导出Excel'>"
+			printLabel="<input type='button' class='button' value='打　印'>"			
+			displayNoLinkPageMark="yes"
+		/>
+	</td></tr>
+</table>
+</body>
+</html>

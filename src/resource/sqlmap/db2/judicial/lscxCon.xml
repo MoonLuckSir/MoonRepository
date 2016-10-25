@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="lscxCon">
+
+	<typeAlias type="com.yitong.commons.model.judicial.lscxCon"
+		alias="lscxconInfo" />
+
+	<!-- 使用LscxCon装载结果集 -->
+	<resultMap id="lscxCon" class="lscxconInfo">
+		<result column="CONMX_NO" property="CONMX_NO" />
+		<result column="REPMOD_NO" property="REPMOD_NO" />
+		<result column="CONMX_NAME" property="CONMX_NAME" />
+		<result column="CONMX_TYPE" property="CONMX_TYPE" />
+		<result column="INPUT_TYPE" property="INPUT_TYPE" />
+		<result column="INPUT_VALUE" property="INPUT_VALUE" />
+		<result column="PHYSICAL_NAME" property="PHYSICAL_NAME" />
+		<result column="DEFAULTVAL" property="DEFAULTVAL" />
+		<result column="OPERATOR" property="OPERATOR" />
+		<result column="CONMX_DESC" property="CONMX_DESC" />
+		<result column="ORDERXH" property="ORDERXH" />
+		<result column="ZJCONS" property="ZJCONS" />
+		
+	</resultMap>
+	
+	<!-- 动态查询 and 列表分页 -->
+	<sql id="queryDynSql">
+		<isNotEmpty prepend="and" property="REPMOD_NO">
+			u.REPMOD_NO like '%$REPMOD_NO$%'
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="CONMX_NAME">
+			u.CONMX_NAME like '%$"CONMX_NAME"$%'
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="CONMX_TYPE">
+			u.CONMX_TYPE like '%$CONMX_TYPE$%'
+		</isNotEmpty>
+	</sql>
+	
+	
+	<!-- 查询SQL -->
+	<sql id="coreSql">
+		<![CDATA[ select  u.CONMX_NO, u.REPMOD_NO, CONMX_NAME, CONMX_TYPE, INPUT_TYPE, INPUT_VALUE, PHYSICAL_NAME, DEFAULTVAL, OPERATOR, CONMX_DESC, ORDERXH,ZJCONS,ISJOIN,ISFGF,ISCHECK,ISNOTNULL,ROW_NUMBER() OVER(ORDER BY CONMX_NO DESC ) AS rn 
+		 from ${PUB}.REP_CONMX u LEFT JOIN ${PUB}.REP_MOD o on u.REPMOD_NO=o.REPMOD_NO  ]]>
+		<dynamic prepend="where">
+			<include refid="queryDynSql" />
+		</dynamic>
+	</sql>
+	<!-- 查询SQL -->
+	<sql id="coreSql1">
+		<![CDATA[ select  CONMX_NO, REPMOD_NO, CONMX_NAME, CONMX_TYPE, INPUT_TYPE, INPUT_VALUE, PHYSICAL_NAME, DEFAULTVAL, OPERATOR, CONMX_DESC, ORDERXH ,ZJCONS,ISJOIN,ISFGF,ISCHECK,ISNOTNULL,ROW_NUMBER() OVER(ORDER BY ORDERXH ASC) AS rn  from ${PUB}.REP_CONMX u ]]>
+		<dynamic prepend="where">
+			<include refid="queryDynSql" />
+		</dynamic>
+	</sql>
+	<!-- 分页查询 -->
+	<select id="pageQuery" parameterClass="map"
+		resultClass="java.util.HashMap">
+		<include refid="public.pageBegin" />
+		<include refid="coreSql" />
+		<include refid="public.pageEnd" />
+	</select>
+
+	<!-- 分页计数 -->
+	<select id="pageCount" parameterClass="map" resultClass="int">
+		<![CDATA[SELECT count(CONMX_NO) cnt FROM ${PUB}.REP_CONMX u ]]>
+		<dynamic prepend="where">
+			<include refid="queryDynSql" />
+		</dynamic>
+	</select>
+	<!-- 计数记录数量 -->
+	<select id="maxIndex" parameterClass="string" resultClass="java.util.HashMap">
+		<![CDATA[select 
+		 (case when max(right(CONMX_NO,3)) is null then '' else max(right(CONMX_NO,3)) end)
+		maxIndex  from ${PUB}.REP_CONMX u where REPMOD_NO = #REPMOD_NO:VARCHAR# ]]>
+	</select>
+	<!-- 新增 -->
+	<insert id="insert" parameterClass="map">
+		<![CDATA[
+		 insert into ${PUB}.REP_CONMX(CONMX_NO, CONMX_NAME, REPMOD_NO, CONMX_TYPE, INPUT_TYPE,INPUT_VALUE,PHYSICAL_NAME,
+		 								DEFAULTVAL,OPERATOR,ORDERXH,CONMX_DESC,ZJCONS,ISJOIN,ISFGF)
+		 values(#CONMX_NO#, #CONMX_NAME#, #REPMOD_NO#,#CONMX_TYPE:VARCHAR:NULL#,#INPUT_TYPE:VARCHAR:NULL#,#INPUT_VALUE:VARCHAR:NULL#,
+			 				#PHYSICAL_NAME:VARCHAR:NULL#,#DEFAULTVAL:VARCHAR:NULL#,#OPERATOR:VARCHAR:NULL#,
+			 				#ORDERXH:VARCHAR:NULL#,#CONMX_DESC:NULL#,#ZJCONS:NULL#,#ISJOIN:NULL#,#ISFGF:NULL#)
+		]]>
+	</insert>
+
+
+	<update id="updateById" parameterClass="map">
+		<![CDATA[ update ${PUB}.REP_CONMX ]]>
+		<!--  -->
+		<dynamic prepend="set">
+			<isNotNull property="CONMX_NAME" prepend=","><![CDATA[CONMX_NAME = #CONMX_NAME#]]></isNotNull>
+			<isNotNull property="CONMX_TYPE" prepend=","><![CDATA[CONMX_TYPE = #CONMX_TYPE#]]></isNotNull>
+			<isNotNull property="INPUT_TYPE" prepend=","><![CDATA[INPUT_TYPE = #INPUT_TYPE#]]></isNotNull>
+			<isNotNull property="INPUT_VALUE" prepend=","><![CDATA[INPUT_VALUE = #INPUT_VALUE#]]></isNotNull>
+			<isNotNull property="PHYSICAL_NAME" prepend=","><![CDATA[PHYSICAL_NAME = #PHYSICAL_NAME#]]></isNotNull>
+			<isNotNull property="DEFAULTVAL" prepend=","><![CDATA[DEFAULTVAL = #DEFAULTVAL#]]></isNotNull>
+			<isNotNull property="OPERATOR" prepend=","><![CDATA[OPERATOR = #OPERATOR#]]></isNotNull>
+			<isNotNull property="ZJCONS" prepend=","><![CDATA[ZJCONS = #ZJCONS#]]></isNotNull>
+			<isNotNull property="ORDERXH" prepend=","><![CDATA[ORDERXH = #ORDERXH#]]></isNotNull>
+			<isNotNull property="CONMX_DESC" prepend=","><![CDATA[CONMX_DESC = #CONMX_DESC#]]></isNotNull>
+			<isNotNull property="ISJOIN" prepend=","><![CDATA[ISJOIN = #ISJOIN#]]></isNotNull>
+			<isNotNull property="ISFGF" prepend=","><![CDATA[ISFGF = #ISFGF#]]></isNotNull>
+			<isNotNull property="ISCHECK" prepend=","><![CDATA[ISCHECK = #ISCHECK#]]></isNotNull>
+			<isNotNull property="ISNOTNULL" prepend=","><![CDATA[ISNOTNULL = #ISNOTNULL#]]></isNotNull>
+		</dynamic>
+		<![CDATA[ where CONMX_NO = #CONMX_NO:VARCHAR# ]]>
+	</update>
+
+	<!-- 加载 -->
+	<select id="loadById" parameterClass="string"
+		resultClass="java.util.HashMap">
+		<![CDATA[ select u.* from ${PUB}.REP_CONMX u 
+		 			where CONMX_NO = #CONMX_NO:VARCHAR# ]]>
+	</select>
+	<!-- 查询 -->
+	<select id="query1" parameterClass="map"
+		resultClass="java.util.HashMap">
+		<include refid="coreSql1" />
+	</select>
+	
+	<!-- 查询 -->
+	<select id="query" parameterClass="map"
+		resultClass="java.util.HashMap">
+		<include refid="coreSql" />
+	</select>
+	<!-- 删除 -->
+	<delete id="delete" parameterClass="map">
+		<![CDATA[ delete from ${PUB}.REP_CONMX  where CONMX_NO = #CONMX_NO# ]]>
+	</delete>
+
+</sqlMap>
+

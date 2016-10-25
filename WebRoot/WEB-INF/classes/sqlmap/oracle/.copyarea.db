@@ -1,0 +1,8 @@
+ClearCase CopyAreaDB|4
+vobs\judicial\judicial_vob\Judicial\src\resource\sqlmap\oracle
+2
+4
+12:sql-map-config.xml|1|13aaf82dd5e|6d5|53ec8fb3|4f1a068a1e7c11e28ad13440b5b041b8|0
+f:ibatis-page.xml|1|13aaf82d987|6a9|5ff1cbe|4eea066e1e7c11e28ad13440b5b041b8|0
+6:hisrep|2|0|0|0|4c5a05021e7c11e28ad13440b5b041b8|0
+6:system|2|0|0|0|4bda04ae1e7c11e28ad13440b5b041b8|0

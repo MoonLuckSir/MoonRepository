@@ -1,0 +1,7 @@
+ClearCase CopyAreaDB|4
+vobs\judicial\judicial_vob\Judicial\src\resource\sqlmap\mssql
+2
+3
+12:sql-map-config.xml|1|13aaf832667|348|809827f9|55aa0a7a1e7c11e28ad13440b5b041b8|0
+f:ibatis-page.xml|1|13aaf832291|222|6c19a961|556a0a5e1e7c11e28ad13440b5b041b8|0
+6:system|2|0|0|0|540a097e1e7c11e28ad13440b5b041b8|0

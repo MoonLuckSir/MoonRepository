@@ -1,0 +1,202 @@
+<html>
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+		<meta http-equiv="cache-control" content="no-cache">
+		<meta http-equiv="expires" content="0">
+		<link rel="stylesheet" type="text/css" href="../../styles/theme/css/style.css"> 
+		<link rel="stylesheet" type="text/css" href="../../styles/theme/css/tools.css"> 
+		<title>菜单列表</title>
+	</head>
+	<body>
+		<table width="100%" height="100%" border="0" cellspacing="0" cellpadding="0"> 
+			<tr>
+				<td height="27">
+					<table width="100%" height="100%" cellspacing="0" cellpadding="0"
+						class="wz">
+						<tr>
+							<td width="28" align="center"><label class="wz_img"></label></td>
+							<td>  
+								当前位置：系统管理 &gt;&gt; 菜单管理 &gt;&gt; 菜单列表
+							</td> 
+							<td width="50" align="right">&nbsp;</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<tr><td class="rowSplit"></td></tr>
+			<tr>
+				<td height="20">
+					<table width="100%" border="0" cellpadding="2"
+						cellspacing="0" class="qry">
+						<tr>
+							<td width="120" align="center">
+								报表编号名称查询：
+							</td>
+							<td align="left">
+								<input type="text" name="rptName" size="30" value="">
+								<input type="button" class="btn" value="查 询" onclick="query()">
+								<input type="button" class="btn" value="返 回"
+									onclick="history.back();" />
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+			<tr><td class="rowSplit"></td></tr>
+			<tr>
+				<td height="30">
+					<div class="lst_title"> 
+						<input type="button" class="btn" value="增 加" />
+						<input type="button" class="btn" value="增 加" />
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td valign="top">
+					<div class="lst_area"> 
+						<table width="100%" border="0" cellpadding="0" cellspacing="1"
+							class="lst">
+							<tr>
+								<th width="130" height="25">
+									菜单编号
+								</th>
+								<th width="318" align="center">
+									菜单名称
+								</th>
+								<th width="130" align="center">
+									上级菜单
+								</th>
+								<th align="center">
+									备注
+								</th>
+								<th width="100" align="center">
+									排序
+								</th>
+								<th width="120">
+									操作
+								</th>
+							</tr> 
+							<tr class="list_row0" onmouseover="mover(this)" onmouseout="mout(this)">
+								<td height="25" align="center">
+									${rst.menuId }
+								</td>
+								<td class="lst_content">
+									${rst.menuName}<br>
+									${rst.menuName}									
+								</td>
+								<td align="center">
+									${rst.parentId}
+								</td>
+								<td>
+									${rst.menuDesc}
+								</td>
+								<td align="center">
+									${rst.menuIndex}
+								</td> 
+								<td align="center">
+									-
+									<a href="javascript:modifyMenu('${rst.menuId }')">修改</a>-
+									<a href="javascript:deleteMenu('${rst.menuId }')">删除</a>-
+								</td>
+							</tr>  
+							<tr class="list_row1" onmouseover="mover(this)" onmouseout="mout(this)">
+								<td height="25" align="center">
+									${rst.menuId }
+								</td>
+								<td class="lst_content">
+									${rst.menuName}
+								</td>
+								<td align="center">
+									${rst.parentId}
+								</td>
+								<td>
+									${rst.menuDesc}
+								</td>
+								<td align="center">
+									${rst.menuIndex}
+								</td> 
+								<td align="center">
+									-
+									<a href="javascript:modifyMenu('${rst.menuId }')">修改</a>-
+									<a href="javascript:deleteMenu('${rst.menuId }')">删除</a>-
+								</td>
+							</tr>   
+							<tr class="list_row0" onmouseover="mover(this)" onmouseout="mout(this)">
+								<td height="25" align="center">
+									${rst.menuId }
+								</td>
+								<td class="lst_content">
+									${rst.menuName}
+								</td>
+								<td align="center">
+									${rst.parentId}
+								</td>
+								<td>
+									${rst.menuDesc}
+								</td>
+								<td align="center">
+									${rst.menuIndex}
+								</td> 
+								<td align="center">
+									-
+									<a href="javascript:modifyMenu('${rst.menuId }')">修改</a>-
+									<a href="javascript:deleteMenu('${rst.menuId }')">删除</a>-
+								</td>
+							</tr>  
+							<tr class="list_row1" onmouseover="mover(this)" onmouseout="mout(this)">
+								<td height="25" align="center">
+									${rst.menuId }
+								</td>
+								<td class="lst_content">
+									${rst.menuName}
+								</td>
+								<td align="center">
+									${rst.parentId}
+								</td>
+								<td>
+									${rst.menuDesc}
+								</td>
+								<td align="center">
+									${rst.menuIndex}
+								</td> 
+								<td align="center">
+									-
+									<a href="javascript:modifyMenu('${rst.menuId }')">修改</a>-
+									<a href="javascript:deleteMenu('${rst.menuId }')">删除</a>-
+								</td>
+							</tr>   
+						</table>
+					</div>
+				</td>
+			</tr>
+			<tr>
+				<td height="30" align="center">
+					<table width="100%" height="100%" border="0" cellpadding="0" cellspacing="0" class="lst_toolbar">
+						<tr>
+							<td>【第１页】【共１页】【１０条记录】页码：<input class="page_no">
+							<a href="#">快速进入<span class="lastPage"></span></a></td>
+							<td align="right">
+								<a><span class="firstPage"></span></a>
+								<a><span class="prevPage"></span></a>
+								【第１页】
+								<a><span class="nextPage"></span></a>
+								<a><span class="lastPage"></span></a>
+							</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+		</table>
+	</body>
+	<script type="text/javascript">
+	
+function mover(obj){
+	obj.oldClass=obj.className;
+	obj.className="mover";
+}
+
+function mout(obj){
+	obj.className=obj.oldClass;
+}
+	</script>
+</html>

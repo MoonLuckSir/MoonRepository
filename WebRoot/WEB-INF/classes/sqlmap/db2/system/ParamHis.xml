@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="paramHis">
+
+	<!-- 动态查询 and 列表分页 -->
+	<sql id="queryDynSql">
+		<isNotEmpty prepend="and" property="tabSchema">
+			TABSCHEMA like '%$tabSchema$%'
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="tabShotName">
+			TABSHOTNAME like '%$tabShotName$%'
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="tabState">
+			TABSTATE = #tabState#
+		</isNotEmpty>
+	</sql>
+
+	<!-- 查询SQL -->
+	<sql id="coreSql">
+		<![CDATA[ select ID, TABSCHEMA, TABSHOTNAME, TABYEAR, TABTYPE,TABSTATE,TABCOL,TABCRC,
+		                 ROW_NUMBER() OVER(ORDER BY ID DESC ) AS rn  
+				  from ${HISUSR}.PARAM_HIS]]>
+		<dynamic prepend="where">
+			<include refid="queryDynSql" />
+		</dynamic>
+	</sql>
+
+	<!-- 分页查询 -->
+	<select id="pageQuery" parameterClass="map"
+		resultClass="java.util.HashMap">
+		<include refid="public.pageBegin" />
+		<include refid="coreSql" />
+		<include refid="public.pageEnd" />
+	</select>
+
+	<!-- 分页计数 -->
+	<select id="pageCount" parameterClass="map" resultClass="int">
+		<![CDATA[SELECT count(1) cnt FROM ${HISUSR}.PARAM_HIS]]>
+		<dynamic prepend="where">
+			<include refid="queryDynSql" />
+		</dynamic>
+	</select>
+	
+	<!-- 加载 -->
+	<select id="loadById" parameterClass="string"
+		resultClass="java.util.HashMap">
+		<![CDATA[ select ID, TABSCHEMA, TABSHOTNAME, TABYEAR, TABTYPE,TABSTATE,TABCOL,TABCRC
+				  from ${HISUSR}.PARAM_HIS where  ID = #id#  ]]>
+	</select>
+	
+
+	<insert id="insert" parameterClass="map">
+		<![CDATA[
+		 insert into ${HISUSR}.PARAM_HIS(ID, TABSCHEMA, TABSHOTNAME, TABYEAR, TABTYPE,TABSTATE,TABCOL,TABCRC)
+		 values(#id#, #tabSchema#,#tabShotName#, #tabYear#,#tabType#, #tabState#,#tabCol#,#tabcrc#)
+		]]>
+	</insert>
+
+	<update id="updateById" parameterClass="map">
+		<![CDATA[ update ${HISUSR}.PARAM_HIS ]]>
+		<dynamic prepend="set">
+			<isNotNull property="tabSchema" prepend=","><![CDATA[TABSCHEMA = #tabSchema#]]></isNotNull>
+			<isNotNull property="tabShotName" prepend=","><![CDATA[TABSHOTNAME = #tabShotName#]]></isNotNull>
+			<isNotNull property="tabYear" prepend=","><![CDATA[TABYEAR = #tabYear#]]></isNotNull>
+			<isNotNull property="tabType" prepend=","><![CDATA[TABTYPE = #tabType#]]></isNotNull>
+			<isNotNull property="tabState" prepend=","><![CDATA[TABSTATE = #tabState#]]></isNotNull>
+			<isNotNull property="tabCol" prepend=","><![CDATA[TABCOL = #tabCol#]]></isNotNull>
+			<isNotNull property="tabcrc" prepend=","><![CDATA[TABCRC = #tabcrc#]]></isNotNull>
+		</dynamic>
+		<![CDATA[ where ID = #id# ]]>
+	</update>
+
+	<!-- 删除 -->
+	<delete id="delete" parameterClass="map">
+		<![CDATA[ delete from ${HISUSR}.PARAM_HIS  where ID = #id# ]]>
+	</delete>
+</sqlMap>

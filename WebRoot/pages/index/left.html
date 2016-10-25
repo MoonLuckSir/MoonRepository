@@ -1,0 +1,119 @@
+<html>
+	<head>
+	   <title>menu</title>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<meta http-equiv="cache-control" content="no-cache">
+        <meta http-equiv="expires" content="0">
+		<link rel="stylesheet" type="text/css" href="../../styles/theme/css/left.css" />
+		<link rel="stylesheet" type="text/css" href="../../assets/css/treeview/treeview.css" />
+		<link rel="stylesheet" type="text/css" href="../../assets/css/treeview/assets/treeview-menu.css" /> 
+		<script type="text/javascript" src="../../scripts/yui/yahoo-min.js"></script>
+		<script type="text/javascript" src="../../scripts/yui/event-min.js"></script>
+		<script type="text/javascript" src="../../scripts/yui/connection-min.js"></script>
+		<script type="text/javascript" src="../../scripts/yui/dom-min.js"></script>
+		<script type="text/javascript" src="../../scripts/yui/treeview-min.js"></script> 
+	</head>
+	<body style="margin: 0px;background-color: #eee;"> 
+	 <table height="100%"  width="219" border="0" cellpadding="0" cellspacing="0" align="right"> 
+	    <tr>
+            <td height="5" style="background-color:#fff;"></td>
+        </tr>
+	    <tr>
+            <td height="82">
+            	<img id="model" src="../../images/left/bbcx.gif" border="0">
+            </td>
+        </tr>
+        <tr>
+            <td valign="top" background="../../images/left/tree_02.gif"> 
+                <div id="treeMenus" style="width:100%;height:100%;overflow-y: auto;padding:2px 5px;"></div>    
+            </td>
+        </tr>
+	 	<tr>
+	 		<td valign="bottom" height="22" background="../../images/left/tree_03.gif">
+	 		</td>
+	 	</tr> 
+	    <tr>
+            <td height="5" style="background-color:#fff;"></td>
+        </tr>
+	 </table> 
+	 <div style="display:none">
+		<form name="form" action="" target="mainFrame" method="post"></form>
+	 </div>
+	</body>
+	<script type="text/javascript">	
+	var tree;
+	var rootImg=document.getElementById("model");
+	var mainFrame=window.top.mainFrame;   		
+	
+    function treeInit() {  
+        buildRandomTextNodeTree(parent.rootMenu);       
+    };
+    
+    function buildRandomTextNodeTree(flg) {    	
+		//instantiate the tree:
+        tree = new YAHOO.widget.TreeView("treeMenus");
+		//The tree is not created in the DOM until this method is called:
+		var oResults=parent.treeData;
+		for (var i=0, j=oResults.size; i<j; i++) {
+			if(oResults.children[i].id==flg){	
+				var node=oResults.children[i];	 
+				if(node.img){
+					rootImg.src="../../images/left/"+node.img;
+				}  
+				loadNodes(tree.getRoot(),node,2);
+				break;
+			}
+		}		
+		tree.subscribe("labelClick", function(node) {	
+			if(!node.isUrl)return;	
+			if(mainFrame.g && mainFrame.g('YT_LOAD_MSG')){
+				return false;
+			}
+			form.action="../../"+node.url;
+	    	if(mainFrame.g){
+				mainFrame.showWaitPanel('');
+				setTimeout("form.submit()",20);
+			}else{ 
+				form.submit();
+			}
+		});
+        tree.draw();
+        tree.expandAll();
+    };   
+    
+    parent.treeCtl.showMenu=function(flg){ 
+    	//parent.indexUrl();//20090626
+    	buildRandomTextNodeTree(flg);
+    	//parent.indexPage.showLeft(); 
+    };
+
+	function loadNodes(node,oResults,lvl){
+		for (var i=0, j=oResults.size; i<j; i++) {
+	   		if(oResults.children[i]){
+	   		    var childNode=oResults.children[i];
+	   			var tempNode = new YAHOO.widget.MenuNode("menu"+i, node, false);
+	   			tempNode.label=" " + childNode.name;
+	   			tempNode.no=childNode.id;
+	   			tempNode.multiExpand=true;	
+	   			tempNode.labelStyle='';
+	   			if(true || childNode.img){
+	   				//tempNode.myimg="../../images/left/" + childNode.img;
+	   				tempNode.myimg="../../images/left/report.gif";
+	   			}
+	   		    var hasChildren=childNode.size>0;	   			  			
+	   			//加載子集
+	   			if(hasChildren){
+	   				tempNode.isUrl=false;
+	   				loadNodes(tempNode,oResults.children[i],lvl+1);
+	   			}else{
+	   				tempNode.isUrl=true;
+	   				tempNode.href="#";
+	   				tempNode.url=childNode.url;
+	   			}
+	   		}					
+		}	
+    };
+
+    YAHOO.util.Event.onDOMReady(treeInit);
+</script>
+</html>

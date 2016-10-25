@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="batchSet">
+
+	<typeAlias type="com.yitong.commons.model.judicial.BatchSetInfo"
+		alias="batchSetInfo" />
+
+	<!-- 使用LscxMb装载结果集 -->
+	<resultMap id="batchSet" class="batchSetInfo">
+		<result column="NUMBER"             property="number" />
+		
+		<result column="BATCH_TYPE"         property="batchType" />
+		<result column="BATCH_TYPE_NAME"    property="batchTypeName" />
+		<result column="NEED_QUERY_DATE"    property="needQueryDate" />
+		
+	    <result column="QUERY_NO_TYPE" 		property="queryNoType" />
+		<result column="IS_VALID" 			property="isValid" />
+	    <result column="EXPORT_COLUMN"		property="exportColumn" />
+		<result column="EXPORT_NAME"		property="exportName" />
+		<result column="QUERY_SQL" 			property="querySQL" />
+	</resultMap>
+	
+	<select resultClass="String" id="getBatchId">
+		SELECT NEXTVAL FOR DBO.BATCHSETID_SEQ FROM SYSIBM.SYSDUMMY1
+	</select>
+	
+	<!-- 动态查询 and 列表分页 -->
+	<sql id="queryDynSql">
+		<isNotEmpty prepend="and" property="number">
+			b.NUMBER = '$number$'
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="batchType">
+			b.BATCH_TYPE = '$batchType$'
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="batchTypeName">
+			b.BATCH_TYPE_NAME = '$batchTypeName$'
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="needQueryDate">
+			b.NEED_QUERY_DATE = '$needQueryDate$'
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="queryNoType">
+			b.QUERY_NO_TYPE = '$queryNoType$'
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="isValid">
+			b.IS_VALID = '$isValid$'
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="exportColumn">
+			b.EXPORT_COLUMN = '$exportColumn$'
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="exportName">
+			b.EXPORT_NAME = '$exportName$'
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="querySQL">
+			b.QUERY_SQL = '$querySQL$'
+		</isNotEmpty>
+	</sql>
+	
+	
+	
+	<!-- 查询SQL -->
+	<sql id="coreSql">
+		<![CDATA[ select NUMBER,BATCH_TYPE,BATCH_TYPE_NAME,EXPORT_NAME,EXPORT_COLUMN,NEED_QUERY_DATE,QUERY_NO_TYPE,IS_VALID,QUERY_SQL,      
+		ROW_NUMBER() OVER(ORDER BY NUMBER) AS rn  from ${PUB}.BATCH_IMPORT_CONFIG b where 1=1 ]]>
+		
+		<dynamic prepend="and">
+			<include refid="queryDynSql" />
+		</dynamic>
+	</sql>
+	
+	<!-- 分页查询 -->
+	<select id="pageQuery" parameterClass="map"
+		resultClass="java.util.HashMap">
+		<include refid="public.pageBegin" />
+		<include refid="coreSql" />
+		<include refid="public.pageEnd" />
+	</select>
+
+	<!-- 分页计数 -->
+	<select id="pageCount" parameterClass="map" resultClass="int">
+		<![CDATA[SELECT count(NUMBER) cnt FROM ${PUB}.BATCH_IMPORT_CONFIG b where 1=1 ]]>
+		<dynamic prepend="and">
+			<include refid="queryDynSql" />
+		</dynamic>
+	</select>
+	
+	<!-- 获取批量设置的账号类型 -->
+	<select id="getImportNoTypes" resultClass="java.util.HashMap">
+		<![CDATA[
+			select var_name,value
+			from ${PUB}.SYS_VAR
+			where var_type = '003'
+		]]>
+	</select>
+	
+	<!-- 从SYS_VAR表获取批量设置交易名称 -->
+	<select id="getBatchTypesFromVAR" resultClass="java.util.HashMap">
+		<![CDATA[
+			select VAR_NAME,VALUE
+			from ${PUB}.SYS_VAR where VAR_TYPE = '002' ORDER BY VALUE
+		]]>
+	</select>
+	
+	<!-- 从BATCH_IMPORT_CONFIG表获取批量设置交易名称 -->
+	<select id="getBatchTypesConfig" resultClass="java.util.HashMap">
+		<![CDATA[
+			select BATCH_TYPE,BATCH_TYPE_NAME
+			from ${PUB}.BATCH_IMPORT_CONFIG ORDER BY BATCH_TYPE
+		]]>
+	</select>
+	
+	<!-- 从BATCH_IMPORT_CONFIG表获取有效的批量设置交易名称 -->
+	<select id="getBatchTypesQy" resultClass="java.util.HashMap">
+		<![CDATA[
+			select BATCH_TYPE,BATCH_TYPE_NAME
+			from ${PUB}.BATCH_IMPORT_CONFIG where IS_VALID = 'Y'
+		]]>
+	</select>
+	
+	<!-- 新增批量设置信息 -->
+	<insert id="insert" parameterClass="map">
+		<![CDATA[
+		 insert into ${PUB}.BATCH_IMPORT_CONFIG(NUMBER, BATCH_TYPE, BATCH_TYPE_NAME, NEED_QUERY_DATE, QUERY_NO_TYPE,IS_VALID,EXPORT_COLUMN,EXPORT_NAME,QUERY_SQL)
+		 values(#number#, #batchType#, #batchTypeName#,#needQueryDate#,#queryNoType#,#isValid#,#exportColumn#,#exportName#,#querySQL#)
+		]]>
+	</insert>
+
+	<!-- 更新批量设置信息 -->
+	<update id="updateById" parameterClass="map">
+		<![CDATA[ update ${PUB}.BATCH_IMPORT_CONFIG ]]>
+		<dynamic prepend="set">
+			<isNotNull property="number" prepend=","><![CDATA[NUMBER = #number#]]></isNotNull>
+			
+			<isNotNull property="batchType" prepend=","><![CDATA[BATCH_TYPE = #batchType#]]></isNotNull>
+			<isNotNull property="batchTypeName" prepend=","><![CDATA[BATCH_TYPE_NAME = #batchTypeName#]]></isNotNull>
+			<isNotNull property="needQueryDate" prepend=","><![CDATA[NEED_QUERY_DATE = #needQueryDate#]]></isNotNull>
+			<isNotNull property="queryNoType" prepend=","><![CDATA[QUERY_NO_TYPE = #queryNoType#]]></isNotNull>
+			
+			<isNotNull property="isValid" prepend=","><![CDATA[IS_VALID = #isValid#]]></isNotNull>
+			<isNotNull property="exportColumn" prepend=","><![CDATA[EXPORT_COLUMN = #exportColumn#]]></isNotNull>
+			<isNotNull property="exportName" prepend=","><![CDATA[EXPORT_NAME = #exportName#]]></isNotNull>
+			<isNotNull property="querySQL" prepend=","><![CDATA[QUERY_SQL = #querySQL#]]></isNotNull>
+		</dynamic>
+		<![CDATA[ where NUMBER = #number# ]]>
+	</update>
+	
+	<!-- 查询 -->
+	<select id="query" parameterClass="map"
+		resultClass="java.util.HashMap">
+		<include refid="coreSql" />
+	</select>
+	<!-- 删除 -->
+	<delete id="delete" parameterClass="map">
+		<![CDATA[ delete from ${PUB}.BATCH_IMPORT_CONFIG  where NUMBER = #number# ]]>
+	</delete>
+	
+	<!-- 根据固定编号加载 -->
+	<select id="loadById" parameterClass="string"
+		resultClass="java.util.HashMap">
+		<![CDATA[ select * from ${PUB}.BATCH_IMPORT_CONFIG b where NUMBER = #number# ]]>
+	</select>
+		
+	<!-- 根据交易类型和状态加载-->
+	<select id="loadByType" parameterClass="map"
+		resultClass="java.util.HashMap">
+		<![CDATA[ select * from ${PUB}.BATCH_IMPORT_CONFIG b where BATCH_TYPE = #batchType# and IS_VALID = 'Y']]>
+	</select>
+	 
+	<!-- 根据交易类型从SYS_VAR参数表中加载 -->
+	<select id="loadByBatchTypeFromVAR" parameterClass="string"
+		resultClass="java.util.HashMap">
+		<![CDATA[ SELECT VAR_NAME from ${PUB}.SYS_VAR WHERE VALUE = #batchType# ]]>
+	</select>
+</sqlMap>
+

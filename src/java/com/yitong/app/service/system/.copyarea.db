@@ -1,0 +1,11 @@
+ClearCase CopyAreaDB|4
+vobs\judicial\judicial_vob\Judicial\src\java\com\yitong\app\service\system
+2
+7
+10:MenuService.java|1|13aaf82323b|338|ccad0be2|3c89fa821e7c11e28ad13440b5b041b8|0
+10:UserService.java|1|13aaf823757|c38|7e66dd8e|3cf9faba1e7c11e28ad13440b5b041b8|0
+11:OrganService.java|1|13aaf8230f3|483|4b3a7f4c|3c59fa661e7c11e28ad13440b5b041b8|0
+10:RoleService.java|1|13aaf822d1c|ed1|74dbf2e5|3bb9fa121e7c11e28ad13440b5b041b8|0
+14:ParamHisService.java|1|13afda5f45f|3f2|949548f7|66f0491a2e2811e287c73440b5b041b8|0
+11:LoginService.java|1|13aaf822e64|35d|bc0b1ef1|3be9fa2e1e7c11e28ad13440b5b041b8|0
+12:SysvarService.java|1|13aaf823382|34c|43914b2|3cb9fa9e1e7c11e28ad13440b5b041b8|0

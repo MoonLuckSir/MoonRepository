@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app xmlns="http://java.sun.com/xml/ns/j2ee"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.4"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+	<!-- Struts Action Mapping-->
+	<servlet>
+		<servlet-name>action</servlet-name>
+		<servlet-class>
+			org.apache.struts.action.ActionServlet
+		</servlet-class>
+		<init-param>
+			<param-name>config</param-name>
+			<param-value>
+				/WEB-INF/struts-config.xml,  
+				/WEB-INF/conf-struts/struts-judicial.xml,
+				/WEB-INF/conf-struts/struts-system.xml
+			</param-value>
+		</init-param>
+		<load-on-startup>1</load-on-startup>
+	</servlet>
+	<servlet-mapping>
+		<servlet-name>action</servlet-name>
+		<url-pattern>*.shtml</url-pattern>
+	</servlet-mapping>
+
+	<!-- Character Encoding filter -->
+	<filter>
+		<filter-name>encodingFilter</filter-name>
+		<filter-class>
+			org.springframework.web.filter.CharacterEncodingFilter
+		</filter-class>
+		<init-param>
+			<param-name>encoding</param-name>
+			<param-value>UTF-8</param-value>
+		</init-param>
+	</filter>
+	<filter-mapping>
+		<filter-name>encodingFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+
+	<!--User Session Validate-->
+	<filter>
+		<filter-name>UrlFilter</filter-name>
+		<filter-class>
+			com.yitong.commons.filter.SessionFilter
+		</filter-class>
+		<init-param>
+			<param-name>forwardTo</param-name>
+			<param-value>/pages/index/logout.jsp</param-value>
+		</init-param>
+		<init-param>
+			<param-name>checkedSessionAttribute</param-name>
+			<param-value>user</param-value>
+		</init-param>
+		<init-param>
+			<param-name>openedURL</param-name>
+			<param-value>
+				/index.jsp,/pages/index/index.jsp,/login.shtml,/pages/index/login.jsp,/judicial/interface.shtml
+			</param-value>
+		</init-param>
+		
+	</filter>
+	<filter-mapping>
+		<filter-name>UrlFilter</filter-name>
+		<url-pattern>*.jsp</url-pattern>
+	</filter-mapping>
+	<filter-mapping>
+		<filter-name>UrlFilter</filter-name>
+		<url-pattern>*.shtml</url-pattern>
+	</filter-mapping>
+
+	<!-- session超时定义,单位为分钟 -->
+	<session-config>
+		<session-timeout>30</session-timeout>
+	</session-config>
+
+	<!-- 默认首页定义 -->
+	<welcome-file-list>
+		<welcome-file>/pages/index/login.jsp</welcome-file>
+	</welcome-file-list>
+
+</web-app>
+

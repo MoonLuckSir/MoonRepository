@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.2//EN" "http://struts.apache.org/dtds/struts-config_1_2.dtd">
+<struts-config>
+
+	<global-exceptions>
+		<exception key="BusinessException"
+			type="com.yitong.commons.exception.ServiceException" scope="request"
+			handler="com.yitong.commons.exception.ServiceExceptionHandler"
+			path="/commons/exception.jsp" >
+		</exception>
+	</global-exceptions>
+	
+	<global-forwards>
+		<!-- 空页面 -->
+		<forward name="blank" path="/pages/index/blank.html" />
+		<!-- 正在建设中 -->
+		<forward name="inprogress" path="/commons/inprogress.jsp" />
+		<!-- 失败页面 -->
+		<forward name="failure" path="/commons/failure.jsp" />
+		<!-- 成功页面 -->
+		<forward name="success" path="/commons/success.jsp" />
+		<!-- 失败页面扩展 -->
+		<forward name="failext" path="/commons/failext.jsp" />
+		<!-- 成功页面扩展-->
+		<forward name="succext" path="/commons/succext.jsp" />
+		<!-- 分页报表展现 -->
+		<forward name="rptList" path="/pages/report/reportList.jsp" />
+		<!-- 单页报表展现 -->
+		<forward name="rptView" path="/pages/report/reportView.jsp" />
+		<!-- 混合模板报表 -->
+		<forward name="rptInnerView" path="/commons/reportResult.jsp" />
+		<!-- 报表展现 -->
+		<forward name="reportBrowser" path="/plugin/applet/ReportBrowser.jsp" />
+	</global-forwards>
+	<plug-in
+		className="org.springframework.web.struts.ContextLoaderPlugIn">
+		<set-property property="contextConfigLocation"
+			value="classpath:/spring/applicationContext*.xml;/WEB-INF/conf-service/service-*.xml;/WEB-INF/conf-action/action-*.xml" />
+	</plug-in>
+</struts-config>
+

@@ -1,0 +1,445 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="sfck">
+
+	<typeAlias type="com.yitong.commons.model.judicial.sfck"
+		alias="sfck" />
+	
+	<!-- 动态查询 and 列表分页 -->
+	<sql id="queryDynSql">
+		<isNotEmpty prepend="and" property="CXMB_NAME">
+			ci.CXMB_NAME LIKE '%'||#CXMB_NAME:VARCHAR:NULL#||'%'
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="CXMB_STU">
+			ci.CXMB_STU = #CXMB_STU:VARCHAR:NULL#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="CONDITION_NAME">
+			cc.CONDITION_NAME like '%'||#CONDITION_NAME:VARCHAR:NULL#||'%'
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="RULE_NAME">
+			r.RULE_NAME like '%'||#RULE_NAME:VARCHAR:NULL#||'%'
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="DCMB_NAME">
+			di.DCMB_NAME LIKE '%'||#DCMB_NAME:VARCHAR:NULL#||'%'
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="DCMB_STU">
+			di.DCMB_STU = #DCMB_STU:VARCHAR:NULL#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="COL_NAME">
+			dc.COL_NAME LIKE '%'||#COL_NAME:VARCHAR:NULL#||'%'
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="TASK_NAME">
+			t.TASK_NAME LIKE '%'||#TASK_NAME:VARCHAR:NULL#||'%'
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="TASK_STU">
+			t.TASK_STU = #TASK_STU:VARCHAR:NULL# 
+		</isNotEmpty>
+	</sql>
+
+	<!-- 查询模板列表 -->
+	<!-- 查询SQL -->
+	<sql id="coreSqlCxmb">
+		<![CDATA[ 
+			SELECT ci.*,ROW_NUMBER() OVER(ORDER BY ci.CXMB_ID DESC) AS rn  FROM ${PUB}.CXMB_INFO ci 
+		]]>
+		<dynamic prepend="where">
+			<include refid="queryDynSql" />
+		</dynamic>
+		
+	</sql>
+	<!-- 分页查询 -->
+	<select id="pageQueryCxmb" parameterClass="map"
+		resultClass="java.util.HashMap">
+		<include refid="public.pageBegin" />
+		<include refid="coreSqlCxmb" />
+		<include refid="public.pageEnd" />
+	</select>
+
+	<!-- 分页计数 -->
+	<select id="pageCountCxmb" parameterClass="map" resultClass="int">
+		<![CDATA[
+			SELECT COUNT(1) cnt FROM ${PUB}.CXMB_INFO CI 
+		]]>
+		<dynamic prepend="where">
+			<include refid="queryDynSql" />
+		</dynamic>
+	</select>
+
+
+<!-- 新增 查询模板-->
+	<insert id="addCxmb" parameterClass="map">
+		<![CDATA[
+		 insert into ${PUB}.cxmb_info(cxmb_id, CXMB_NAME, CXMB_USER, CXMB_ORG, CXMB_CRETIME,CXMB_DEPT,CXMB_STU,CXMB_DESC)
+		 values(nextval for ${PUB}.CXMB_SEQ, #CXMB_NAME:VARCHAR:NULL#,#user:VARCHAR:NULL#,#org:VARCHAR:NULL#,CURRENT TIMESTAMP,
+		 		#CXMB_DEPT:VARCHAR:NULL#,'0',#CXMB_DESC:VARCHAR:NULL#)
+		]]>
+	</insert>
+	
+	<!-- 通过模板编号加载模板信息 -->
+	<select id="loadCxmb" parameterClass="string"
+		resultClass="java.util.HashMap">
+		<![CDATA[ 
+			select ci.* from ${PUB}.CXMB_INFO CI where ci.cxmb_id = #CXMB_ID:VARCHAR:NULL#
+		 ]]>
+	</select>
+	
+	<!-- 修改模板信息 -->
+	<update id="modiCxmb" parameterClass="map" >
+		<![CDATA[
+			UPDATE ${PUB}.CXMB_INFO ci SET ci.CXMB_NAME=#CXMB_NAME:VARCHAR:NULL#,ci.CXMB_DEPT=#CXMB_DEPT:VARCHAR:NULL#,ci.CXMB_DESC=#CXMB_DESC:VARCHAR:NULL#
+			WHERE ci.cxmb_id= #CXMB_ID:VARCHAR:NULL#
+		]]>
+	</update>
+	
+	<!-- 删除模板信息 -->
+	<delete id="delCxmb" parameterClass="string">
+		<![CDATA[
+			DELETE FROM ${PUB}.CXMB_INFO ci WHERE ci.cxmb_id= #CXMB_ID:VARCHAR:NULL#
+		]]>
+	</delete>
+	
+	
+	<!-- 修改模板状态信息 -->
+	<update id="updateStu" parameterClass="map" >
+		<![CDATA[
+			UPDATE ${PUB}.CXMB_INFO ci SET ci.CXMB_STU=#CXMB_STU:VARCHAR:NULL#
+			WHERE ci.cxmb_id= #CXMB_ID:VARCHAR:NULL#
+		]]>
+	</update>
+	
+	
+	<!-- 查询模板列表 -->
+	<!-- 查询SQL -->
+	<sql id="coreSqlCon">
+		<![CDATA[ 
+			SELECT cc.*,ci.CXMB_NAME, ROW_NUMBER() OVER(ORDER BY cc.CONDITION_ID DESC) AS rn  FROM ${PUB}.CXMB_CONDITIONS cc  LEFT JOIN  ${PUB}.CXMB_INFO ci on ci.CXMB_ID = cc.CXMB_ID
+			WHERE cc.CXMB_ID = #CXMB_ID:VARCHAR:NULL#
+		]]>
+		<dynamic >
+			<include refid="queryDynSql" />
+		</dynamic>
+		
+	</sql>
+	<!-- 分页查询 -->
+	<select id="pageQueryCon" parameterClass="map"
+		resultClass="java.util.HashMap">
+		<include refid="public.pageBegin" />
+		<include refid="coreSqlCon" />
+		<include refid="public.pageEnd" />
+	</select>
+
+	<!-- 分页计数 -->
+	<select id="pageCountCon" parameterClass="map" resultClass="int">
+		<![CDATA[
+			SELECT COUNT(1) cnt FROM ${PUB}.CXMB_CONDITIONS cc 
+			WHERE cc.CXMB_ID = #CXMB_ID:VARCHAR:NULL#
+		]]>
+		<dynamic >
+			<include refid="queryDynSql" />
+		</dynamic>
+	</select>
+	
+	
+	<!-- 新增 查询模板条件-->
+	<insert id="addCon" parameterClass="map">
+		<![CDATA[
+		 insert into ${PUB}.CXMB_CONDITIONS(CXMB_ID, CONDITION_ID, CONDITION_NAME, PHYSICAL_NAME, INPUT_TYPE,VALUE_TYPE,VALUE_DEF,CONDITION_DESC)
+		 values(#CXMB_ID:VARCHAR:NULL#,nextval for ${PUB}.CON_SEQ,#CONDITION_NAME:VARCHAR:NULL#,#PHYSICAL_NAME:VARCHAR:NULL#,#INPUT_TYPE:VARCHAR:NULL#,
+		 		#VALUE_TYPE:VARCHAR:NULL#,#VALUE_DEF:VARCHAR:NULL#,#CONDITION_DESC:VARCHAR:NULL#)
+		]]>
+	</insert>
+	
+	<!-- 通过模板编号条件编号加载条件信息 -->
+	<select id="loadCon" parameterClass="map"
+		resultClass="java.util.HashMap">
+		<![CDATA[ 
+			select cc.*,ci.CXMB_NAME from ${PUB}.CXMB_CONDITIONS cc LEFT JOIN  ${PUB}.CXMB_INFO ci on ci.CXMB_ID = cc.CXMB_ID where cc.cxmb_id = #CXMB_ID:VARCHAR:NULL# and cc.CONDITION_ID = #CONDITION_ID:VARCHAR:NULL#
+		 ]]>
+	</select>
+	
+	<!-- 校验是否存在相同的物理名 -->
+	<select id="checkCon" parameterClass="map"
+		resultClass="java.util.HashMap">
+		<![CDATA[ 
+			select cc.* from ${PUB}.CXMB_CONDITIONS cc 
+			where cc.PHYSICAL_NAME = #PHYSICAL_NAME:VARCHAR:NULL#  and cc.CXMB_ID = #CXMB_ID:VARCHAR:NULL#
+		 ]]>
+	</select>
+	
+	<!-- 修改模板条件 -->
+	<update id="modiCon" parameterClass="map" >
+		<![CDATA[
+			UPDATE ${PUB}.CXMB_CONDITIONS cc SET cc.CONDITION_NAME=#CONDITION_NAME:VARCHAR:NULL#,cc.INPUT_TYPE=#INPUT_TYPE:VARCHAR:NULL#
+			,cc.VALUE_TYPE=#VALUE_TYPE:VARCHAR:NULL#,cc.VALUE_DEF=#VALUE_DEF:VARCHAR:NULL#,cc.CONDITION_DESC=#CONDITION_DESC:VARCHAR:NULL# WHERE cc.CXMB_ID= #CXMB_ID:VARCHAR:NULL# AND cc.CONDITION_ID= #CONDITION_ID:VARCHAR:NULL# 
+		]]>
+	</update>
+	
+	<!-- 删除模板条件信息 -->
+	<delete id="delCon" parameterClass="string">
+		<![CDATA[
+			DELETE FROM ${PUB}.CXMB_CONDITIONS cc WHERE cc.CONDITION_ID= #CONDITION_ID:VARCHAR:NULL#
+		]]>
+	</delete>
+	
+	<!-- 删除模板条件信息 -->
+	<delete id="delCon2" parameterClass="string">
+		<![CDATA[
+			DELETE FROM ${PUB}.RULE r WHERE r.CONDITION_ID= #CONDITION_ID:VARCHAR:NULL# 
+		]]>
+	</delete>
+	
+	
+	<!-- 规则列表 -->
+	<!-- 查询SQL -->
+	<sql id="coreSqlRule">
+		<![CDATA[ 
+			SELECT r.*,cc.CONDITION_NAME,ROW_NUMBER() OVER(ORDER BY r.RULE_ID DESC) AS rn  FROM ${PUB}.RULE r LEFT JOIN ${PUB}.CXMB_CONDITIONS cc ON r.CONDITION_ID = cc.CONDITION_ID 
+			WHERE r.CONDITION_ID=#CONDITION_ID:VARCHAR:NULL#
+		]]>
+		<dynamic >
+			<include refid="queryDynSql" />
+		</dynamic>
+		
+	</sql>
+	<!-- 分页查询 -->
+	<select id="pageQueryRule" parameterClass="map"
+		resultClass="java.util.HashMap">
+		<include refid="public.pageBegin" />
+		<include refid="coreSqlRule" />
+		<include refid="public.pageEnd" />
+	</select>
+
+	<!-- 分页计数 -->
+	<select id="pageCountRule" parameterClass="map" resultClass="int">
+		<![CDATA[
+			SELECT COUNT(1) cnt FROM ${PUB}.RULE r  WHERE r.CONDITION_ID=#CONDITION_ID:VARCHAR:NULL#
+		]]>
+		<dynamic>
+			<include refid="queryDynSql" />
+		</dynamic>
+	</select>
+	
+	
+	
+	<!-- 新增 查询模板条件-->
+	<insert id="addRule" parameterClass="map">
+		<![CDATA[
+		 insert into ${PUB}.RULE (CONDITION_ID, RULE_ID, RULE_NAME, RULE_VALUE, RULE_DESC)
+		 values (#CONDITION_ID:VARCHAR:NULL#,nextval for ${PUB}.RUL_SEQ,#RULE_NAME:VARCHAR:NULL#,#RULE_VALUE:VARCHAR:NULL#,#RULE_DESC:VARCHAR:NULL#)
+		]]>
+	</insert>
+	
+	<!-- 通过条件编号规则编号加载条件信息 -->
+	<select id="loadRule" parameterClass="map"
+		resultClass="java.util.HashMap">
+		<![CDATA[ 
+			select r.*,cc.CONDITION_NAME from ${PUB}.RULE r LEFT JOIN ${PUB}.CXMB_CONDITIONS cc ON r.CONDITION_ID = cc.CONDITION_ID where r.CONDITION_ID = #CONDITION_ID:VARCHAR:NULL# and r.RULE_ID = #RULE_ID:VARCHAR:NULL#
+		 ]]>
+	</select>
+	
+	<!-- 修改条件规则信息 -->
+	<update id="updateRule" parameterClass="map" >
+		<![CDATA[
+			UPDATE ${PUB}.RULE r SET r.RULE_NAME=#RULE_NAME:VARCHAR:NULL#,r.RULE_VALUE=#RULE_VALUE:VARCHAR:NULL#,r.RULE_DESC = #RULE_DESC:VARCHAR:NULL#
+			WHERE r.CONDITION_ID= #CONDITION_ID:VARCHAR:NULL# AND r.RULE_ID = #RULE_ID:VARCHAR:NULL#
+		]]>
+	</update>
+	
+	<!-- 删除条件规则信息 -->
+	<delete id="delRule" parameterClass="map">
+		<![CDATA[
+			DELETE FROM ${PUB}.RULE r WHERE  r.CONDITION_ID= #CONDITION_ID:VARCHAR:NULL# AND r.RULE_ID = #RULE_ID:VARCHAR:NULL#
+		]]>
+	</delete>
+	
+	<!-- 通过模板编号条件编号加载条件信息 -->
+	<select id="checkRule" parameterClass="map"
+		resultClass="java.util.HashMap">
+		<![CDATA[ 
+			select r.* from ${PUB}.RULE r where r.CONDITION_ID = #CONDITION_ID:VARCHAR:NULL# and r.RULE_NAME = #RULE_NAME:VARCHAR:NULL#
+		 ]]>
+	</select>
+	
+	
+	<!-- 导出模板列表 -->
+	<!-- 查询SQL -->
+	<sql id="coreSqlDcmb">
+		<![CDATA[ 
+			SELECT di.*,ci.CXMB_NAME,ROW_NUMBER() OVER(ORDER BY di.DCMB_ID DESC) AS rn  FROM ${PUB}.DCMB_INFO di LEFT JOIN ${PUB}.cxmb_info ci ON di.CXMB_ID = ci.CXMB_ID 
+			WHERE di.CXMB_ID=#CXMB_ID:VARCHAR:NULL#
+		]]>
+		<dynamic >
+			<include refid="queryDynSql" />
+		</dynamic>
+		
+	</sql>
+	<!-- 分页查询 -->
+	<select id="pageQueryDcmb" parameterClass="map"
+		resultClass="java.util.HashMap">
+		<include refid="public.pageBegin" />
+		<include refid="coreSqlDcmb" />
+		<include refid="public.pageEnd" />
+	</select>
+
+	<!-- 分页计数 -->
+	<select id="pageCountDcmb" parameterClass="map" resultClass="int">
+		<![CDATA[
+			SELECT COUNT(1) cnt FROM ${PUB}.DCMB_INFO di  WHERE di.CXMB_ID=#CXMB_ID:VARCHAR:NULL#
+		]]>
+		<dynamic >
+			<include refid="queryDynSql" />
+		</dynamic>
+	</select>
+	
+	
+	<!-- 新增 查询模板-->
+	<insert id="addDcmb" parameterClass="map">
+		<![CDATA[
+		 insert into ${PUB}.DCMB_INFO (CXMB_ID, DCMB_ID, DCMB_NAME, DCMB_TABLE, DCMB_STU,DCMB_DESC)
+		 values (#CXMB_ID:VARCHAR:NULL#,nextval for ${PUB}.DCMB_SEQ, #DCMB_NAME:VARCHAR:NULL#,#DCMB_TABLE:VARCHAR:NULL#,
+		 		'0',#DCMB_DESC:VARCHAR:NULL#)
+		]]>
+	</insert>
+	
+	<!-- 通过模板编号加载导出模板信息 -->
+	<select id="loadDcmb" parameterClass="string"
+		resultClass="java.util.HashMap">
+		<![CDATA[ 
+			select di.*,ci.CXMB_NAME from ${PUB}.DCMB_INFO di LEFT JOIN ${PUB}.cxmb_info ci ON di.CXMB_ID = ci.CXMB_ID where di.DCMB_ID = #DCMB_ID:VARCHAR:NULL#
+		 ]]>
+	</select>
+	
+	
+	
+	<!-- 校验导出模板对应表是否重复 -->
+	<select id="checkDcmb" parameterClass="map"
+		resultClass="java.util.HashMap">
+		<![CDATA[ 
+			select di.* from ${PUB}.DCMB_INFO di 
+			where di.DCMB_TABLE = #DCMB_TABLE:VARCHAR:NULL# AND di.CXMB_ID = #CXMB_ID:VARCHAR:NULL#
+		 ]]>
+	</select>
+	
+	<!-- 修改导出模板信息 -->
+	<update id="updateDcmb" parameterClass="map" >
+		<![CDATA[
+			UPDATE ${PUB}.DCMB_INFO di SET di.DCMB_NAME=#DCMB_NAME:VARCHAR:NULL#,di.DCMB_TABLE=#DCMB_TABLE:VARCHAR:NULL#,di.DCMB_DESC=#DCMB_DESC:VARCHAR:NULL#
+			WHERE di.cxmb_id= #CXMB_ID:VARCHAR:NULL# AND di.DCMB_ID= #DCMB_ID:VARCHAR:NULL#
+		]]>
+	</update>
+	
+	<!-- 删除导出模板信息 -->
+	<delete id="delDcmb" parameterClass="string">
+		<![CDATA[
+			DELETE FROM ${PUB}.DCMB_INFO di WHERE di.DCMB_ID= #DCMB_ID:VARCHAR:NULL# 
+		]]>
+	</delete>
+	<!-- 删除导出模板信息 -->
+	<delete id="delDcmb2" parameterClass="string">
+		<![CDATA[
+			DELETE FROM ${PUB}.DCMB_COLUMN dc WHERE dc.DCMB_ID= #DCMB_ID:VARCHAR:NULL# 
+		]]>
+	</delete>
+	
+	
+	<!-- 修改导出模板状态信息 -->
+	<update id="updateStuDc" parameterClass="map" >
+		<![CDATA[
+			UPDATE ${PUB}.DCMB_INFO di SET di.DCMB_STU=#DCMB_STU:VARCHAR:NULL#
+			WHERE di.DCMB_ID= #DCMB_ID:VARCHAR:NULL# 
+		]]>
+	</update>
+	
+	
+	<!-- 导出字段列表 -->
+	<!-- 查询SQL -->
+	<sql id="coreSqlDczd">
+		<![CDATA[ 
+			SELECT dc.*,di.DCMB_NAME,ROW_NUMBER() OVER(ORDER BY dc.COL_ID DESC) AS rn  FROM ${PUB}.DCMB_COLUMN dc LEFT JOIN ${PUB}.DCMB_INFO di ON di.DCMB_ID = dc.DCMB_ID
+			WHERE dc.DCMB_ID=#DCMB_ID:VARCHAR:NULL#
+		]]>
+		<dynamic >
+			<include refid="queryDynSql" />
+		</dynamic>
+		
+	</sql>
+	<!-- 分页查询 -->
+	<select id="pageQueryDczd" parameterClass="map"
+		resultClass="java.util.HashMap">
+		<include refid="public.pageBegin" />
+		<include refid="coreSqlDczd" />
+		<include refid="public.pageEnd" />
+	</select>
+
+	<!-- 分页计数 -->
+	<select id="pageCountDczd" parameterClass="map" resultClass="int">
+		<![CDATA[
+			SELECT COUNT(1) cnt FROM ${PUB}.DCMB_COLUMN dc  WHERE dc.DCMB_ID=#DCMB_ID:VARCHAR:NULL#
+		]]>
+		<dynamic >
+			<include refid="queryDynSql" />
+		</dynamic>
+	</select>
+	
+	<!-- 新增 导出字段-->
+	<insert id="addCol" parameterClass="map">
+		<![CDATA[
+		 insert into ${PUB}.DCMB_COLUMN (DCMB_ID, COL_ID, COL_NAME, PHYSICAL_NAME, ORDERXH,COLMX_DESC)
+		 values (#DCMB_ID:VARCHAR:NULL#,nextval for ${PUB}.COl_SEQ, #COL_NAME:VARCHAR:NULL#,#PHYSICAL_NAME:VARCHAR:NULL#,
+		 		#ORDERXH:VARCHAR:NULL#,#COLMX_DESC:VARCHAR:NULL#)
+		]]>
+	</insert>
+	
+	<!-- 通过模板编号加载导出字段信息 -->
+	<select id="loadCol" parameterClass="string"
+		resultClass="java.util.HashMap">
+		<![CDATA[ 
+			select dc.*,di.DCMB_NAME from ${PUB}.DCMB_COLUMN dc LEFT JOIN ${PUB}.DCMB_INFO di ON di.DCMB_ID = dc.DCMB_ID where dc.COL_ID = #COL_ID:VARCHAR:NULL#
+		 ]]>
+	</select>
+	
+	<!-- 校验导出字段对应物理名称是否重复 -->
+	<select id="checkDczd" parameterClass="map"
+		resultClass="java.util.HashMap">
+		<![CDATA[ 
+			select dc.* from ${PUB}.DCMB_COLUMN dc 
+			where dc.DCMB_ID = #DCMB_ID:VARCHAR:NULL# AND dc.PHYSICAL_NAME = #PHYSICAL_NAME:VARCHAR:NULL#
+		 ]]>
+	</select>
+	
+	<!-- 修改导出字段信息 -->
+	<update id="updateCol" parameterClass="map" >
+		<![CDATA[
+			UPDATE ${PUB}.DCMB_COLUMN dc SET dc.COL_NAME=#COL_NAME:VARCHAR:NULL#,dc.PHYSICAL_NAME=#PHYSICAL_NAME:VARCHAR:NULL#,dc.ORDERXH=#ORDERXH:VARCHAR:NULL#,dc.COLMX_DESC=#COLMX_DESC:VARCHAR:NULL#
+			WHERE dc.DCMB_ID= #DCMB_ID:VARCHAR:NULL# AND dc.COL_ID= #COL_ID:VARCHAR:NULL#
+		]]>
+	</update>
+	
+	<!-- 删除导出字段信息 -->
+	<delete id="delCol" parameterClass="string">
+		<![CDATA[
+			DELETE FROM ${PUB}.DCMB_COLUMN dc WHERE dc.COL_ID= #COL_ID:VARCHAR:NULL# 
+		]]>
+	</delete>
+	
+	
+	<!-- 加载查询模板下所有导出模板 -->
+	<select id="findDcmbs" parameterClass="string"
+		resultClass="java.util.HashMap">
+		<![CDATA[ 
+			select di.* from ${PUB}.DCMB_INFO di where di.cxmb_id = #CXMB_ID:VARCHAR:NULL#
+		 ]]>
+	</select>
+	
+	<!-- 加载查询模板下所有查询条件 -->
+	<select id="findCons" parameterClass="string"
+		resultClass="java.util.HashMap">
+		<![CDATA[ 
+			select cc.* from ${PUB}.CXMB_CONDITIONS cc where cc.cxmb_id = #CXMB_ID:VARCHAR:NULL#
+		 ]]>
+	</select>
+	
+	
+	
+</sqlMap>
+

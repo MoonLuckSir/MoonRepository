@@ -1,0 +1,39 @@
+.ygtvcheck0 {
+	background: url(img/check/check0.gif) 0 0 no-repeat;
+	width: 16px;
+	cursor: pointer
+}
+
+.ygtvcheck1 {
+	background: url(img/check/check1.gif) 0 0 no-repeat;
+	width: 16px;
+	cursor: pointer
+}
+
+.ygtvcheck2 {
+	background: url(img/check/check2.gif) 0 0 no-repeat;
+	width: 16px;
+	cursor: pointer
+}
+
+.userIcon {
+	background: url(img/user.gif) 0 0 no-repeat;
+	width: 16px;
+	cursor: pointer
+}
+
+.organIcon {
+	background: url(img/organ.gif) 0 0 no-repeat;
+	cursor: pointer
+}
+
+#expandcontractdiv {
+	border: 1px solid #336600;
+	background-color: #FFFFCC;
+	margin: 0 0 .5em 0;
+	padding: 0.2em;
+}
+
+#treeDiv1 {
+	background: #fff
+}

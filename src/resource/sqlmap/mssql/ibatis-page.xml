@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+
+<sqlMap namespace="public">
+ 
+	<select id="query" parameterClass="String" resultClass="java.util.HashMap"> 
+		<![CDATA[ $sql$ ]]>
+	</select>
+	<insert id="insert" parameterClass="String">
+		<![CDATA[ $sql$ ]]>
+	</insert>
+	<update id="update" parameterClass="String">
+		<![CDATA[ $sql$ ]]>
+	</update>
+	<delete id="delete" parameterClass="String">
+		<![CDATA[ $sql$ ]]>
+	</delete>
+
+</sqlMap>
+

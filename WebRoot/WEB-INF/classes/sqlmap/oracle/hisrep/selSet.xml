@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="selSet">
+
+	<typeAlias type="com.yitong.commons.model.judicial.selSet"
+		alias="selSetInfo" />
+
+	<!-- 使用LscxMb装载结果集 -->
+	<resultMap id="selSet" class="selSetInfo">
+		<result column="SELID" property="SELID" />
+		<result column="SQL" property="SQL" />
+		<result column="RETRUNVALUE" property="RETRUNVALUE" />
+		<result column="SELCONS" property="SELCONS" />
+		<result column="DISPLAYCOL" property="DISPLAYCOL" />
+		<result column="DISPLAYNAME" property="DISPLAYNAME" />
+		<result column="KEYVALUE" property="KEYVALUE" />
+		<result column="CONDITIONCOL" property="CONDITIONCOL" />
+		<result column="DEFCONDITION" property="DEFCONDITION" />
+		
+	</resultMap>
+	
+	<!-- 动态查询 and 列表分页 -->
+	<sql id="queryDynSql">
+		<isNotEmpty prepend="and" property="SELID">
+			u.SELID = '$SELID$'
+		</isNotEmpty>
+		
+	</sql>
+	
+	
+	<!-- 查询SQL -->
+	<sql id="coreSql">
+		<![CDATA[ select SELID, SQL, RETRUNVALUE, SELCONS, DISPLAYCOL, DISPLAYNAME,KEYVALUE,  CONDITIONCOL, DEFCONDITION 
+		from ${FINPRO}.REP_SEL u  ]]>
+		<dynamic prepend="where">
+			<include refid="queryDynSql" />
+		</dynamic>
+		<![CDATA[ ORDER BY SELID ASC ]]>
+	</sql>
+	
+	<!-- 分页查询 -->
+	<select id="pageQuery" parameterClass="map"
+		resultClass="java.util.HashMap">
+		<include refid="public.pageBegin" />
+		<include refid="coreSql" />
+		<include refid="public.pageEnd" />
+	</select>
+
+	<!-- 分页计数 -->
+	<select id="pageCount" parameterClass="map" resultClass="int">
+		<![CDATA[SELECT count(SELID) cnt FROM ${FINPRO}.REP_SEL u ]]>
+		<dynamic prepend="where">
+			<include refid="queryDynSql" />
+		</dynamic>
+	</select>
+	
+	
+	<!-- 加载 -->
+	<select id="loadById" parameterClass="string"
+		resultClass="java.util.HashMap">
+		<![CDATA[ select u.*  from ${FINPRO}.REP_SEL u 
+		 			where u.SELID = #SELID:VARCHAR# ]]>
+	</select>
+	
+	<!-- 查询 -->
+	<select id="query" parameterClass="map"
+		resultClass="java.util.HashMap">
+		<include refid="coreSql" />
+	</select>
+	
+</sqlMap>
+

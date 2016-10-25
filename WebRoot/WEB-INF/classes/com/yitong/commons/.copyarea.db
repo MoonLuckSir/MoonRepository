@@ -1,0 +1,11 @@
+ClearCase CopyAreaDB|4
+vobs\judicial\judicial_vob\Judicial\src\java\com\yitong\commons
+2
+7
+6:filter|2|0|0|0|45ea00da1e7c11e28ad13440b5b041b8|0
+7:service|2|0|0|0|457a00861e7c11e28ad13440b5b041b8|0
+6:action|2|0|0|0|4b0a04061e7c11e28ad13440b5b041b8|0
+9:exception|2|0|0|0|450a00321e7c11e28ad13440b5b041b8|0
+5:model|2|0|0|0|462a01121e7c11e28ad13440b5b041b8|0
+3:dao|2|0|0|0|44c9fffa1e7c11e28ad13440b5b041b8|0
+4:util|2|0|0|0|4349fee21e7c11e28ad13440b5b041b8|0

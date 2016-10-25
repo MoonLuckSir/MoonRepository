@@ -1,0 +1,11 @@
+ClearCase CopyAreaDB|4
+vobs\judicial\judicial_vob\Judicial\src\java\com\yitong\app\action\system
+2
+7
+10:OrganAction.java|1|14201bd8f92|9ba|7c2e3ff5|9fa230ca403811e38cb63440b5b041b8|0
+13:ParamHisAction.java|1|13aaf8274ad|1620|36c27f2d|4269fe561e7c11e28ad13440b5b041b8|0
+f:MenuAction.java|1|13aaf827883|108b|6b00b1a3|42f9feaa1e7c11e28ad13440b5b041b8|0
+f:UserAction.java|1|13c5bfad405|3f26|70f96845|00d7110f639d11e291493440b5b041b8|0
+11:SysvarAction.java|1|13aaf82773b|11e7|3ae21b5b|42c9fe8e1e7c11e28ad13440b5b041b8|0
+f:RoleAction.java|1|13aaf827366|392a|4ff18a5b|4239fe3a1e7c11e28ad13440b5b041b8|0
+10:LoginAction.java|1|13c6183ac8d|1a07|289510a0|337faca6647511e281833440b5b041b8|0

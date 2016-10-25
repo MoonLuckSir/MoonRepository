@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+           http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
+           http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd"
+	default-autowire="byName"> 
+	
+	
+	<bean name="/judicial/ddbbzx"
+		class="com.yitong.app.action.judicial.DDBBZXAction" scope="singleton">
+	</bean>
+	
+	 <bean name="/judicial/lscxmb"
+		class="com.yitong.app.action.judicial.lscxmb.LscxMbAction" scope="singleton">
+	</bean>
+	 <bean name="/judicial/lscxsq"
+		class="com.yitong.app.action.judicial.lscxsq.lscxSqAction" scope="singleton">
+	</bean>
+	<bean name="/judicial/mbtjsz"
+		class="com.yitong.app.action.judicial.mbtjsz.MbTjSzAction" scope="singleton">
+	</bean>
+	<bean name="/judicial/lscxcol"
+		class="com.yitong.app.action.judicial.lscxcol.LscxColAction" scope="singleton">
+	</bean>	
+	 <bean name="/judicial/lscxsh"
+		class="com.yitong.app.action.judicial.lscxsh.lscxShAction" scope="singleton">
+	</bean>
+	<bean name="/judicial/lscxysh"
+		class="com.yitong.app.action.judicial.lscxysh.lscxYshAction" scope="singleton">
+	</bean>
+	<bean name="/judicial/lscxrul"
+		class="com.yitong.app.action.judicial.lscxrul.LscxRulAction" scope="singleton">
+	</bean>	
+	<bean name="/judicial/selcon"
+		class="com.yitong.app.action.judicial.selConAction" scope="singleton">
+	</bean>
+	<bean name="/judicial/lscxexp"
+		class="com.yitong.app.action.judicial.lscxexp.LscxExpAction" scope="singleton">
+	</bean>	
+	<bean name="/judicial/lscxhea"
+		class="com.yitong.app.action.judicial.lscxhea.LscxHeaAction" scope="singleton">
+	</bean>	
+	<bean name="/judicial/plcx"
+		class="com.yitong.app.action.judicial.plcx.BatchQueryAction" scope="singleton">
+	</bean>	
+	
+	<bean name="/judicial/gatck"
+		class="com.yitong.app.action.judicial.gatsfck.GatckAction" scope="singleton">
+	</bean>
+	
+	<bean name="/judicial/djcx"
+		class="com.yitong.app.action.judicial.jcysfck.DjcxAction" scope="singleton">
+	</bean>	
+	
+	<bean name="/judicial/fyck"
+		class="com.yitong.app.action.judicial.fysfck.FyckAction" scope="singleton">
+	</bean>	
+	
+	<bean name="/judicial/interface"
+		class="com.yitong.app.action.judicial.jcysfck.InterfaceMethodAction" scope="singleton">
+	</bean>
+	
+	<bean name="/judicial/jymx"
+		class="com.yitong.app.action.judicial.dxzpjymx.JymxAction" scope="singleton">
+	</bean>
+	
+	<bean name="/judicial/zfdj"
+		class="com.yitong.app.action.judicial.dxzpzfdj.ZfdjAction" scope="singleton">
+	</bean>
+	
+</beans>

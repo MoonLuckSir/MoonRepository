@@ -1,0 +1,16 @@
+ClearCase CopyAreaDB|4
+vobs\judicial\judicial_vob\Judicial\src\resource\sqlmap\oracle\hisrep
+2
+c
+b:lscxHea.xml|1|13aaf82e8f2|fd3|20a2e681|4cea05561e7c11e28ad13440b5b041b8|0
+d:lscxSqhis.xml|1|13aaf82f454|a7a|c3d649bd|4e8a06361e7c11e28ad13440b5b041b8|0
+c:lscxDtzx.xml|1|13aaf82e663|480|a309728c|4caa053a1e7c11e28ad13440b5b041b8|0
+a:LscxMb.xml|1|13aaf82f08f|12d9|284cc158|4dea05e21e7c11e28ad13440b5b041b8|0
+b:lscxCon.xml|1|13aaf82e3d4|167f|d3a1e4df|4c7a051e1e7c11e28ad13440b5b041b8|0
+b:lscxExp.xml|1|13aaf82f59c|1137|81e458a8|4eba06521e7c11e28ad13440b5b041b8|0
+b:lscxRul.xml|1|13aaf82ecb8|1019|c1f4e8c1|4d4a058e1e7c11e28ad13440b5b041b8|0
+a:selcon.xml|1|13aaf82edff|315|1b7bfe8d|4d7a05aa1e7c11e28ad13440b5b041b8|0
+b:lscxCol.xml|1|13aaf82f1d6|1358|7d91f4f6|4e1a05fe1e7c11e28ad13440b5b041b8|0
+a:lscxSq.xml|1|13aaf82ef47|15b9|f3b7a6e7|4dba05c61e7c11e28ad13440b5b041b8|0
+b:lscxLog.xml|1|13aaf82f31e|a9e|6dfb521a|4e4a061a1e7c11e28ad13440b5b041b8|0
+a:selSet.xml|1|13aaf82eb70|852|2d4da170|4d1a05721e7c11e28ad13440b5b041b8|0

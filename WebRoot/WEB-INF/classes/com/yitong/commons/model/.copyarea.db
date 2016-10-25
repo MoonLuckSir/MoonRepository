@@ -1,0 +1,15 @@
+ClearCase CopyAreaDB|4
+vobs\judicial\judicial_vob\Judicial\src\java\com\yitong\commons\model
+2
+b
+10:UserSession.java|1|13aaf82a2dd|6ad|c8f526b3|48ea02d21e7c11e28ad13440b5b041b8|0
+11:OPTreeHelper.java|1|13aaf829b10|1667|cde21af2|468a01661e7c11e28ad13440b5b041b8|0
+5:inner|2|0|0|0|464a012e1e7c11e28ad13440b5b041b8|0
+b:Consts.java|1|13aaf82ae61|b4c|81d84dcb|4ada03ea1e7c11e28ad13440b5b041b8|0
+14:IOrgTreeService.java|1|13aaf82a6b3|23a|3e3c5bd|4a0a037a1e7c11e28ad13440b5b041b8|0
+6:system|2|0|0|0|491a02ee1e7c11e28ad13440b5b041b8|0
+f:ParamCover.java|1|13aaf82a943|7b9|59abe90a|4a3a03961e7c11e28ad13440b5b041b8|0
+f:Properties.java|1|13aaf82ad19|388|70bf1eb4|4aaa03ce1e7c11e28ad13440b5b041b8|0
+8:judicial|2|0|0|0|46da019e1e7c11e28ad13440b5b041b8|0
+e:IListPage.java|1|13aaf82abd2|525|fc53e257|4a6a03b21e7c11e28ad13440b5b041b8|0
+f:MenuHelper.java|1|13aaf829ef6|1403|faee3c44|46ba01821e7c11e28ad13440b5b041b8|0

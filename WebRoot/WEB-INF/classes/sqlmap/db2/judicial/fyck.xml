@@ -1,0 +1,266 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="fyck">
+	
+	<!-- 动态查询 and 列表分页 -->
+	<sql id="queryDynSql">
+		<isNotEmpty prepend="and" property="ksr">
+			<![CDATA[
+				CHAR(DATE(t.REG_DATE),ISO) >= #ksr:VARCHAR:NULL#
+			]]>
+			
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="jsr">
+			<![CDATA[
+				CHAR(DATE(t.REG_DATE),ISO) <= #jsr:VARCHAR:NULL#
+			]]>
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="TASK_STU">
+			t.TASK_STU = #TASK_STU:VARCHAR:NULL# 
+		</isNotEmpty>
+		
+		<isNotEmpty prepend="and" property="BDHM">
+			t.BDHM = #BDHM:VARCHAR:NULL# 
+		</isNotEmpty>
+		
+	</sql>
+
+	
+	<!-- 查询任务列表 -->
+	<!-- 查询SQL -->
+	<sql id="coreSqlFyCond">
+		<![CDATA[ 
+			SELECT t.*,ROW_NUMBER() OVER(ORDER BY t.TASK_ID DESC) AS rn  FROM ${PUB}.FY_CONDI_DATA t 
+			WHERE t.TASK_ID = #taskId:VARCHAR:NULL# 
+		]]>
+		<dynamic >
+			<include refid="queryDynSql" />
+		</dynamic>
+	</sql>
+	
+	<!-- 分页查询 -->
+	<select id="pageQueryFyCond" parameterClass="map"
+		resultClass="java.util.HashMap">
+		<include refid="public.pageBegin" />
+		<include refid="coreSqlFyCond" />
+		<include refid="public.pageEnd" />
+	</select>
+	
+	
+	<!-- 分页计数 -->
+	<select id="pageCountFyCond" parameterClass="map" resultClass="int">
+		<![CDATA[
+			SELECT COUNT(1) cnt FROM ${PUB}.FY_CONDI_DATA t
+			WHERE t.TASK_ID = #taskId:VARCHAR:NULL#
+		]]>
+		<dynamic >
+			<include refid="queryDynSql" />
+		</dynamic>
+	</select>
+	
+	<!-- 查询任务列表 -->
+	<!-- 查询SQL -->
+	<sql id="coreSqlZgfyCond">
+		<![CDATA[ 
+			SELECT t.*,ROW_NUMBER() OVER(ORDER BY t.TASK_ID DESC) AS rn  FROM ${PUB}.ZGFY_CONDI_DATA t 
+			WHERE t.TASK_ID = #taskId:VARCHAR:NULL# 
+		]]>
+		<dynamic >
+			<include refid="queryDynSql" />
+		</dynamic>
+	</sql>
+	
+	<!-- 分页查询 -->
+	<select id="pageQueryZgfyCond" parameterClass="map"
+		resultClass="java.util.HashMap">
+		<include refid="public.pageBegin" />
+		<include refid="coreSqlZgfyCond" />
+		<include refid="public.pageEnd" />
+	</select>
+	
+	
+	<!-- 分页计数 -->
+	<select id="pageCountZgfyCond" parameterClass="map" resultClass="int">
+		<![CDATA[
+			SELECT COUNT(1) cnt FROM ${PUB}.ZGFY_CONDI_DATA t
+			WHERE t.TASK_ID = #taskId:VARCHAR:NULL#
+		]]>
+		<dynamic >
+			<include refid="queryDynSql" />
+		</dynamic>
+	</select>
+
+
+	<!-- 查询任务条件列表 -->
+	<!-- 查询SQL -->
+	<sql id="coreSqlFyTask">
+		<![CDATA[ 
+			SELECT t.*,ROW_NUMBER() OVER(ORDER BY t.TASK_ID DESC) AS rn  FROM ${PUB}.TASK t 
+			WHERE t.QRY_DEPT = 'FY'
+		]]>
+		<dynamic >
+			<include refid="queryDynSql" />
+		</dynamic>
+	</sql>
+	
+	<!-- 分页查询 -->
+	<select id="pageQueryFyTask" parameterClass="map"
+		resultClass="java.util.HashMap">
+		<include refid="public.pageBegin" />
+		<include refid="coreSqlFyTask" />
+		<include refid="public.pageEnd" />
+	</select>
+	
+	
+	<!-- 分页计数 -->
+	<select id="pageCountFyTask" parameterClass="map" resultClass="int">
+		<![CDATA[
+			SELECT COUNT(1) cnt FROM ${PUB}.TASK t
+			WHERE  t.QRY_DEPT = 'ZGFY'
+		]]>
+		<dynamic >
+			<include refid="queryDynSql" />
+		</dynamic>
+	</select>
+	
+	
+	<!-- 查询任务条件列表 -->
+	<!-- 查询SQL -->
+	<sql id="coreSqlZgfyTask">
+		<![CDATA[ 
+			SELECT t.*,ROW_NUMBER() OVER(ORDER BY t.TASK_ID DESC) AS rn  FROM ${PUB}.TASK t 
+			WHERE t.QRY_DEPT = 'ZGFY'
+		]]>
+		<dynamic >
+			<include refid="queryDynSql" />
+		</dynamic>
+	</sql>
+	
+	<!-- 分页查询 -->
+	<select id="pageQueryZgfyTask" parameterClass="map"
+		resultClass="java.util.HashMap">
+		<include refid="public.pageBegin" />
+		<include refid="coreSqlZgfyTask" />
+		<include refid="public.pageEnd" />
+	</select>
+	
+	
+	<!-- 分页计数 -->
+	<select id="pageCountZgfyTask" parameterClass="map" resultClass="int">
+		<![CDATA[
+			SELECT COUNT(1) cnt FROM ${PUB}.TASK t
+			WHERE  t.QRY_DEPT = 'ZGFY'
+		]]>
+		<dynamic >
+			<include refid="queryDynSql" />
+		</dynamic>
+	</select>
+	
+
+	<!-- 查找有无重复的查询请求单号 -->
+	<select id="loadConData" parameterClass="map"
+		resultClass="java.util.HashMap">
+		<![CDATA[ 
+			select fcd.* from ${PUB}.FY_CONDI_DATA fcd where fcd.BDHM = #BDHM:VARCHAR:NULL#
+		 ]]>
+	</select>
+	
+	<!-- 删除重复的查询请求单号 -->
+	<delete id="delConData" parameterClass="map" >
+		<![CDATA[ 
+			DELETE from  ${PUB}.FY_CONDI_DATA fcd where fcd.BDHM = #BDHM:VARCHAR:NULL#
+		 ]]>
+	</delete>
+	
+	<!-- 新增 查询条件数据-->
+	<insert id="insertConData" parameterClass="map">
+		<![CDATA[
+		 insert into ${PUB}.FY_CONDI_DATA(TASK_ID, BDHM, LB, XZ, XM,GJ,ZJLX,ZJHM,FZJG,FYMC,CBR,AH,CXKSSJ,CXJSSJ,WSNR,WJLX,GZZBM,GZZ,GWZBM,GWZ,ERRORINFO)
+		 values (#TASK_ID:VARCHAR:NULL#,#BDHM:VARCHAR:NULL#, #LB:VARCHAR:NULL#,#XZ:VARCHAR:NULL#,
+				 #XM:VARCHAR:NULL#,#GJ:VARCHAR:NULL#,#ZJLX:VARCHAR:NULL#,#DSRZJHM:VARCHAR:NULL#,#FZJG:VARCHAR:NULL#,
+				 #FYMC:VARCHAR:NULL#,#CBR:VARCHAR:NULL#,#AH:VARCHAR:NULL#,#CXKSSJ:VARCHAR:NULL#,#CXJSSJ:VARCHAR:NULL#,
+				 #WSNR:VARCHAR:NULL#,#WJLX:VARCHAR:NULL#,#GZZBM:VARCHAR:NULL#,#GZZ:VARCHAR:NULL#,#GWZBM:VARCHAR:NULL#,#GWZ:VARCHAR:NULL#,#ERRORINFO:VARCHAR:NULL#
+		 	)
+		]]>
+	</insert>
+	
+	<!-- 新增 查询任务-->
+	<insert id="addTask" parameterClass="map">
+		<![CDATA[
+		 insert into ${PUB}.TASK (TASK_ID, TASK_NAME, QRY_DEPT, CXMB_ID, EXP_FORMAT,REG_WAY,REG_USER,REG_DATE,TASK_STU)
+		 values (#TASK_ID:VARCHAR:NULL#,#TASK_NAME:VARCHAR:NULL#, #QRY_DEPT:VARCHAR:NULL#,#CXMB_ID:VARCHAR:NULL#,
+				 #EXP_FORMAT:VARCHAR:NULL#,#REG_WAY:VARCHAR:NULL#,#REG_USER:VARCHAR:NULL#,CURRENT TIMESTAMP,'7'
+		 	)
+		]]>
+	</insert>
+	
+	
+	<!-- 更改任务状态 -->
+	<update id="updateTaskStu" parameterClass="map" >
+		<![CDATA[
+			UPDATE ${PUB}.TASK t SET t.TASK_STU= #taskStu:VARCHAR:NULL#
+		]]>
+		<isEqual property="taskStu" compareValue="10" prepend=",">
+			<![CDATA[
+			   t.MAKE_INFO = #errMsg:VARCHAR:NULL#
+			]]>
+		</isEqual>
+		<![CDATA[	
+			WHERE t.TASK_ID= #taskId:VARCHAR:NULL#
+		]]>
+	</update>
+	
+	
+	<!-- 成功任务更新进程  法院-->
+	<update id="successTask" parameterClass="map" >
+		<![CDATA[
+			UPDATE ${PUB}.TASK t SET t.TASK_STU='8',t.MAKE_FILENAME=#filename:VARCHAR:NULL#,t.IMP_FILENAME=#impfilename:VARCHAR:NULL# WHERE t.TASK_ID = #taskId:VARCHAR:NULL#
+		]]>
+			
+	</update>
+	
+	
+	
+	<!-- 失败任务更新进程  法院 -->
+	<update id="failTask" parameterClass="map" >
+		<![CDATA[
+			UPDATE ${PUB}.TASK t SET t.MAKE_INFO= #info:VARCHAR:NULL#,t.TASK_STU='10' WHERE t.TASK_ID = #taskId:VARCHAR:NULL#
+		]]>
+			
+	</update>
+	
+	<!-- 更新任务下的条件报错信息 法院 -->
+	<update id="updateCondiErroinfo" parameterClass="map" >
+		<![CDATA[
+			UPDATE ${PUB}.FY_CONDI_DATA t SET t.ERRORINFO = #msg:VARCHAR:NULL# 
+			WHERE t.TASK_ID = #taskId:VARCHAR:NULL# AND t.BDHM = #bdhm:VARCHAR:NULL#
+		]]>
+			
+	</update>
+	
+	
+	<!-- 更新任务下的条件报错信息  最高法院 -->
+	<update id="updateZgfyCondiErroinfo" parameterClass="map" >
+		<![CDATA[
+			UPDATE ${PUB}.ZGFY_CONDI_DATA t SET t.ERRORINFO = #msg:VARCHAR:NULL# 
+			WHERE t.TASK_ID = #taskId:VARCHAR:NULL# AND t.BDHM = #bdhm:VARCHAR:NULL#
+		]]>
+			
+	</update>
+
+
+	<!-- 更改任务启动时间 -->
+	<update id="updateTaskTime"  >
+		<![CDATA[
+			UPDATE ${PUB}.TASK_EXECUTE_TIME t SET t.EXECUTE_TIME= CURRENT TIMESTAMP
+		]]>
+	</update>
+	
+	<!-- 更改任务启动时间 -->
+	<update id="updateTaskTime2"  >
+		<![CDATA[
+			UPDATE ${PUB}.ZGFY_TASK_EXECUTE_TIME t SET t.EXECUTE_TIME= CURRENT TIMESTAMP
+		]]>
+	</update>
+</sqlMap>
+

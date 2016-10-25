@@ -1,0 +1,14 @@
+ClearCase CopyAreaDB|4
+vobs\judicial\judicial_vob\Judicial\src\java\com\yitong\commons\model\judicial
+2
+a
+b:selSet.java|1|13aaf82b866|615|d1add132|47ba022a1e7c11e28ad13440b5b041b8|0
+b:lscxSq.java|1|13aaf82baf5|86d|47e78358|481a02621e7c11e28ad13440b5b041b8|0
+c:lscxRul.java|1|13aaf82b49f|3b7|5e0532cb|472a01d61e7c11e28ad13440b5b041b8|0
+c:lscxCon.java|1|13aaf82b71f|a89|7fd8294c|478a020e1e7c11e28ad13440b5b041b8|0
+c:LscxExp.java|1|13aaf82b9ae|5a9|cfe3ca7e|47ea02461e7c11e28ad13440b5b041b8|0
+c:LscxHea.java|1|13aaf82bc3f|4bc|3d847d79|485a027e1e7c11e28ad13440b5b041b8|0
+c:lscxCol.java|1|13aaf82b373|690|b212f604|46fa01ba1e7c11e28ad13440b5b041b8|0
+b:LscxMb.java|1|13aaf82bd6b|a95|2e387250|488a029a1e7c11e28ad13440b5b041b8|0
+e:LscxSqhis.java|1|13aaf82b5d7|473|1735516|475a01f21e7c11e28ad13440b5b041b8|0
+c:LscxLog.java|1|13aaf82be98|433|cae341cf|48ba02b61e7c11e28ad13440b5b041b8|0

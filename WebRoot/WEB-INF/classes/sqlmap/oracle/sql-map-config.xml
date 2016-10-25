@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<!DOCTYPE sqlMapConfig      
+    PUBLIC "-//ibatis.apache.org//DTD SQL Map Config 2.0//EN"      
+    "http://ibatis.apache.org/dtd/sql-map-config-2.dtd">
+<sqlMapConfig>
+    <properties resource="sqlmap/service.properties" />
+	<!--定义iBATIS自身应用信息-->
+	<settings cacheModelsEnabled="true" enhancementEnabled="true"
+		lazyLoadingEnabled="true" maxRequests="300" maxSessions="200"
+		maxTransactions="30" useStatementNamespaces="true" />
+
+	<!-- page 公共提取-->
+	<sqlMap resource="sqlmap/oracle/ibatis-page.xml" />  
+    <!-- 系统管理相关-->
+	<sqlMap resource="sqlmap/oracle/system/MenuInfo.xml" />
+	
+	<sqlMap resource="sqlmap/oracle/system/OrganInfo.xml" />
+	<!-- 历史查询模板-->
+	<sqlMap resource="sqlmap/oracle/judicial/LscxMb.xml" /> 
+	<!-- 历史条件设置-->
+	<sqlMap resource="sqlmap/oracle/judicial/lscxCon.xml" /> 
+    <!-- 历史列设置-->
+	<sqlMap resource="sqlmap/oracle/judicial/lscxCol.xml" /> 
+	 <!-- 历史列设置-->
+	<sqlMap resource="sqlmap/oracle/judicial/lscxDtzx.xml" /> 
+	<!-- 历史查询申请-->
+	<sqlMap resource="sqlmap/oracle/judicial/lscxSq.xml" /> 
+	<!-- 条件规则 -->
+	<sqlMap resource="sqlmap/oracle/judicial/lscxRul.xml" />
+	<!-- 模板导出列明细 -->
+	<sqlMap resource="sqlmap/oracle/judicial/lscxExp.xml" />
+	<!-- selcon -->
+	<sqlMap resource="sqlmap/oracle/judicial/selcon.xml" />
+	<!-- 模板抬头明细 -->
+	<sqlMap resource="sqlmap/oracle/judicial/lscxHea.xml" />
+	<!-- 日志 -->
+	<sqlMap resource="sqlmap/oracle/judicial/lscxLog.xml" />
+	<!-- 申请的审核日志 -->
+	<sqlMap resource="sqlmap/oracle/judicial/lscxSqhis.xml" />
+	<!-- 通用选取配置-->
+	<sqlMap resource="sqlmap/oracle/judicial/selSet.xml" />
+</sqlMapConfig>

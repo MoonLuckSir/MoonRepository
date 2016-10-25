@@ -1,0 +1,8 @@
+ClearCase CopyAreaDB|4
+vobs\judicial\judicial_vob\Judicial\src\resource
+2
+4
+6:spring|2|0|0|0|55ca0a961e7c11e28ad13440b5b041b8|0
+6:sqlmap|2|0|0|0|4b6a045a1e7c11e28ad13440b5b041b8|0
+10:log4j.properties|1|13aaf82d312|2a3|1f2aef29|565a0aea1e7c11e28ad13440b5b041b8|0
+f:conf.properties|1|13aaf82cf3b|e6|9aa23906|562a0ace1e7c11e28ad13440b5b041b8|0

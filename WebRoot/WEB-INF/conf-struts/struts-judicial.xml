@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE struts-config PUBLIC "-//Apache Software Foundation//DTD Struts Configuration 1.2//EN" "http://struts.apache.org/dtds/struts-config_1_2.dtd">
+<struts-config>
+	<form-beans>
+		<form-bean name="uploadForm"
+			type="com.yitong.app.action.judicial.plcx.UploadForm"></form-bean>
+	</form-beans>
+	
+	
+	<action-mappings>
+		 
+		
+		<action parameter="action" path="/judicial/ddbbzx" scope="request"
+			type="org.springframework.web.struts.DelegatingActionProxy">
+			<forward name="query" path="/pages/judicial/dtbbzx/query.jsp" />
+			<forward name="query_save" path="/pages/judicial/dtbbzx/query_save.jsp" />
+			<forward name="query_edit" path="/pages/judicial/dtbbzx/query_edit.jsp" />
+			<forward name="query_view" path="/pages/judicial/dtbbzx/query_view.jsp" />
+			<forward name="list" path="/pages/judicial/dtbbzx/list.jsp" />
+			<forward name="replist" path="/pages/judicial/dtbbzx/replist.jsp" />
+			<forward name="replist1" path="/pages/judicial/dtbbzx/replist1.jsp" />
+			<forward name="tzssx" path="/pages/judicial/dtbbzx/tzssx.jsp" />
+			<forward name="tzssx1" path="/pages/judicial/dtbbzx/tzssx1.jsp" />
+		</action>
+
+		<action parameter="action" path="/judicial/lscxmb" scope="request"
+			type="org.springframework.web.struts.DelegatingActionProxy">
+			<forward name="list" path="/pages/judicial/lscxmb/lscxmb_L.jsp" />
+			<forward name="list1" path="/pages/judicial/lscxmb/lscxmb_L1.jsp" />
+			<forward name="query" path="/pages/judicial/lscxmb/lscxmb_Q.jsp" />
+			<forward name="view" path="/pages/judicial/lscxmb/lscxmb_V.jsp" />
+			<forward name="add" path="/pages/judicial/lscxmb/lscxmb_A.jsp" />
+			<forward name="update" path="/pages/judicial/lscxmb/lscxmb_U.jsp" />
+		</action>
+		<action parameter="action" path="/judicial/mbtjsz" scope="request"
+			type="org.springframework.web.struts.DelegatingActionProxy">
+			<forward name="list" path="/pages/judicial/mbtjsz/mbtjsz_L.jsp" />
+			<forward name="query" path="/pages/judicial/mbtjsz/mbtjsz_Q.jsp" />
+			<forward name="view" path="/pages/judicial/mbtjsz/mbtjsz_V.jsp" />
+			<forward name="add" path="/pages/judicial/mbtjsz/mbtjsz_A.jsp" />
+			<forward name="update" path="/pages/judicial/mbtjsz/mbtjsz_U.jsp" />
+		</action>
+		<action parameter="action" path="/judicial/lscxsq" scope="request"
+			type="org.springframework.web.struts.DelegatingActionProxy">
+			<forward name="list" path="/pages/judicial/lscxsq/lscxsq_L.jsp" />
+			<forward name="query" path="/pages/judicial/lscxsq/lscxsq_Q.jsp" />
+			<forward name="view" path="/pages/judicial/lscxsq/lscxsq_V.jsp" />
+			<forward name="add" path="/pages/judicial/lscxsq/lscxsq_A.jsp" />
+			<forward name="update" path="/pages/judicial/lscxsq/lscxsq_U.jsp" />
+		</action>
+		<action parameter="action" path="/judicial/lscxcol" scope="request"
+			type="org.springframework.web.struts.DelegatingActionProxy">
+			<forward name="list" path="/pages/judicial/lscxcol/lscxcol_L.jsp" />
+			<forward name="query" path="/pages/judicial/lscxcol/lscxcol_Q.jsp" />
+			<forward name="view" path="/pages/judicial/lscxcol/lscxcol_V.jsp" />
+			<forward name="add" path="/pages/judicial/lscxcol/lscxcol_A.jsp" />
+			<forward name="update" path="/pages/judicial/lscxcol/lscxcol_U.jsp" />
+		</action>
+		<action parameter="action" path="/judicial/lscxsh" scope="request"
+			type="org.springframework.web.struts.DelegatingActionProxy">
+			<forward name="list" path="/pages/judicial/lscxsh/lscxsh_L.jsp" />
+			<forward name="view" path="/pages/judicial/lscxsh/lscxsh_V.jsp" />
+			<forward name="txyj" path="/pages/judicial/lscxsh/lscxsq_SH.jsp" />
+		</action>
+		<action parameter="action" path="/judicial/lscxysh" scope="request"
+			type="org.springframework.web.struts.DelegatingActionProxy">
+			<forward name="list" path="/pages/judicial/lscxysh/lscxysh_L.jsp" />
+			<forward name="view" path="/pages/judicial/lscxysh/lscxysh_V.jsp" />
+		</action>
+		<action parameter="action" path="/judicial/lscxrul" scope="request"
+			type="org.springframework.web.struts.DelegatingActionProxy">
+			<forward name="list" path="/pages/judicial/lscxrul/lscxrul_L.jsp" />
+			<forward name="view" path="/pages/judicial/lscxrul/lscxrul_V.jsp" />
+			<forward name="add" path="/pages/judicial/lscxrul/lscxrul_A.jsp" />
+			<forward name="update" path="/pages/judicial/lscxrul/lscxrul_U.jsp" />
+		</action>
+		<action parameter="action" path="/judicial/selcon" scope="request"
+			type="org.springframework.web.struts.DelegatingActionProxy">
+			<forward name="list" path="/pages/judicial/selcon/selcon.jsp" />
+		</action>
+		<action parameter="action" path="/judicial/lscxexp" scope="request"
+			type="org.springframework.web.struts.DelegatingActionProxy">
+			<forward name="list" path="/pages/judicial/lscxexp/lscxexp_L.jsp" />
+			<forward name="view" path="/pages/judicial/lscxexp/lscxexp_V.jsp" />
+			<forward name="add" path="/pages/judicial/lscxexp/lscxexp_A.jsp" />
+			<forward name="update" path="/pages/judicial/lscxexp/lscxexp_U.jsp" />
+		</action>
+		<action parameter="action" path="/judicial/lscxhea" scope="request"
+			type="org.springframework.web.struts.DelegatingActionProxy">
+			<forward name="list" path="/pages/judicial/lscxhea/lscxhea_L.jsp" />
+			<forward name="query" path="/pages/judicial/lscxhea/lscxhea_Q.jsp" />
+			<forward name="view" path="/pages/judicial/lscxhea/lscxhea_V.jsp" />
+			<forward name="add" path="/pages/judicial/lscxhea/lscxhea_A.jsp" />
+			<forward name="update" path="/pages/judicial/lscxhea/lscxhea_U.jsp" />
+		</action>
+
+		<action parameter="action" path="/judicial/plcx" scope="request"
+			name="uploadForm" type="org.springframework.web.struts.DelegatingActionProxy">
+			<forward name="plcx" path="/pages/judicial/plcx/importFile.jsp" />
+			<forward name="commitAuditList" path="/pages/judicial/plcx/commitAudit_L.jsp" />
+			<forward name="auditList" path="/pages/judicial/plcx/audit_L.jsp" />
+			<forward name="audit" path="/pages/judicial/plcx/audit_A.jsp" />
+			<forward name="downloadList" path="/pages/judicial/plcx/downloadFile_L.jsp" />
+			<forward name="auditRemark" path="/pages/judicial/plcx/audit_V.jsp" />
+			<forward name="errorRemark" path="/pages/judicial/plcx/error_V.jsp" />
+		</action>
+		
+		<action parameter="action" path="/judicial/sfck" scope="request"
+			 type="org.springframework.web.struts.DelegatingActionProxy">
+			<forward name="cxmb" path="/pages/judicial/jcysfck/cxmb_L.jsp" />
+			<forward name="addCxmb" path="/pages/judicial/jcysfck/cxmb_A.jsp" />
+			<forward name="modiCxmb" path="/pages/judicial/jcysfck/cxmb_M.jsp" />
+			
+			<forward name="tjsz" path="/pages/judicial/jcysfck/tjsz_L.jsp" />
+			<forward name="addCon" path="/pages/judicial/jcysfck/tjsz_A.jsp" />
+			<forward name="modiCon" path="/pages/judicial/jcysfck/tjsz_M.jsp" />
+			
+			<forward name="rule" path="/pages/judicial/jcysfck/rule_L.jsp" />
+			<forward name="addRule" path="/pages/judicial/jcysfck/rule_A.jsp" />
+			<forward name="modiRule" path="/pages/judicial/jcysfck/rule_M.jsp" />
+			
+			<forward name="dcmb" path="/pages/judicial/jcysfck/dcmb_L.jsp" />
+			<forward name="addDcmb" path="/pages/judicial/jcysfck/dcmb_A.jsp" />
+			<forward name="modiDcmb" path="/pages/judicial/jcysfck/dcmb_M.jsp" />
+			
+			<forward name="dczd" path="/pages/judicial/jcysfck/dczd_L.jsp" />
+			<forward name="addCol" path="/pages/judicial/jcysfck/dczd_A.jsp" />
+			<forward name="modiCol" path="/pages/judicial/jcysfck/dczd_M.jsp" />
+			
+		</action>
+		
+		<action parameter="action" path="/judicial/djcx" scope="request"
+			name="uploadForm" type="org.springframework.web.struts.DelegatingActionProxy">
+			<forward name="task" path="/pages/judicial/djcx/task_L.jsp" />
+			<forward name="addTask" path="/pages/judicial/djcx/task_A.jsp" />
+			<forward name="impFile" path="/pages/judicial/djcx/impFile.jsp" />
+			<forward name="modiTask" path="/pages/judicial/djcx/task_M.jsp" />
+			<forward name="auditList" path="/pages/judicial/djcx/audit_L.jsp" />
+			<forward name="auditInfo" path="/pages/judicial/djcx/audit_I.jsp" />
+			<forward name="xzjgList" path="/pages/judicial/djcx/result_L.jsp" />
+			<forward name="xzjgInfo" path="/pages/judicial/djcx/result_I.jsp" />
+			<forward name="taskInfoList" path="/pages/judicial/djcx/taskInfo_L.jsp" />
+		</action>
+		
+		<action parameter="action" path="/judicial/fyck" scope="request"
+			 type="org.springframework.web.struts.DelegatingActionProxy">
+			<forward name="fytask" path="/pages/judicial/fysfck/task_L.jsp" />
+			<forward name="fycond" path="/pages/judicial/fysfck/cond_L.jsp" />
+			<forward name="errorInfo" path="/pages/judicial/fysfck/task_I.jsp" />
+			
+			<forward name="zgfytask" path="/pages/judicial/zgfysfck/task_L.jsp" />
+			<forward name="zgfycond" path="/pages/judicial/zgfysfck/cond_L.jsp" />
+			<forward name="zgfyErrorInfo" path="/pages/judicial/zgfysfck/task_I.jsp" />
+		</action>
+		
+		<action parameter="action" path="/judicial/interface" scope="request"
+			 type="org.springframework.web.struts.DelegatingActionProxy">
+			
+		</action>
+		
+		<action parameter="action" path="/judicial/jymx" scope="request"
+			type="org.springframework.web.struts.DelegatingActionProxy">
+			<forward name="list" path="/pages/judicial/dxzpjymx/jymx_L.jsp" />
+			<forward name="view" path="/pages/judicial/dxzpjymx/jymx_V.jsp" />
+			<forward name="errorInfo" path="/pages/judicial/dxzpjymx/showerror_I.jsp" />
+			<forward name="ckztlist" path="/pages/judicial/dxzpjymx/ckzt_L.jsp" />
+			<forward name="ckztview" path="/pages/judicial/dxzpjymx/ckzt_V.jsp" />
+			<forward name="qzhcxlist" path="/pages/judicial/dxzpjymx/qzhcx_L.jsp" />
+			<forward name="qzhcxview" path="/pages/judicial/dxzpjymx/qzhcx_V.jsp" />
+			<forward name="fklist" path="/pages/judicial/dxzpjymx/qzhmxfk_L.jsp" />
+			<forward name="fkview" path="/pages/judicial/dxzpjymx/qzhmxfk_V.jsp" />
+			<forward name="cxmxlist" path="/pages/judicial/dxzpjymx/cxmx_L.jsp" />
+			<forward name="cxmxview" path="/pages/judicial/dxzpjymx/cxmx_V.jsp" />
+			<forward name="ckfklist" path="/pages/judicial/dxzpjymx/ckfk_L.jsp" />
+			<forward name="ckfkview" path="/pages/judicial/dxzpjymx/ckfk_V.jsp" />
+			<forward name="zhlist" path="/pages/judicial/dxzpjymx/cxzh_L.jsp" />
+			<forward name="zhview" path="/pages/judicial/dxzpjymx/cxzh_V.jsp" />
+			<forward name="djview" path="/pages/judicial/dxzpjymx/cxdj_V.jsp" />
+		</action>
+		
+		<action parameter="action" path="/judicial/zfdj" scope="request"
+			type="org.springframework.web.struts.DelegatingActionProxy">
+			<forward name="list" path="/pages/judicial/dxzpzfdj/zfqq_L.jsp" />
+			<forward name="view" path="/pages/judicial/dxzpzfdj/zfqq_V.jsp" />
+			<forward name="zffklist" path="/pages/judicial/dxzpzfdj/zffk_L.jsp" />
+			<forward name="zffkview" path="/pages/judicial/dxzpzfdj/zffk_V.jsp" />
+			
+			<forward name="errorInfo" path="/pages/judicial/dxzpzfdj/showerror_I.jsp" />
+			
+			<forward name="jclist" path="/pages/judicial/dxzpzfdj/zfjc_L.jsp" />
+			<forward name="jcview" path="/pages/judicial/dxzpzfdj/zfjc_V.jsp" />
+			<forward name="jcfklist" path="/pages/judicial/dxzpzfdj/zfjcfk_L.jsp" />
+			<forward name="jcfkview" path="/pages/judicial/dxzpzfdj/zfjcfk_V.jsp" />
+			
+			<forward name="yqlist" path="/pages/judicial/dxzpzfdj/zfyq_L.jsp" />
+			<forward name="yqview" path="/pages/judicial/dxzpzfdj/zfyq_V.jsp" />
+			<forward name="yqfklist" path="/pages/judicial/dxzpzfdj/zfyqfk_L.jsp" />
+			<forward name="yqfkview" path="/pages/judicial/dxzpzfdj/zfyqfk_V.jsp" />
+			
+			<forward name="djlist" path="/pages/judicial/dxzpzfdj/djqq_L.jsp" />
+			<forward name="djview" path="/pages/judicial/dxzpzfdj/djqq_V.jsp" />
+			<forward name="djfklist" path="/pages/judicial/dxzpzfdj/djfk_L.jsp" />
+			<forward name="djfkview" path="/pages/judicial/dxzpzfdj/djfk_V.jsp" />
+			
+			<forward name="djjclist" path="/pages/judicial/dxzpzfdj/djjc_L.jsp" />
+			<forward name="djjcview" path="/pages/judicial/dxzpzfdj/djjc_V.jsp" />
+			<forward name="djjcfklist" path="/pages/judicial/dxzpzfdj/djjcfk_L.jsp" />
+			<forward name="djjcfkview" path="/pages/judicial/dxzpzfdj/djjcfk_V.jsp" />
+			
+			<forward name="djyqlist" path="/pages/judicial/dxzpzfdj/djyq_L.jsp" />
+			<forward name="djyqview" path="/pages/judicial/dxzpzfdj/djyq_V.jsp" />
+			<forward name="djyqfklist" path="/pages/judicial/dxzpzfdj/djyqfk_L.jsp" />
+			<forward name="djyqfkview" path="/pages/judicial/dxzpzfdj/djyqfk_V.jsp" />
+			
+			<forward name="ywtjview" path="/pages/judicial/dxzpzfdj/ywtj_V.jsp" />
+			
+			<forward name="toSendCard" path="/pages/judicial/dxzpzfdj/sendCard_A.jsp" /><!--异常开卡可疑名单上报页面  -->
+			<forward name="toSendAccount" path="/pages/judicial/dxzpzfdj/sendAccount_A.jsp" /><!--涉案账户可疑名单上报页面  -->
+			<forward name="toSendEvent" path="/pages/judicial/dxzpzfdj/sendEvent_A.jsp" /><!-- 异常事件可疑名单上报页面 -->
+			
+			<forward name="toAjjb" path="/pages/judicial/dxzpzfdj/ajjb_A.jsp" /><!-- 案件举报页面 -->
+		</action>
+		
+		<action parameter="action" path="/judicial/gatck" scope="request"
+			 type="org.springframework.web.struts.DelegatingActionProxy">
+			<forward name="gattask" path="/pages/judicial/gatsfck/task_L.jsp" />
+			<forward name="fycond" path="/pages/judicial/fysfck/cond_L.jsp" />
+			<forward name="errorInfo" path="/pages/judicial/fysfck/task_I.jsp" />
+			
+			<forward name="zgfytask" path="/pages/judicial/zgfysfck/task_L.jsp" />
+			<forward name="zgfycond" path="/pages/judicial/zgfysfck/cond_L.jsp" />
+			<forward name="zgfyErrorInfo" path="/pages/judicial/zgfysfck/task_I.jsp" />
+		</action>
+		
+	</action-mappings>
+</struts-config>
+

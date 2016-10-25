@@ -1,0 +1,900 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="zfdj">
+
+	<!-- 动态查询 and 列表分页 -->
+	 <sql id="queryDynSql">
+	 
+		 <isNotEmpty prepend="and" property="APPLICATIONID">
+			v.APPLICATIONID = #APPLICATIONID:VARCHAR:NULL# 
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="ORIGINALAPPLICATIONID">
+			v.ORIGINALAPPLICATIONID = #ORIGINALAPPLICATIONID:VARCHAR:NULL# 
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="ACCOUNTNUMBER">
+			v.ACCOUNTNUMBER = #ACCOUNTNUMBER:VARCHAR:NULL# 
+		</isNotEmpty>
+	 	<isNotEmpty prepend="and" property="STATUS">
+			v.STATUS = #STATUS:VARCHAR:NULL# 
+		</isNotEmpty> 
+		<isNotEmpty prepend="and" property="ksr">
+			<![CDATA[
+				CHAR(DATE(v.QRY_DATE),ISO) >= #ksr:VARCHAR:NULL#
+			]]>
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="jsr">
+			<![CDATA[
+				CHAR(DATE(v.QRY_DATE),ISO) <= #jsr:VARCHAR:NULL#
+			]]>
+		</isNotEmpty>
+	</sql>
+
+	<!-- 止付信息查询SQL -->
+	<sql id="coreSql">
+		<![CDATA[ select v.* ,ROW_NUMBER() OVER(ORDER BY  v.QRY_DATE DESC) AS rn from ${DBO}.DXZP_ZFREQ_TASK v ]]>
+		<dynamic prepend="where">
+			<include refid="queryDynSql" />
+		</dynamic> 
+	</sql>
+
+	<!-- 分页查询 -->
+	<select id="pageQuery" parameterClass="map"
+		resultClass="java.util.HashMap">
+		<include refid="public.pageBegin" />
+		<include refid="coreSql" />
+		<include refid="public.pageEnd" />
+	</select>
+
+	<!-- 分页计数 -->
+	<select id="pageCount" parameterClass="map" resultClass="int">
+		<![CDATA[ SELECT count(APPLICATIONID) cnt FROM ${DBO}.DXZP_ZFREQ_TASK v ]]>
+		 <dynamic prepend="where">
+			<include refid="queryDynSql" />
+		</dynamic> 
+	</select>
+	
+	<!-- 根据固定编号加载 -->
+	<select id="loadById" parameterClass="string"
+		resultClass="java.util.HashMap">
+		<![CDATA[ select * from ${DBO}.DXZP_ZFREQ_TASK v where v.APPLICATIONID = #APPLICATIONID:VARCHAR:NULL# ]]>
+	</select>
+	
+	<!-- 止付反馈信息查询SQL -->
+	
+	<sql id="coreSqlZffkTask">
+		<![CDATA[ select v.* ,ROW_NUMBER() OVER(ORDER BY v.APPLICATIONID DESC) AS rn from ${DBO}.DXZP_ZFRES_INFO v 
+		where v.APPLICATIONID = #APPLICATIONID:VARCHAR:NULL# ]]>
+		
+	</sql>
+
+	<!-- 分页查询 -->
+	<select id="pageQueryZffkTask" parameterClass="map"
+		resultClass="java.util.HashMap">
+		<include refid="public.pageBegin" />
+		<include refid="coreSqlZffkTask" />
+		<include refid="public.pageEnd" />
+	</select>
+
+	<!-- 分页计数 -->
+	<select id="pageCountZffkTask" parameterClass="map" resultClass="int">
+		<![CDATA[ SELECT count(APPLICATIONID) cnt FROM ${DBO}.DXZP_ZFRES_INFO v where v.APPLICATIONID = #APPLICATIONID:VARCHAR:NULL# ]]>
+		
+	</select>
+	
+	<!-- 根据固定编号加载 -->
+	<select id="loadByZffkId" parameterClass="string"
+		resultClass="java.util.HashMap">
+		<![CDATA[ select * from ${DBO}.DXZP_ZFRES_INFO v where v.APPLICATIONID = #APPLICATIONID:VARCHAR:NULL# ]]>
+	</select>
+	
+	<!-- 止付解除信息查询SQL -->
+	<sql id="coreSqlJcTask">
+		<![CDATA[ select v.* ,ROW_NUMBER() OVER(ORDER BY v.QRY_DATE DESC) AS rn from ${DBO}.DXZP_ZFJCREQ_TASK v ]]>
+		<dynamic prepend="where">
+			<include refid="queryDynSql" />
+		</dynamic> 
+	</sql>
+
+	<!-- 分页查询 -->
+	<select id="pageQueryJcTask" parameterClass="map"
+		resultClass="java.util.HashMap">
+		<include refid="public.pageBegin" />
+		<include refid="coreSqlJcTask" />
+		<include refid="public.pageEnd" />
+	</select>
+
+	<!-- 分页计数 -->
+	<select id="pageCountJcTask" parameterClass="map" resultClass="int">
+		<![CDATA[ SELECT count(APPLICATIONID) cnt FROM ${DBO}.DXZP_ZFJCREQ_TASK v ]]>
+		 <dynamic prepend="where">
+			<include refid="queryDynSql" />
+		</dynamic> 
+	</select>
+	
+	<!-- 根据固定编号加载 -->
+	<select id="loadByJcId" parameterClass="string"
+		resultClass="java.util.HashMap">
+		<![CDATA[ select * from ${DBO}.DXZP_ZFJCREQ_TASK v where v.APPLICATIONID = #APPLICATIONID:VARCHAR:NULL# ]]>
+	</select>
+	
+	<!-- 止付解除反馈信息查询SQL -->
+	<sql id="coreSqlJcfkTask">
+		<![CDATA[ select v.* ,ROW_NUMBER() OVER(ORDER BY v.APPLICATIONID DESC) AS rn from ${DBO}.DXZP_ZFJCRES_INFO v 
+		where v.APPLICATIONID = #APPLICATIONID:VARCHAR:NULL# ]]>
+		
+	</sql>
+
+	<!-- 分页查询 -->
+	<select id="pageQueryJcfkTask" parameterClass="map"
+		resultClass="java.util.HashMap">
+		<include refid="public.pageBegin" />
+		<include refid="coreSqlJcfkTask" />
+		<include refid="public.pageEnd" />
+	</select>
+
+	<!-- 分页计数 -->
+	<select id="pageCountJcfkTask" parameterClass="map" resultClass="int">
+		<![CDATA[ SELECT count(APPLICATIONID) cnt FROM ${DBO}.DXZP_ZFJCRES_INFO v where v.APPLICATIONID = #APPLICATIONID:VARCHAR:NULL# ]]>
+		
+	</select>
+	
+	<!-- 根据固定编号加载 -->
+	<select id="loadByJcfkId" parameterClass="string"
+		resultClass="java.util.HashMap">
+		<![CDATA[ select * from ${DBO}.DXZP_ZFJCRES_INFO v where v.APPLICATIONID = #APPLICATIONID:VARCHAR:NULL# ]]>
+	</select>
+	
+	<!-- 止付延期信息查询SQL -->
+	<sql id="coreSqlYqTask">
+		<![CDATA[ select v.* ,ROW_NUMBER() OVER(ORDER BY v.QRY_DATE DESC) AS rn from ${DBO}.DXZP_ZFYQREQ_TASK v ]]>
+		<dynamic prepend="where">
+			<include refid="queryDynSql" />
+		</dynamic> 
+	</sql>
+
+	<!-- 分页查询 -->
+	<select id="pageQueryYqTask" parameterClass="map"
+		resultClass="java.util.HashMap">
+		<include refid="public.pageBegin" />
+		<include refid="coreSqlYqTask" />
+		<include refid="public.pageEnd" />
+	</select>
+
+	<!-- 分页计数 -->
+	<select id="pageCountYqTask" parameterClass="map" resultClass="int">
+		<![CDATA[ SELECT count(APPLICATIONID) cnt FROM ${DBO}.DXZP_ZFYQREQ_TASK v ]]>
+		 <dynamic prepend="where">
+			<include refid="queryDynSql" />
+		</dynamic> 
+	</select>
+	
+	<!-- 根据固定编号加载 -->
+	<select id="loadByYqId" parameterClass="string"
+		resultClass="java.util.HashMap">
+		<![CDATA[ select * from ${DBO}.DXZP_ZFYQREQ_TASK v where v.APPLICATIONID = #APPLICATIONID:VARCHAR:NULL# ]]>
+	</select>
+	
+	<!-- 止付延期反馈信息查询SQL -->
+	<sql id="coreSqlYqfkTask">
+		<![CDATA[ select v.* ,ROW_NUMBER() OVER(ORDER BY v.APPLICATIONID DESC) AS rn from ${DBO}.DXZP_ZFYQRES_INFO v 
+		
+		where v.APPLICATIONID = #APPLICATIONID:VARCHAR:NULL# ]]>
+		
+	</sql>
+
+	<!-- 分页查询 -->
+	<select id="pageQueryYqfkTask" parameterClass="map"
+		resultClass="java.util.HashMap">
+		<include refid="public.pageBegin" />
+		<include refid="coreSqlYqfkTask" />
+		<include refid="public.pageEnd" />
+	</select>
+
+	<!-- 分页计数 -->
+	<select id="pageCountYqfkTask" parameterClass="map" resultClass="int">
+		<![CDATA[ SELECT count(APPLICATIONID) cnt FROM ${DBO}.DXZP_ZFYQRES_INFO v where v.APPLICATIONID = #APPLICATIONID:VARCHAR:NULL# ]]>
+		
+	</select>
+	
+	<!-- 根据固定编号加载 -->
+	<select id="loadByYqfkId" parameterClass="string"
+		resultClass="java.util.HashMap">
+		<![CDATA[ select * from ${DBO}.DXZP_ZFYQRES_INFO v where v.APPLICATIONID = #APPLICATIONID:VARCHAR:NULL# ]]>
+	</select>
+	
+	<!-- 冻结信息查询SQL -->
+	<sql id="coreSqlDjTask">
+		<![CDATA[ select v.* ,ROW_NUMBER() OVER(ORDER BY v.QRY_DATE DESC) AS rn from ${DBO}.DXZP_DJREQ_TASK v ]]>
+		<dynamic prepend="where">
+			<include refid="queryDynSql" />
+		</dynamic> 
+		
+	</sql>
+
+	<!-- 分页查询 -->
+	<select id="pageQueryDjTask" parameterClass="map"
+		resultClass="java.util.HashMap">
+		<include refid="public.pageBegin" />
+		<include refid="coreSqlDjTask" />
+		<include refid="public.pageEnd" />
+	</select>
+
+	<!-- 分页计数 -->
+	<select id="pageCountDjTask" parameterClass="map" resultClass="int">
+		<![CDATA[ SELECT count(APPLICATIONID) cnt FROM ${DBO}.DXZP_DJREQ_TASK v  ]]>
+		 <dynamic prepend="where">
+			<include refid="queryDynSql" />
+		</dynamic> 
+	</select>
+	
+	<!-- 根据固定编号加载 -->
+	<select id="loadByDjId" parameterClass="string"
+		resultClass="java.util.HashMap">
+		<![CDATA[ select * from ${DBO}.DXZP_DJREQ_TASK v where v.APPLICATIONID = #APPLICATIONID:VARCHAR:NULL# ]]>
+	</select>
+	
+	<!-- 冻结反馈信息查询SQL -->
+	<sql id="coreSqlDjfkTask">
+		<![CDATA[ select v.* ,ROW_NUMBER() OVER(ORDER BY v.APPLICATIONID DESC) AS rn from ${DBO}.DXZP_DJRES_INFO v where v.APPLICATIONID = #APPLICATIONID:VARCHAR:NULL# ]]>
+		
+	</sql>
+
+	<!-- 分页查询 -->
+	<select id="pageQueryDjfkTask" parameterClass="map"
+		resultClass="java.util.HashMap">
+		<include refid="public.pageBegin" />
+		<include refid="coreSqlDjfkTask" />
+		<include refid="public.pageEnd" />
+	</select>
+
+	<!-- 分页计数 -->
+	<select id="pageCountDjfkTask" parameterClass="map" resultClass="int">
+		<![CDATA[ SELECT count(APPLICATIONID) cnt FROM ${DBO}.DXZP_DJRES_INFO v where v.APPLICATIONID = #APPLICATIONID:VARCHAR:NULL# ]]>
+		
+	</select>
+	
+	<!-- 根据固定编号加载 -->
+	<select id="loadByDjfkId" parameterClass="string"
+		resultClass="java.util.HashMap">
+		<![CDATA[ select * from ${DBO}.DXZP_DJRES_INFO v where v.APPLICATIONID = #APPLICATIONID:VARCHAR:NULL# ]]>
+	</select>
+	
+	<!-- 冻结解除信息查询SQL -->
+	<sql id="coreSqlDjjcTask">
+		<![CDATA[ select v.* ,ROW_NUMBER() OVER(ORDER BY v.QRY_DATE DESC) AS rn from ${DBO}.DXZP_DJJCREQ_TASK v ]]>
+		<dynamic prepend="where">
+			<include refid="queryDynSql" />
+		</dynamic> 
+	</sql>
+
+	<!-- 分页查询 -->
+	<select id="pageQueryDjjcTask" parameterClass="map"
+		resultClass="java.util.HashMap">
+		<include refid="public.pageBegin" />
+		<include refid="coreSqlDjjcTask" />
+		<include refid="public.pageEnd" />
+	</select>
+
+	<!-- 分页计数 -->
+	<select id="pageCountDjjcTask" parameterClass="map" resultClass="int">
+		<![CDATA[ SELECT count(APPLICATIONID) cnt FROM ${DBO}.DXZP_DJJCREQ_TASK v  ]]>
+		 <dynamic prepend="where">
+			<include refid="queryDynSql" />
+		</dynamic> 
+	</select>
+	
+	<!-- 根据固定编号加载 -->
+	<select id="loadByDjjcId" parameterClass="string"
+		resultClass="java.util.HashMap">
+		<![CDATA[ select * from ${DBO}.DXZP_DJJCREQ_TASK v where v.APPLICATIONID = #APPLICATIONID:VARCHAR:NULL# ]]>
+	</select>
+	
+	<!-- 冻结解除反馈信息查询SQL -->
+	<sql id="coreSqlDjjcfkTask">
+		<![CDATA[ select v.* ,ROW_NUMBER() OVER(ORDER BY v.APPLICATIONID DESC) AS rn from 
+		${DBO}.DXZP_DJJCRES_INFO v where v.APPLICATIONID = #APPLICATIONID:VARCHAR:NULL# ]]>
+		
+	</sql>
+
+	<!-- 分页查询 -->
+	<select id="pageQueryDjjcfkTask" parameterClass="map"
+		resultClass="java.util.HashMap">
+		<include refid="public.pageBegin" />
+		<include refid="coreSqlDjjcfkTask" />
+		<include refid="public.pageEnd" />
+	</select>
+
+	<!-- 分页计数 -->
+	<select id="pageCountDjjcfkTask" parameterClass="map" resultClass="int">
+		<![CDATA[ SELECT count(APPLICATIONID) cnt FROM ${DBO}.DXZP_DJJCRES_INFO v where v.APPLICATIONID = #APPLICATIONID:VARCHAR:NULL# ]]>
+		
+	</select>
+	
+	<!-- 根据固定编号加载 -->
+	<select id="loadByDjjcfkId" parameterClass="string"
+		resultClass="java.util.HashMap">
+		<![CDATA[ select * from ${DBO}.DXZP_DJJCRES_INFO v where v.APPLICATIONID = #APPLICATIONID:VARCHAR:NULL# ]]>
+	</select>
+	
+	<!-- 冻结延期信息查询SQL -->
+	<sql id="coreSqlDjyqTask">
+		<![CDATA[ select v.* ,ROW_NUMBER() OVER(ORDER BY v.QRY_DATE DESC) AS rn from ${DBO}.DXZP_DJYQREQ_TASK v ]]>
+		<dynamic prepend="where">
+			<include refid="queryDynSql" />
+		</dynamic> 
+	</sql>
+
+	<!-- 分页查询 -->
+	<select id="pageQueryDjyqTask" parameterClass="map"
+		resultClass="java.util.HashMap">
+		<include refid="public.pageBegin" />
+		<include refid="coreSqlDjyqTask" />
+		<include refid="public.pageEnd" />
+	</select>
+
+	<!-- 分页计数 -->
+	<select id="pageCountDjyqTask" parameterClass="map" resultClass="int">
+		<![CDATA[ SELECT count(APPLICATIONID) cnt FROM ${DBO}.DXZP_DJYQREQ_TASK v  ]]>
+		 <dynamic prepend="where">
+			<include refid="queryDynSql" />
+		</dynamic> 
+	</select>
+	
+	<!-- 根据固定编号加载 -->
+	<select id="loadByDjyqId" parameterClass="string"
+		resultClass="java.util.HashMap">
+		<![CDATA[ select * from ${DBO}.DXZP_DJYQREQ_TASK v where v.APPLICATIONID = #APPLICATIONID:VARCHAR:NULL# ]]>
+	</select>
+	
+	<!-- 冻结延期反馈信息查询SQL -->
+	<sql id="coreSqlDjyqfkTask">
+		<![CDATA[ select v.* ,ROW_NUMBER() OVER(ORDER BY v.APPLICATIONID DESC) AS rn from
+		 ${DBO}.DXZP_DJYQRES_INFO v where v.APPLICATIONID = #APPLICATIONID:VARCHAR:NULL# ]]>
+		
+	</sql>
+
+	<!-- 分页查询 -->
+	<select id="pageQueryDjyqfkTask" parameterClass="map"
+		resultClass="java.util.HashMap">
+		<include refid="public.pageBegin" />
+		<include refid="coreSqlDjyqfkTask" />
+		<include refid="public.pageEnd" />
+	</select>
+
+	<!-- 分页计数 -->
+	<select id="pageCountDjyqfkTask" parameterClass="map" resultClass="int">
+		<![CDATA[ SELECT count(APPLICATIONID) cnt FROM ${DBO}.DXZP_DJYQRES_INFO v 
+		where v.APPLICATIONID = #APPLICATIONID:VARCHAR:NULL# ]]>
+		
+	</select>
+	
+	<!-- 根据固定编号加载 -->
+	<select id="loadByDjyqfkId" parameterClass="string"
+		resultClass="java.util.HashMap">
+		<![CDATA[ select * from ${DBO}.DXZP_DJYQRES_INFO v where v.APPLICATIONID = #APPLICATIONID:VARCHAR:NULL# ]]>
+	</select>
+	
+	
+	<!-- 计算止付业务笔数 -->
+	<select id="countZfBizNum"  parameterClass= "map" resultClass="string">
+		<![CDATA[ select COUNT(*) zfBizNum from ${DBO}.DXZP_ZFREQ_TASK t 
+				  WHERE  t.QRY_DATE >= to_date(#ksr:VARCHAR:NULL#, 'yyyy-mm-dd hh24:mi:ss')
+				  		 AND t.QRY_DATE <= to_date(#jsr:VARCHAR:NULL#, 'yyyy-mm-dd hh24:mi:ss')
+		     ]]>
+	</select>
+	
+	<!-- 计算止付账户数量 -->
+	<select id="countZfAcctNum" parameterClass= "map"   resultClass="string">
+		<![CDATA[ select COUNT(*) zfAcctNum from ${DBO}.DXZP_ZFREQ_TASK v 
+					where v.STATUS = '9' 
+						  AND v.QRY_DATE >= to_date(#ksr:VARCHAR:NULL#, 'yyyy-mm-dd hh24:mi:ss')
+				  		  AND v.QRY_DATE <= to_date(#jsr:VARCHAR:NULL#, 'yyyy-mm-dd hh24:mi:ss')
+		
+		]]>
+	</select>
+	
+	<!-- 计算止付账户余额 -->
+	<select id="countZfAcctBalance"  parameterClass= "map"  resultClass="string">
+		<![CDATA[ 
+			SELECT sum(double(b.AccountBalance)) AS zfAcctBalance FROM ${DBO}.DXZP_ZFREQ_TASK  a 
+			LEFT JOIN ${DBO}.DXZP_ZFRES_INFO  b ON a.APPLICATIONID = b.APPLICATIONID 
+			WHERE TRIM(b.AccountBalance) !='' AND b.AccountBalance IS not NULL AND a.STATUS = '9'
+			 	  AND  a.QRY_DATE >= to_date(#ksr:VARCHAR:NULL#, 'yyyy-mm-dd hh24:mi:ss')
+				  AND  a.QRY_DATE <= to_date(#jsr:VARCHAR:NULL#, 'yyyy-mm-dd hh24:mi:ss')
+		]]>
+	</select>
+	
+	<!-- 计算冻结业务笔数 -->
+	<select id="countDjBizNum" parameterClass= "map"   resultClass="string">
+		<![CDATA[ select COUNT(*) djBizNum from ${DBO}.DXZP_DJREQ_TASK 
+				  WHERE   QRY_DATE >= to_date(#ksr:VARCHAR:NULL#, 'yyyy-mm-dd hh24:mi:ss')
+				  AND  QRY_DATE <= to_date(#jsr:VARCHAR:NULL#, 'yyyy-mm-dd hh24:mi:ss')  ]]>
+	</select>
+	
+	<!-- 计算冻结账户数量 -->
+	<select id="countDjAcctNum" parameterClass= "map"  resultClass="string">
+		<![CDATA[ select COUNT(*) djAcctNum from ${DBO}.DXZP_DJREQ_TASK v 
+		         where v.STATUS = '9' 
+		          AND  v.QRY_DATE >= to_date(#ksr:VARCHAR:NULL#, 'yyyy-mm-dd hh24:mi:ss')
+				  AND  v.QRY_DATE <= to_date(#jsr:VARCHAR:NULL#, 'yyyy-mm-dd hh24:mi:ss')]]>
+	</select>
+	
+	<!-- 计算冻结账户余额 -->
+	<select id="countDjAcctBalance" parameterClass= "map"  resultClass="string">
+		<![CDATA[ 
+			SELECT sum(double(b.FrozedBalance)) AS djAcctBalance FROM ${DBO}.DXZP_DJREQ_TASK a 
+			LEFT JOIN ${DBO}.DXZP_DJRES_INFO  b ON a.APPLICATIONID = b.APPLICATIONID
+			WHERE TRIM(b.FrozedBalance) !='' AND b.FrozedBalance IS not NULL AND a.STATUS = '9'
+			      AND  a.QRY_DATE >= to_date(#ksr:VARCHAR:NULL#, 'yyyy-mm-dd hh24:mi:ss')
+				  AND  a.QRY_DATE <= to_date(#jsr:VARCHAR:NULL#, 'yyyy-mm-dd hh24:mi:ss')
+		]]>
+	</select>
+	
+	<!-- 计算快速查询业务笔数 -->
+	<select id="countQryBizNum" parameterClass= "map"  resultClass="string">
+		<![CDATA[ 
+			SELECT sum(bs) AS qryBizNum FROM (
+				SELECT COUNT(*) bs FROM ${DBO}.DXZP_CKZTQRY_TASK where  
+				       QRY_DATE >= to_date(#ksr:VARCHAR:NULL#, 'yyyy-mm-dd hh24:mi:ss')
+				  AND  QRY_DATE <= to_date(#jsr:VARCHAR:NULL#, 'yyyy-mm-dd hh24:mi:ss') 
+				UNION ALL
+				SELECT COUNT(*) bs FROM ${DBO}.DXZP_JYMXQRY_TASK where  
+				       QRY_DATE >= to_date(#ksr:VARCHAR:NULL#, 'yyyy-mm-dd hh24:mi:ss')
+				  AND  QRY_DATE <= to_date(#jsr:VARCHAR:NULL#, 'yyyy-mm-dd hh24:mi:ss') 
+				UNION ALL
+				SELECT COUNT(*) bs FROM ${DBO}.DXZP_QZHCXQRY_TASK where  
+				       QRY_DATE >= to_date(#ksr:VARCHAR:NULL#, 'yyyy-mm-dd hh24:mi:ss')
+				  AND  QRY_DATE <= to_date(#jsr:VARCHAR:NULL#, 'yyyy-mm-dd hh24:mi:ss') 
+			)
+		  ]]>
+	</select>
+	
+	<!-- 计算快速查询账户数量 -->
+	<select id="countQryAcctNum" parameterClass= "map"  resultClass="string">
+		<![CDATA[ 
+			SELECT sum(bs) AS qryAcctNum FROM (
+				SELECT COUNT(*) bs FROM ${DBO}.DXZP_CKZTQRY_TASK a where a.STATUS = '9'  
+					   AND  a.QRY_DATE >= to_date(#ksr:VARCHAR:NULL#, 'yyyy-mm-dd hh24:mi:ss')
+				       AND  a.QRY_DATE <= to_date(#jsr:VARCHAR:NULL#, 'yyyy-mm-dd hh24:mi:ss')
+				UNION ALL
+				SELECT COUNT(*) bs FROM ${DBO}.DXZP_JYMXQRY_TASK b where b.STATUS = '9'
+					   AND  b.QRY_DATE >= to_date(#ksr:VARCHAR:NULL#, 'yyyy-mm-dd hh24:mi:ss')
+				       AND  b.QRY_DATE <= to_date(#jsr:VARCHAR:NULL#, 'yyyy-mm-dd hh24:mi:ss')
+				UNION ALL
+				SELECT COUNT(*) bs FROM ${DBO}.DXZP_QZHCXQRY_TASK c where c.STATUS = '9'
+				       AND  c.QRY_DATE >= to_date(#ksr:VARCHAR:NULL#, 'yyyy-mm-dd hh24:mi:ss')
+				       AND  c.QRY_DATE <= to_date(#jsr:VARCHAR:NULL#, 'yyyy-mm-dd hh24:mi:ss')
+			)
+		 ]]>
+	</select>
+	
+	
+	<!-- 合计业务笔数 -->
+	<select id="totalBizNum" parameterClass= "map"  resultClass="string">
+		<![CDATA[ 
+			SELECT sum(bs) AS totalBizNum FROM (
+				SELECT COUNT(*) bs FROM ${DBO}.DXZP_CKZTQRY_TASK WHERE 
+				       QRY_DATE >= to_date(#ksr:VARCHAR:NULL#, 'yyyy-mm-dd hh24:mi:ss')
+				  AND  QRY_DATE <= to_date(#jsr:VARCHAR:NULL#, 'yyyy-mm-dd hh24:mi:ss')
+				UNION ALL
+				SELECT COUNT(*) bs FROM ${DBO}.DXZP_JYMXQRY_TASK WHERE 
+				       QRY_DATE >= to_date(#ksr:VARCHAR:NULL#, 'yyyy-mm-dd hh24:mi:ss')
+				  AND  QRY_DATE <= to_date(#jsr:VARCHAR:NULL#, 'yyyy-mm-dd hh24:mi:ss')
+				UNION ALL
+				SELECT COUNT(*) bs FROM ${DBO}.DXZP_QZHCXQRY_TASK WHERE 
+				       QRY_DATE >= to_date(#ksr:VARCHAR:NULL#, 'yyyy-mm-dd hh24:mi:ss')
+				  AND  QRY_DATE <= to_date(#jsr:VARCHAR:NULL#, 'yyyy-mm-dd hh24:mi:ss')
+				UNION ALL
+				select COUNT(*) bs from ${DBO}.DXZP_ZFREQ_TASK  WHERE 
+				       QRY_DATE >= to_date(#ksr:VARCHAR:NULL#, 'yyyy-mm-dd hh24:mi:ss')
+				  AND  QRY_DATE <= to_date(#jsr:VARCHAR:NULL#, 'yyyy-mm-dd hh24:mi:ss')
+				UNION ALL
+				select COUNT(*) bs from ${DBO}.DXZP_DJREQ_TASK  WHERE 
+				       QRY_DATE >= to_date(#ksr:VARCHAR:NULL#, 'yyyy-mm-dd hh24:mi:ss')
+				  AND  QRY_DATE <= to_date(#jsr:VARCHAR:NULL#, 'yyyy-mm-dd hh24:mi:ss')
+			)
+		 ]]>
+	</select>
+	
+	<!-- 合计账户数量 -->
+	<select id="totalAcctNum" parameterClass= "map"  resultClass="string">
+		<![CDATA[ 
+			SELECT sum(bs) AS totalAcctNum FROM (
+			SELECT COUNT(*) bs FROM ${DBO}.DXZP_CKZTQRY_TASK a where a.STATUS = '9'  
+				  AND  a.QRY_DATE >= to_date(#ksr:VARCHAR:NULL#, 'yyyy-mm-dd hh24:mi:ss')
+				  AND  a.QRY_DATE <= to_date(#jsr:VARCHAR:NULL#, 'yyyy-mm-dd hh24:mi:ss')
+			UNION ALL
+			SELECT COUNT(*) bs FROM ${DBO}.DXZP_JYMXQRY_TASK b where b.STATUS = '9'
+				  AND  b.QRY_DATE >= to_date(#ksr:VARCHAR:NULL#, 'yyyy-mm-dd hh24:mi:ss')
+				  AND  b.QRY_DATE <= to_date(#jsr:VARCHAR:NULL#, 'yyyy-mm-dd hh24:mi:ss')
+			UNION ALL
+			SELECT COUNT(*) bs FROM ${DBO}.DXZP_QZHCXQRY_TASK c where c.STATUS = '9'
+			      AND  c.QRY_DATE >= to_date(#ksr:VARCHAR:NULL#, 'yyyy-mm-dd hh24:mi:ss')
+				  AND  c.QRY_DATE <= to_date(#jsr:VARCHAR:NULL#, 'yyyy-mm-dd hh24:mi:ss')
+			UNION ALL
+			select COUNT(*) bs from ${DBO}.DXZP_DJREQ_TASK d where d.STATUS = '9'
+			      AND  d.QRY_DATE >= to_date(#ksr:VARCHAR:NULL#, 'yyyy-mm-dd hh24:mi:ss')
+				  AND  d.QRY_DATE <= to_date(#jsr:VARCHAR:NULL#, 'yyyy-mm-dd hh24:mi:ss')
+			UNION ALL
+			select COUNT(*) bs from ${DBO}.DXZP_ZFREQ_TASK e where e.STATUS = '9' 
+				  AND  e.QRY_DATE >= to_date(#ksr:VARCHAR:NULL#, 'yyyy-mm-dd hh24:mi:ss')
+				  AND  e.QRY_DATE <= to_date(#jsr:VARCHAR:NULL#, 'yyyy-mm-dd hh24:mi:ss')
+			)
+		 ]]>
+	</select>
+	
+	<!-- 合计账户余额 -->
+	<select id="totalAcctBalance" parameterClass= "map"  resultClass="string">
+		<![CDATA[ 
+			SELECT sum(bal) AS totalAcctBalance FROM (
+				SELECT sum(double(AccountBalance)) AS bal FROM ${DBO}.DXZP_ZFREQ_TASK a 
+				LEFT JOIN ${DBO}.DXZP_ZFRES_INFO  b ON a.APPLICATIONID = b.APPLICATIONID 
+				WHERE TRIM(b.AccountBalance) !='' AND b.AccountBalance IS not NULL
+				AND  a.QRY_DATE >= to_date(#ksr:VARCHAR:NULL#, 'yyyy-mm-dd hh24:mi:ss') 
+				AND  a.QRY_DATE <= to_date(#jsr:VARCHAR:NULL#, 'yyyy-mm-dd hh24:mi:ss')
+				UNION ALL
+				SELECT sum(double(b.FrozedBalance)) AS bal FROM ${DBO}.DXZP_DJREQ_TASK a 
+				LEFT JOIN ${DBO}.DXZP_DJRES_INFO  b ON a.APPLICATIONID = b.APPLICATIONID
+				WHERE TRIM(b.FrozedBalance) !='' AND b.FrozedBalance IS not NULL
+				AND  a.QRY_DATE >= to_date(#ksr:VARCHAR:NULL#, 'yyyy-mm-dd hh24:mi:ss') 
+				AND  a.QRY_DATE <= to_date(#jsr:VARCHAR:NULL#, 'yyyy-mm-dd hh24:mi:ss')
+			)
+		]]>
+	</select>
+	
+	<!-- 增加异常开卡 -->
+	<insert id="insertYckk" parameterClass="map">
+		<![CDATA[
+		 	insert into ${PUB}.DXZP_YCKKREQ_TASK
+		 	(
+		 		TRANSSERIALNUMBER, 
+		 		JSJG, 
+		 		FROMTGORGANIZATIONID, 
+		 		TXCODE, 
+		 		APPLICATIONID, 
+		 		FEATURECODE,
+		 		BANKID,
+		 		IDTYPE,
+		 		IDNUMBER,
+		 		IDNAME,
+		 		CARDNUMBER,
+		 		ACCOUNTOPENTIME,
+		 		ACCOUNTOPENPLACE,
+		 		OPERATORNAME,
+		 		OPERATORPHONENUMBER,
+		 		STATUS,
+		 		QRY_DATE,
+		 		ERRORINFO
+		 	)values(
+		 		#TRANSSERIALNUMBER#, 
+		 		#JSJG#, 
+		 		#FROMTGORGANIZATIONID#, 
+		 		#TXCODE#, 
+		 		#APPLICATIONID#, 
+		 		#FEATURECODE#,
+		 		#BANKID#,
+		 		#IDTYPE#,
+		 		#IDNUMBER#,
+		 		#IDNAME#,
+		 		#CARDNUMBER#,
+		 		#ACCOUNTOPENTIME#,
+		 		#ACCOUNTOPENPLACE#,
+		 		#OPERATORNAME#,
+		 		#OPERATORPHONENUMBER#,
+		 		#STATUS#,
+		 		CURRENT TIMESTAMP,
+		 		#ERRORINFO#
+		 	)
+		]]>
+	</insert>
+	
+	<!-- 增加涉案账户 -->
+	<insert id="insertSazh" parameterClass="map">
+		<![CDATA[
+		 	insert into ${PUB}.DXZP_SAZH_TASK
+		 	(
+		 		TRANSSERIALNUMBER, 
+		 		JSJG, 
+		 		FROMTGORGANIZATIONID, 
+		 		TXCODE, 
+		 		APPLICATIONID, 
+		 		FEATURECODE,
+		 		BANKID,
+		 		CARDNUMBER,
+		 		ACCOUNTNAME,
+		 		IDTYPE,
+		 		IDNUMBER,
+		 		PHONENUMBER,
+		 		ADDRESS,
+		 		POSTCODE,
+		 		ACCOUNTOPENPLACE,
+		 		ACCOUNTNUMBER,
+		 		ACCOUNTSERIAL,
+		 		ACCOUNTTYPE,
+		 		ACCOUNTSTATUS,
+		 		CURRENCY,
+		 		CASHREMIT,
+		 		TRANSACTIONTYPE,
+		 		BORROWINGSIGNS,
+		 		TRANSACTIONAMOUNT,
+		 		ACCOUNTBALANCE,
+		 		TRANSACTIONTIME,
+		 		TRANSACTIONSERIAL,
+		 		OPPONENTNAME,
+		 		OPPONENTACCOUNTNUMBER,
+		 		OPPONENTCREDENTIALNUMBER,
+		 		OPPONENTDEPOSITBANKID,
+		 		TRANSACTIONREMARK,
+		 		TRANSACTIONBRANCHNAME,
+		 		TRANSACTIONBRANCHCODE,
+		 		LOGNUMBER,
+		 		SUMMONSNUMBER,
+		 		VOUCHERTYPE,
+		 		VOUCHERCODE,
+		 		CASHMARK,
+		 		TERMINALNUMBER,
+		 		TRANSACTIONSTATUS,
+		 		TRANSACTIONADDRESS,
+		 		MERCHANTNAME,
+		 		MERCHANTCODE,
+		 		IPADDRESS,
+		 		MAC,
+		 		TELLERCODE,
+		 		REMARK,
+		 		REPORTORGNAME,
+		 		OPERATORNAME,
+		 		OPERATORPHONENUMBER,
+		 		STATUS,
+		 		QRY_DATE,
+		 		ERRORINFO
+		 	)values(
+		 		#TRANSSERIALNUMBER#, 
+		 		#JSJG#, 
+		 		#FROMTGORGANIZATIONID#, 
+		 		#TXCODE#, 
+		 		#APPLICATIONID#, 
+		 		#FEATURECODE#,
+		 		#BANKID#,
+		 		#CARDNUMBER#,
+		 		#ACCOUNTNAME#,
+		 		#IDTYPE#,
+		 		#IDNUMBER#,
+		 		#PHONENUMBER#,
+		 		#ADDRESS#,
+		 		#POSTCODE#,
+		 		#ACCOUNTOPENPLACE#,
+		 		#ACCOUNTNUMBER#,
+		 		#ACCOUNTSERIAL#,
+		 		#ACCOUNTTYPE#,
+		 		#ACCOUNTSTATUS#,
+		 		#CURRENCY#,
+		 		#CASHREMIT#,
+		 		#TRANSACTIONTYPE#,
+		 		#BORROWINGSIGNS#,
+		 		#TRANSACTIONAMOUNT#,
+		 		#ACCOUNTBALANCE#,
+		 		#TRANSACTIONTIME#,
+		 		#TRANSACTIONSERIAL#,
+		 		#OPPONENTNAME#,
+		 		#OPPONENTACCOUNTNUMBER#,
+		 		#OPPONENTCREDENTIALNUMBER#,
+		 		#OPPONENTDEPOSITBANKID#,
+		 		#TRANSACTIONREMARK#,
+		 		#TRANSACTIONBRANCHNAME#,
+		 		#TRANSACTIONBRANCHCODE#,
+		 		#LOGNUMBER#,
+		 		#SUMMONSNUMBER#,
+		 		#VOUCHERTYPE#,
+		 		#VOUCHERCODE#,
+		 		#CASHMARK#,
+		 		#TERMINALNUMBER#,
+		 		#TRANSACTIONSTATUS#,
+		 		#TRANSACTIONADDRESS#,
+		 		#MERCHANTNAME#,
+		 		#MERCHANTCODE#,
+		 		#IPADDRESS#,
+		 		#MAC#,
+		 		#TELLERCODE#,
+		 		#REMARK#,
+		 		#REPORTORGNAME#,
+		 		#OPERATORNAME#,
+		 		#OPERATORPHONENUMBER#,
+		 		#STATUS#,
+		 		CURRENT TIMESTAMP,
+		 		#ERRORINFO#
+		 	)
+		]]>
+	</insert>
+	
+	<!-- 增加异常事件 -->
+	<insert id="insertYcsj" parameterClass="map">
+		<![CDATA[
+		 	insert into ${PUB}.DXZP_YCSJ_TASK
+		 	(
+		 		TRANSSERIALNUMBER, 
+		 		JSJG, 
+		 		FROMTGORGANIZATIONID, 
+		 		TXCODE, 
+		 		APPLICATIONID, 
+		 		BANKID,
+		 		OPERATORNAME,
+		 		OPERATORPHONENUMBER,
+		 		ACCOUNTNAME,
+		 		CARDNUMBER,
+		 		REMARK,
+		 		ACCOUNTNUMBER,
+		 		ACCOUNTSERIAL,
+		 		ACCOUNTTYPE,
+		 		ACCOUNTSTATUS,
+		 		CURRENCY,
+		 		CASHREMIT,
+		 		FEATURECODE,
+		 		TRANSACTIONTYPE,
+		 		BORROWINGSIGNS,
+		 		TRANSACTIONAMOUNT,
+		 		ACCOUNTBALANCE,
+		 		TRANSACTIONTIME,
+		 		TRANSACTIONSERIAL,
+		 		OPPONENTNAME,
+		 		OPPONENTACCOUNTNUMBER,
+		 		OPPONENTCREDENTIALNUMBER,
+		 		OPPONENTDEPOSITBANKID,
+		 		TRANSACTIONREMARK,
+		 		TRANSACTIONBRANCHNAME,
+		 		TRANSACTIONBRANCHCODE,
+		 		LOGNUMBER,
+		 		SUMMONSNUMBER,
+		 		VOUCHERTYPE,
+		 		VOUCHERCODE,
+		 		CASHMARK,
+		 		TERMINALNUMBER,
+		 		TRANSACTIONSTATUS,
+		 		TRANSACTIONADDRESS,
+		 		MERCHANTNAME,
+		 		MERCHANTCODE,
+		 		IPADDRESS,
+		 		MAC,
+		 		TELLERCODE,
+		 		STATUS,
+		 		QRY_DATE,
+		 		ERRORINFO
+		 	)values(
+		 		#TRANSSERIALNUMBER#, 
+		 		#JSJG#, 
+		 		#FROMTGORGANIZATIONID#, 
+		 		#TXCODE#, 
+		 		#APPLICATIONID#, 
+		 		#BANKID#,
+		 		#OPERATORNAME#,
+		 		#OPERATORPHONENUMBER#,
+		 		#ACCOUNTNAME#,
+		 		#CARDNUMBER#,
+		 		#REMARK#,
+		 		#ACCOUNTNUMBER#,
+		 		#ACCOUNTSERIAL#,
+		 		#ACCOUNTTYPE#,
+		 		#ACCOUNTSTATUS#,
+		 		#CURRENCY#,
+		 		#CASHREMIT#,
+		 		#FEATURECODE#,
+		 		#TRANSACTIONTYPE#,
+		 		#BORROWINGSIGNS#,
+		 		#TRANSACTIONAMOUNT#,
+		 		#ACCOUNTBALANCE#,
+		 		#TRANSACTIONTIME#,
+		 		#TRANSACTIONSERIAL#,
+		 		#OPPONENTNAME#,
+		 		#OPPONENTACCOUNTNUMBER#,
+		 		#OPPONENTCREDENTIALNUMBER#,
+		 		#OPPONENTDEPOSITBANKID#,
+		 		#TRANSACTIONREMARK#,
+		 		#TRANSACTIONBRANCHNAME#,
+		 		#TRANSACTIONBRANCHCODE#,
+		 		#LOGNUMBER#,
+		 		#SUMMONSNUMBER#,
+		 		#VOUCHERTYPE#,
+		 		#VOUCHERCODE#,
+		 		#CASHMARK#,
+		 		#TERMINALNUMBER#,
+		 		#TRANSACTIONSTATUS#,
+		 		#TRANSACTIONADDRESS#,
+		 		#MERCHANTNAME#,
+		 		#MERCHANTCODE#,
+		 		#IPADDRESS#,
+		 		#MAC#,
+		 		#TELLERCODE#,
+		 		#STATUS#,
+		 		CURRENT TIMESTAMP,
+		 		#ERRORINFO#
+		 	)
+		]]>
+	</insert>
+	
+	<!-- 增加案件举报 -->
+	<insert id="insertAjjb" parameterClass="map">
+		<![CDATA[
+		 	insert into ${PUB}.DXZP_AJJB_TASK
+		 	(
+		 		TRANSSERIALNUMBER, 
+		 		JSJG, 
+		 		TXCODE, 
+		 		ISINITIALNODE,
+		 		FROMTGORGANIZATIONID, 
+		 		APPLICATIONID, 
+		 		APPLICATIONTYPE,
+		 		REPORTENDTIME,
+		 		VICTIMNAME,
+		 		VICTIMPHONENUMBER,
+		 		VICTIMIDTYPE,
+		 		VICTIMIDNUMBER,
+		 		ACCIDENTDESCRIPTION,
+		 		REPORTORGNAME,
+		 		OPERATORNAME,
+		 		OPERATORPHONENUMBER,
+		 		ID,
+		 		TIME,
+		 		TYPE,
+		 		CURRENCY,
+		 		TRANSFERAMOUNT,
+		 		TRANSFEROUTBANKID,
+		 		TRANSFEROUTBANKNAME,
+		 		TRANSFEROUTACCOUNTNAME,
+		 		TRANSFEROUTACCOUNTNUMBER,
+		 		TRANSFERINBANKID,
+		 		TRANSFERINBANKNAME,
+		 		TRANSFERINACCOUNTNAME,
+		 		TRANSFERINACCOUNTNUMBER,
+		 		IP,
+		 		MAC,
+		 		DEVICEID,
+		 		PLACE,
+		 		REMARK,
+		 		ISCEASED,
+		 		STATUS,
+		 		QRY_DATE,
+		 		ERRORINFO
+		 	)values(
+		 		#TRANSSERIALNUMBER#, 
+		 		#JSJG#, 
+		 		#TXCODE#, 
+		 		#ISINITIALNODE#, 
+		 		#FROMTGORGANIZATIONID#, 
+		 		#APPLICATIONID#,
+		 		#APPLICATIONTYPE#,
+		 		#REPORTENDTIME#,
+		 		#VICTIMNAME#,
+		 		#VICTIMPHONENUMBER#,
+		 		#VICTIMIDTYPE#,
+		 		#VICTIMIDNUMBER#,
+		 		#ACCIDENTDESCRIPTION#,
+		 		#REPORTORGNAME#,
+		 		#OPERATORNAME#,
+		 		#OPERATORPHONENUMBER#,
+		 		#ID#,
+		 		#TIME#,
+		 		#TYPE#,
+		 		#CURRENCY#,
+		 		#TRANSFERAMOUNT#,
+		 		#TRANSFEROUTBANKID#,
+		 		#TRANSFEROUTBANKNAME#,
+		 		#TRANSFEROUTACCOUNTNAME#,
+		 		#TRANSFEROUTACCOUNTNUMBER#,
+		 		#TRANSFERINBANKID#,
+		 		#TRANSFERINBANKNAME#,
+		 		#TRANSFERINACCOUNTNAME#,
+		 		#TRANSFERINACCOUNTNUMBER#,
+		 		#IP#,
+		 		#MAC#,
+		 		#DEVICEID#,
+		 		#PLACE#,
+		 		#REMARK#,
+		 		#ISCEASED#,
+		 		#STATUS#,
+		 		CURRENT TIMESTAMP,
+		 		#ERRORINFO#
+		 	)
+		]]>
+	</insert>
+	
+</sqlMap>
+

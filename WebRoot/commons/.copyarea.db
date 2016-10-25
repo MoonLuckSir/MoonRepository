@@ -1,0 +1,15 @@
+ClearCase CopyAreaDB|4
+vobs\judicial\judicial_vob\Judicial\WebRoot\commons
+2
+b
+b:success.jsp|1|13aaf816625|c4a|495b1bec|2849ec4a1e7c11e28ad13440b5b041b8|0
+e:inprogress.jsp|1|13aaf8164dd|7e|adf92ca4|2819ec2e1e7c11e28ad13440b5b041b8|0
+b:failure.jsp|1|13aaf816c8b|b97|1efce86c|2929ecd61e7c11e28ad13440b5b041b8|0
+e:pagefooter.jsp|1|13aaf816b43|273|53acc03a|28f9ecba1e7c11e28ad13440b5b041b8|0
+13:reportResult.jsp.rq|1|13aaf8168b4|16ec|d347e263|28a9ec821e7c11e28ad13440b5b041b8|0
+b:taglibs.jsp|1|13aaf816396|141|183a656a|27e9ec121e7c11e28ad13440b5b041b8|0
+a:jslibs.jsp|1|13aaf81624e|2ec|522d05c2|27b9ebf61e7c11e28ad13440b5b041b8|0
+11:reportShow.jsp.rq|1|13aaf816106|7e5|6ff49a80|2789ebda1e7c11e28ad13440b5b041b8|0
+b:failext.jsp|1|13aaf815fbf|c1a|f9e910bd|2759ebbe1e7c11e28ad13440b5b041b8|0
+d:exception.jsp|1|13aaf8169fc|bcc|383502a0|28d9ec9e1e7c11e28ad13440b5b041b8|0
+f:jslibs4tree.jsp|1|13aaf81676c|101|d0205d29|2879ec661e7c11e28ad13440b5b041b8|0

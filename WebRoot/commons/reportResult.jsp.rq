@@ -1,0 +1,166 @@
+<%@ page language="java" pageEncoding="UTF-8"%>
+<%@ page import="com.yitong.commons.model.Consts"%>
+<%@ page import="com.yitong.commons.util.ParamUtil"%>
+<%@ page import="com.yitong.commons.model.ReportVO"%>
+<%@ include file="/commons/taglibs.jsp"%>
+<%
+	/***********************************************
+	 *		             列表頁面  	   		       *
+	 ***********************************************/
+	ReportVO rptVO = (ReportVO) request.getAttribute(Consts.RPT_VO);
+	boolean isNull = rptVO == null;
+	String rptName = ParamUtil.get(request, "rptName");
+	String rptRaq = ParamUtil.get(request, "rptRaq");
+	String prtRaq = ParamUtil.get(request, "prtRaq");
+	String adr = ParamUtil.get(request, "adr");
+	String pms = ParamUtil.get(request, "pms");
+	String sas = ParamUtil.get(request, "sas");
+
+	String his = request.getParameter("histry");
+	int histry = his != null ? Integer.parseInt(his) - 1 : -1;
+
+	String reportName = isNull ? rptName : rptVO.getReportName();
+	String reportFileName = isNull ? rptRaq : rptVO.getReportFileName();
+	String printedRaq = isNull ? prtRaq : rptVO.getPrintRaq();
+	String params = isNull ? pms : rptVO.getParams();
+	String location = isNull ? adr : rptVO.getLocation();
+	String saveAsName = isNull ? sas : rptVO.getSaveAsName();
+	boolean exportExcel = isNull ? "true".equals(ParamUtil.get(request,
+			"exportExcel")) : rptVO.isShowExportExcel();
+	boolean exportWord = isNull ? "true".equals(ParamUtil.get(request,
+			"exportWord")) : rptVO.isShowExportWord();
+	boolean gotoBack = isNull ? "true".equals(ParamUtil.get(request,
+			"gotoBack")) : rptVO.isGotoBack();
+
+	String needSaveAsExcel = exportExcel ? "yes" : "no";
+	String needSaveAsWord = exportWord ? "yes" : "no";
+	String needSaveAsPdf = gotoBack ? "yes" : "no";
+%>
+<%@ taglib uri="/WEB-INF/tlds/runqianReport4.tld" prefix="report"%>
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+	<head>
+		<title>IFRAME内嵌报表</title>
+		<meta http-equiv="pragma" content="no-cache">
+		<meta http-equiv="cache-control" content="no-cache">
+		<meta http-equiv="expires" content="0">
+		<script type="text/javascript" src="${ctx}/scripts/util/plus.js"></script>
+	</head>
+	<body style="border:0px;margin: 0px;">
+		<div style="width:100%;" align="center"><%
+			if (!isNull || !ParamUtil.isEmpty(rptRaq)) {
+			%><report:html name="<%=reportName%>"
+					reportFileName="<%=reportFileName%>" srcType="file"
+					params="<%=params%>" scale="1" width="-1"
+					funcBarLocation="bottom" separator=" "
+					needScroll="no" needPageMark="yes"
+					saveAsName="<%=saveAsName%>" 
+					needSaveAsExcel="<%=needSaveAsExcel%>"
+					needSaveAsPdf="<%=needSaveAsPdf%>"
+					needSaveAsWord="<%=needSaveAsWord%>" needPrint="yes"
+					printLabel=" " savePrintSetup="yes" printedRaq="<%=printedRaq%>"
+					excelLabel=" " pdfLabel=" " wordLabel=" " firstPageLabel="" excelPageStyle="1"
+					prevPageLabel=" " nextPageLabel=" " lastPageLabel=" " 
+					pageMarkLabel="<span id='RptPage'></span>第{currPage}页 共{totalPage}页"
+					displayNoLinkPageMark="no" /><%
+			}%></div>
+	</body> 
+	<script type="text/javascript" src="${ctx}/scripts/util/bigTable.js"></script>	
+	<script type="text/javascript">		    
+		// modified by uke 
+		function createHiddenInput(form,name,value){			
+			var inpt=document.createElement("input");
+			inpt.type="hidden";
+			inpt.name=name;
+			inpt.value=value;
+			form.appendChild(inpt);
+		}			
+	    function cuntHistory(){
+			try{
+				report_turnPageForm.histry.value=<%=histry%>;
+			}catch(e){				
+			}
+	    }  
+	    var hasPrinted=false;  	 
+	    function printPage(){
+	    	hasPrinted=true;
+	    	report_print();
+	    }  
+	    function firstPage(){
+	    	cuntHistory();
+	    	report_toPage(1);
+	    }
+	    function lastPage(){
+	    	cuntHistory();
+	    	var totPage=report_getTotalPage();
+	    	if(totPage > 1){
+	    		report_toPage(totPage);
+	    	}
+	    }	    
+	    function prevPage(){
+	    	cuntHistory();
+	    	var curPage=report_getCurrPage();
+	    	if(curPage > 1){
+	    		report_toPage(curPage-1);
+	    	}
+	    }	    
+	    function nextPage(){
+	    	cuntHistory();
+	    	var curPage=report_getCurrPage();
+	    	var totPage=report_getTotalPage();
+	    	if(curPage < totPage){
+	    		report_toPage(curPage+1);
+	    	}
+	    }	 
+	    function zoomDiv(s){ 
+	    	document.body.style.zoom=s;
+	    }
+	    function hiddenToolBar(){
+	    	try{	    		
+	    		var fstPageBtn=g("RptPage");
+		    	if(fstPageBtn.parentNode){
+		    		fstPageBtn.parentNode.style.display="none";
+		    	}
+	    	}catch(e){   	
+	    	}  	
+	    } 
+		//補充頁面參數
+		var initParams=function(){
+			var frm=document.getElementsByName("report_turnPageForm")[0];
+			if(frm){
+				parent.closeWindow();
+				if(parent.reportPageInit){
+					try{
+						parent.reportPageInit();
+					}catch(e){}
+				}
+				//hiddenToolBar(); 
+				if(frm && frm.rptName){ 
+					return;
+				}
+				createHiddenInput(frm,"rptName","<%=reportName%>");			
+				createHiddenInput(frm,"rptRaq","<%=reportFileName%>");			
+				createHiddenInput(frm,"prtRaq","<%=printedRaq%>");										
+				createHiddenInput(frm,"pms","<%=params%>");														
+				createHiddenInput(frm,"adr","<%=location%>");				
+				createHiddenInput(frm,"sas","<%=saveAsName%>");	
+				createHiddenInput(frm,"exportExcel","<%=exportExcel%>");	
+				createHiddenInput(frm,"exportWord","<%=exportWord%>");
+				createHiddenInput(frm,"histry","<%=histry%>");
+				createHiddenInput(frm,"gotoBack","<%=gotoBack%>");
+				return;				
+			}
+		}();
+		
+  		var scrollLayer = function(){
+  			try{
+		  		var layers = new ScrollLayer(g("report")); 
+  				layers.init();
+  				window.onscroll=function(){ 
+  					layers.moverLayers(); 
+  				};
+  			}catch(e){alert(e)}
+  		}();	
+		
+	</script>
+</html>

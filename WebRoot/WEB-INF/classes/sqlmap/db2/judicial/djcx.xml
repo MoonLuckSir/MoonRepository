@@ -1,0 +1,377 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="djcx">
+	<typeAlias type="com.yitong.commons.model.judicial.sfck.CxqqInfo_JCY"
+		alias="cxqqInfo" />
+
+	
+	<!-- 动态查询 and 列表分页 -->
+	<sql id="queryDynSql">
+		
+		<isNotEmpty prepend="and" property="TASK_NAME">
+			t.TASK_NAME LIKE '%'||#TASK_NAME:VARCHAR:NULL#||'%'
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="TASK_STU">
+			t.TASK_STU = #TASK_STU:VARCHAR:NULL# 
+		</isNotEmpty>
+		
+		<isNotEmpty prepend="and" property="ksr">
+			<![CDATA[
+				CHAR(DATE(t.REG_DATE),ISO) >= #ksr:VARCHAR:NULL#
+			]]>
+			
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="jsr">
+			<![CDATA[
+				CHAR(DATE(t.REG_DATE),ISO) <= #jsr:VARCHAR:NULL#
+			]]>
+		</isNotEmpty>
+	</sql>
+
+	<!-- 查询任务列表 -->
+	<!-- 查询SQL -->
+	<sql id="coreSqlTask">
+		<![CDATA[ 
+			SELECT t.*,ROW_NUMBER() OVER(ORDER BY t.TASK_ID DESC) AS rn  FROM ${PUB}.TASK t 
+			WHERE   t.REG_USER=#REG_USER:VARCHAR:NULL# and t.QRY_DEPT = 'JC'
+		]]>
+		<isEmpty property="TASK_STU">
+			<![CDATA[
+				and (t.TASK_STU = '1'  OR t.TASK_STU = '3')
+			]]>
+		</isEmpty>
+		<isNotEmpty property="TASK_STU">
+			<![CDATA[
+				and t.TASK_STU = #TASK_STU:VARCHAR:NULL#
+			]]>
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="TASK_NAME">
+			<![CDATA[
+				t.TASK_NAME LIKE '%'||#TASK_NAME:VARCHAR:NULL#||'%'
+			]]>
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="ksr">
+			<![CDATA[
+				CHAR(DATE(t.REG_DATE),ISO) >= #ksr:VARCHAR:NULL#
+			]]>
+			
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="jsr">
+			<![CDATA[
+				CHAR(DATE(t.REG_DATE),ISO) <= #jsr:VARCHAR:NULL#
+			]]>
+		</isNotEmpty>
+		
+	</sql>
+	
+	<!-- 分页查询 -->
+	<select id="pageQueryTask" parameterClass="map"
+		resultClass="java.util.HashMap">
+		<include refid="public.pageBegin" />
+		<include refid="coreSqlTask" />
+		<include refid="public.pageEnd" />
+	</select>
+	
+	
+	<!-- 分页计数 -->
+	<select id="pageCountTask" parameterClass="map" resultClass="int">
+		<![CDATA[
+			SELECT COUNT(1) cnt FROM ${PUB}.TASK t
+			WHERE t.REG_USER=#REG_USER:VARCHAR:NULL# and t.QRY_DEPT = 'JC'
+		]]>
+		<isEmpty property="TASK_STU">
+			<![CDATA[
+				and (t.TASK_STU = '1'  OR t.TASK_STU = '3')
+			]]>
+		</isEmpty>
+		<isNotEmpty property="TASK_STU">
+			<![CDATA[
+				and t.TASK_STU = #TASK_STU:VARCHAR:NULL#
+			]]>
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="TASK_NAME">
+			t.TASK_NAME LIKE '%'||#TASK_NAME:VARCHAR:NULL#||'%'
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="ksr">
+			<![CDATA[
+				CHAR(DATE(t.REG_DATE),ISO) >= #ksr:VARCHAR:NULL#
+			]]>
+			
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="jsr">
+			<![CDATA[
+				CHAR(DATE(t.REG_DATE),ISO) <= #jsr:VARCHAR:NULL#
+			]]>
+		</isNotEmpty>
+	</select>
+	
+
+	
+	<!-- 查询SQL -->
+	<sql id="coreSqlAudit">
+		<![CDATA[ 
+			SELECT t.*,ROW_NUMBER() OVER(ORDER BY t.TASK_ID DESC) AS rn  FROM ${PUB}.TASK t 
+			WHERE t.QRY_DEPT = 'JC'
+		]]>
+		<isEmpty property="TASK_STU">
+			<![CDATA[
+				and t.TASK_STU != '1'
+			]]>
+		</isEmpty>
+		<isNotEmpty property="TASK_STU">
+			<![CDATA[
+				and t.TASK_STU = #TASK_STU:VARCHAR:NULL#
+			]]>
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="TASK_NAME">
+			t.TASK_NAME LIKE '%'||#TASK_NAME:VARCHAR:NULL#||'%'
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="ksr">
+			<![CDATA[
+				CHAR(DATE(t.REG_DATE),ISO) >= #ksr:VARCHAR:NULL#
+			]]>
+			
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="jsr">
+			<![CDATA[
+				CHAR(DATE(t.REG_DATE),ISO) <= #jsr:VARCHAR:NULL#
+			]]>
+		</isNotEmpty>
+	</sql>
+	
+	
+	<!-- 分页查询 -->
+	<select id="pageQueryAudit" parameterClass="map"
+		resultClass="java.util.HashMap">
+		<include refid="public.pageBegin" />
+		<include refid="coreSqlAudit" />
+		<include refid="public.pageEnd" />
+	</select>
+	
+	
+	<!-- 分页计数 -->
+	<select id="pageCountAudit" parameterClass="map" resultClass="int">
+		<![CDATA[
+			SELECT COUNT(1) cnt FROM ${PUB}.TASK t
+			WHERE  t.QRY_DEPT = 'JC'
+		]]>
+		<isEmpty property="TASK_STU">
+			<![CDATA[
+				and t.TASK_STU != '1'
+			]]>
+		</isEmpty>
+		<isNotEmpty property="TASK_STU">
+			<![CDATA[
+				and t.TASK_STU = #TASK_STU:VARCHAR:NULL#
+			]]>
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="TASK_NAME">
+			t.TASK_NAME LIKE '%'||#TASK_NAME:VARCHAR:NULL#||'%'
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="ksr">
+			<![CDATA[
+				CHAR(DATE(t.REG_DATE),ISO) >= #ksr:VARCHAR:NULL#
+			]]>
+			
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="jsr">
+			<![CDATA[
+				CHAR(DATE(t.REG_DATE),ISO) <= #jsr:VARCHAR:NULL#
+			]]>
+		</isNotEmpty>
+	</select>
+	
+	
+	<!-- 查询SQL -->
+	<sql id="coreSqlTaskInfo">
+		<![CDATA[ 
+			SELECT t.*,ROW_NUMBER() OVER(ORDER BY t.TASK_ID DESC) AS rn  FROM ${PUB}.TASK t 
+			Where t.QRY_DEPT = 'JC'
+		]]>
+		<dynamic >
+			<include refid="queryDynSql" />
+		</dynamic>
+		
+	</sql>
+	
+	<!-- 分页查询 -->
+	<select id="pageQueryTaskInfo" parameterClass="map"
+		resultClass="java.util.HashMap">
+		<include refid="public.pageBegin" />
+		<include refid="coreSqlTaskInfo" />
+		<include refid="public.pageEnd" />
+	</select>
+	
+	<!-- 分页计数 -->
+	<select id="pageCountTaskInfo" parameterClass="map" resultClass="int">
+		<![CDATA[
+			SELECT COUNT(1) cnt FROM ${PUB}.TASK t Where t.QRY_DEPT = 'JC'
+			
+		]]>
+		<dynamic >
+			<include refid="queryDynSql" />
+		</dynamic>
+		
+	</select>
+	
+	
+	
+	<!-- 查询SQL -->
+	<sql id="coreSqlCxjg">
+		<![CDATA[ 
+			SELECT t.*,ROW_NUMBER() OVER(ORDER BY t.AUDIT_DATE DESC) AS rn  FROM ${PUB}.TASK t 
+			WHERE  t.REG_USER=#REG_USER:VARCHAR:NULL# and t.QRY_DEPT = 'JC'
+		]]>
+		<isEmpty property="TASK_STU">
+			<![CDATA[
+				and (t.TASK_STU != '1')
+			]]>
+		</isEmpty>
+		<isNotEmpty property="TASK_STU">
+			<![CDATA[
+				and t.TASK_STU = #TASK_STU:VARCHAR:NULL#
+			]]>
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="TASK_NAME">
+			t.TASK_NAME LIKE '%'||#TASK_NAME:VARCHAR:NULL#||'%'
+		</isNotEmpty>
+		
+	</sql>
+	
+	<!-- 分页查询 -->
+	<select id="pageQueryCxjg" parameterClass="map"
+		resultClass="java.util.HashMap">
+		<include refid="public.pageBegin" />
+		<include refid="coreSqlCxjg" />
+		<include refid="public.pageEnd" />
+	</select>
+	
+	<!-- 分页计数 -->
+	<select id="pageCountCxjg" parameterClass="map" resultClass="int">
+		<![CDATA[
+			SELECT COUNT(1) cnt FROM ${PUB}.TASK t
+			WHERE   t.REG_USER=#REG_USER:VARCHAR:NULL# and t.QRY_DEPT = 'JC'
+		]]>
+		<isEmpty property="TASK_STU">
+			<![CDATA[
+				and (t.TASK_STU = '4' OR t.TASK_STU = '5' OR t.TASK_STU = '6')
+			]]>
+		</isEmpty>
+		<isNotEmpty property="TASK_STU">
+			<![CDATA[
+				and t.TASK_STU = #TASK_STU:VARCHAR:NULL#
+			]]>
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="TASK_NAME">
+			t.TASK_NAME LIKE '%'||#TASK_NAME:VARCHAR:NULL#||'%'
+		</isNotEmpty>
+	</select>
+	
+	<!-- 加载所有查询模板 -->
+	<select id="findListCxmb" parameterClass="string"
+		resultClass="java.util.HashMap">
+		<![CDATA[ 
+			select ci.* from ${PUB}.CXMB_INFO ci where ci.CXMB_STU = '1'
+		 ]]>
+	</select>
+	
+	<!-- 查找有无重复的查询请求单号 -->
+	<select id="loadConData" parameterClass="map"
+		resultClass="java.util.HashMap">
+		<![CDATA[ 
+			select jcd.* from ${PUB}.JCY_CONDI_DATA jcd where jcd.BDHM = #BDHM:VARCHAR:NULL#
+		 ]]>
+	</select>
+	
+	
+	<!-- 新增 查询任务-->
+	<insert id="addTask" parameterClass="map">
+		<![CDATA[
+		 insert into ${PUB}.TASK (TASK_ID, TASK_NAME, QRY_DEPT, CXMB_ID, EXP_FORMAT,REG_WAY,REG_USER,REG_DATE,TASK_STU,IMP_FILENAME,EXTRA_FILENAME)
+		 values (#TASK_ID:VARCHAR:NULL#,#TASK_NAME:VARCHAR:NULL#, #QRY_DEPT:VARCHAR:NULL#,#CXMB_ID:VARCHAR:NULL#,
+				 #EXP_FORMAT:VARCHAR:NULL#,#REG_WAY:VARCHAR:NULL#,#REG_USER:VARCHAR:NULL#,CURRENT TIMESTAMP,'1',#IMP_FILENAME:VARCHAR:NULL#,#EXTRA_FILENAME:VARCHAR:NULL#
+		 	)
+		]]>
+	</insert>
+	
+	<!-- 新增 查询条件数据-->
+	<insert id="insertConData" parameterClass="map">
+		<![CDATA[
+		 insert into ${PUB}.JCY_CONDI_DATA(TASK_ID, BDHM, LB, XZ, XM,GJ,ZJLX,ZJHM,FZJG,JGHM,CBR,AH,CXKSSJ,CXJSSJ,ZWFKSJ,SQSJ)
+		 values (#TASK_ID:VARCHAR:NULL#,#BDHM:VARCHAR:NULL#, #LB:VARCHAR:NULL#,#XZ:VARCHAR:NULL#,
+				 #XM:VARCHAR:NULL#,#GJ:VARCHAR:NULL#,#ZJLX:VARCHAR:NULL#,#ZJHM:VARCHAR:NULL#,#FZJG:VARCHAR:NULL#,
+				 #JGHM:VARCHAR:NULL#,#CBR:VARCHAR:NULL#,#AH:VARCHAR:NULL#,#CXKSSJ:VARCHAR:NULL#,#CXJSSJ:VARCHAR:NULL#,
+				 #ZWFKSJ:VARCHAR:NULL#,#SQSJ:VARCHAR:NULL#
+		 	)
+		]]>
+	</insert>
+	
+	<!-- 新增 查询条件数据-->
+	<insert id="insertConDataXml" parameterClass="cxqqInfo">
+		<![CDATA[
+		 insert into ${PUB}.JCY_CONDI_DATA(TASK_ID, BDHM, LB, XZ, XM,GJ,ZJLX,ZJHM,FZJG,JGHM,CBR,AH,CXKSSJ,CXJSSJ,ZWFKSJ,SQSJ)
+		 values (#taskId:VARCHAR:NULL#,#BDHM:VARCHAR:NULL#, #LB:VARCHAR:NULL#,#XZ:VARCHAR:NULL#,
+				 #XM:VARCHAR:NULL#,#GJ:VARCHAR:NULL#,#ZJLX:VARCHAR:NULL#,#DSRZJHM:VARCHAR:NULL#,#FZJG:VARCHAR:NULL#,
+				 #JGHM:VARCHAR:NULL#,#CBR:VARCHAR:NULL#,#AH:VARCHAR:NULL#,#CXKSSJ:VARCHAR:NULL#,#CXJSSJ:VARCHAR:NULL#,
+				 #ZWFKSJ:VARCHAR:NULL#,#SQSJ:VARCHAR:NULL#
+		 	)
+		]]>
+	</insert>
+	
+	<!-- 删除任务 -->
+	<delete id="delTask" parameterClass="map">
+		<![CDATA[ delete from ${PUB}.TASK  where TASK_ID = #taskId# ]]>
+	</delete>
+	
+	<!-- 删除任务 -->
+	<delete id="delTaskCondition" parameterClass="map">
+		<![CDATA[ delete from ${PUB}.JCY_CONDI_DATA  where TASK_ID = #taskId# ]]>
+	</delete>
+	
+	<!-- 提交审核任务,审核通过、审核不通过 -->
+	<update id="updateTaskStu" parameterClass="map" >
+		<![CDATA[
+			UPDATE ${PUB}.TASK t SET t.TASK_STU= #taskStu:VARCHAR:NULL#
+		]]>
+			<isEqual property="taskStu" compareValue="1" prepend=",">
+				<![CDATA[t.AUDIT_USER='',t.AUDIT_DATE =null,t.MAKE_SDATE = null,t.AUDIT_INFO='',t.MAKE_INFO='']]>
+			</isEqual>
+			<isEqual property="taskStu" compareValue="3" prepend=",">
+				<![CDATA[t.AUDIT_USER=#AUDIT_USER:VARCHAR:NULL#,t.AUDIT_DATE = CURRENT TIMESTAMP,t.AUDIT_INFO = #audit_info:VARCHAR:NULL#]]>
+			</isEqual>
+			<isEqual property="taskStu" compareValue="4" prepend=",">
+				<![CDATA[t.AUDIT_USER=#AUDIT_USER:VARCHAR:NULL#,t.AUDIT_DATE = CURRENT TIMESTAMP,t.MAKE_SDATE=CURRENT TIMESTAMP]]>
+			</isEqual>
+
+		<![CDATA[  
+			WHERE t.TASK_ID= #TASK_ID:VARCHAR:NULL#
+		]]>
+	</update>
+	
+	<!-- 根据任务编号找到查询条件 -->
+	<select id="findConditionsByTaskId" parameterClass="string"
+		resultClass="java.util.HashMap">
+		<![CDATA[ 
+			SELECT * from ${PUB}.JCY_CONDI_DATA q WHERE q.TASK_ID =  #TASK_ID:VARCHAR:NULL#
+		 ]]>
+	</select>
+	
+	<!-- 成功任务更新进程 -->
+	<update id="successTask" parameterClass="map" >
+		<![CDATA[
+		
+			UPDATE ${PUB}.TASK t SET t.TASK_STU='5',t.MAKE_FILENAME=#filename:VARCHAR:NULL#,t.MAKE_EDATE=CURRENT TIMESTAMP WHERE t.TASK_ID = #taskId:VARCHAR:NULL#
+		]]>
+			
+	</update>
+	
+	<!-- 失败任务更新进程 -->
+	<update id="failTask" parameterClass="map" >
+		<![CDATA[
+			UPDATE ${PUB}.TASK t SET t.MAKE_INFO= #info:VARCHAR:NULL#,t.TASK_STU='6',t.MAKE_EDATE=CURRENT TIMESTAMP WHERE t.TASK_ID = #taskId:VARCHAR:NULL#
+		]]>
+			
+	</update>
+	
+</sqlMap>
+

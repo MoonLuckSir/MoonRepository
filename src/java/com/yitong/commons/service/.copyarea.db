@@ -1,0 +1,6 @@
+ClearCase CopyAreaDB|4
+vobs\judicial\judicial_vob\Judicial\src\java\com\yitong\commons\service
+2
+2
+10:BaseService.java|1|13aaf8295f1|1394|ab9b80c0|45ca00be1e7c11e28ad13440b5b041b8|0
+11:IBaseService.java|1|13aaf8294aa|540|b557db49|459a00a21e7c11e28ad13440b5b041b8|0

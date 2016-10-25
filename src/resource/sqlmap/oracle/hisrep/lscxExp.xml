@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="lscxExp">
+
+	<typeAlias type="com.yitong.commons.model.judicial.LscxExp"
+		alias="lscxExpInfo" />
+
+	<!-- 使用LscxMb装载结果集 -->
+	<resultMap id="lscxExp" class="lscxExpInfo">
+		<result column="EXPMX_NO" property="EXPMX_NO" />
+		<result column="REPMOD_NO" property="REPMOD_NO" />
+		<result column="COLMX_NAME" property="COLMX_NAME" />
+		<result column="PHYSICAL_NAME" property="PHYSICAL_NAME" />
+		<result column="COLMX_DESC" property="COLMX_DESC" />
+		<result column="ALIGN" property="ALIGN" />
+		<result column="ORDERXH" property="ORDERXH" />
+		<result column="ISTOCHAR" property="ISTOCHAR" />
+	</resultMap>
+	
+	<!-- 动态查询 and 列表分页 -->
+	<sql id="queryDynSql">
+		<isNotEmpty prepend="and" property="EXPMX_NO">
+			u.EXPMX_NO like '%$EXPMX_NO$%'
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="REPMOD_NO">
+			u.REPMOD_NO = '$REPMOD_NO$'
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="COLMX_NAME">
+			u.COLMX_NAME = '$COLMX_NAME$'
+		</isNotEmpty>		
+	</sql>
+	
+	
+	<!-- 查询SQL -->
+	<sql id="coreSql">
+		<![CDATA[ select
+					EXPMX_NO,u.REPMOD_NO,u.COLMX_NAME,u.PHYSICAL_NAME,u.COLMX_DESC,u.ALIGN,u.ORDERXH,
+					o.REP_NO,o.REP_NAME,u.ISTOCHAR
+		from ${FINPRO}.REP_EXPMX u left join ${FINPRO}.REP_MOD o on u.REPMOD_NO=o.REPMOD_NO ]]>
+		<dynamic prepend="where">
+			<include refid="queryDynSql" />
+		</dynamic>
+		<![CDATA[ order by ORDERXH ASC   ]]>
+	</sql>
+	<!-- 分页查询 -->
+	<select id="pageQuery" parameterClass="map"
+		resultClass="java.util.HashMap">
+		<include refid="public.pageBegin" />
+		<include refid="coreSql" />
+		<include refid="public.pageEnd" />
+	</select>
+
+	<!-- 分页计数 -->
+	<select id="pageCount" parameterClass="map" resultClass="int">
+		<![CDATA[SELECT count(EXPMX_NO) cnt FROM ${FINPRO}.REP_EXPMX u ]]>
+		<dynamic prepend="where">
+			<include refid="queryDynSql" />
+		</dynamic>
+	</select>
+	<!-- 计数记录数量 -->
+	<select id="maxIndex" parameterClass="string" resultClass="java.util.HashMap">
+		<![CDATA[select 
+		 (case when max(substr(EXPMX_NO,-3,3)) is null then '' else max(substr(EXPMX_NO,-3,3)) end)
+		maxIndex  from ${FINPRO}.REP_EXPMX u where REPMOD_NO = #REPMOD_NO:VARCHAR# ]]>
+	</select>
+	<!-- 新增 -->
+	<insert id="insert" parameterClass="map">
+		<![CDATA[
+		 insert into ${FINPRO}.REP_EXPMX(EXPMX_NO, REPMOD_NO, COLMX_NAME, PHYSICAL_NAME, ALIGN,COLMX_DESC,ORDERXH,ISTOCHAR)
+		 values(#EXPMX_NO#, #REPMOD_NO#, #COLMX_NAME#,#PHYSICAL_NAME:VARCHAR:NULL#,#ALIGN:VARCHAR:NULL#,
+		 		#COLMX_DESC:VARCHAR:NULL#,#ORDERXH:VARCHAR:NULL#,#ORDER:VARCHAR:NULL#)
+		]]>
+	</insert>
+
+	<update id="updateById" parameterClass="map">
+		<![CDATA[ update ${FINPRO}.REP_EXPMX ]]>
+		<!--  -->
+		<dynamic prepend="set">
+			<isNotNull property="COLMX_NAME" prepend=","><![CDATA[COLMX_NAME = #COLMX_NAME#]]></isNotNull>
+			<isNotNull property="PHYSICAL_NAME" prepend=","><![CDATA[PHYSICAL_NAME = #PHYSICAL_NAME#]]></isNotNull>
+			<isNotNull property="ALIGN" prepend=","><![CDATA[ALIGN = #ALIGN#]]></isNotNull>	
+			<isNotNull property="COLMX_DESC" prepend=","><![CDATA[COLMX_DESC = #COLMX_DESC#]]></isNotNull>
+			<isNotNull property="ORDERXH" prepend=","><![CDATA[ORDERXH = #ORDERXH#]]></isNotNull>
+			<isNotNull property="ISTOCHAR" prepend=","><![CDATA[ISTOCHAR = #ISTOCHAR#]]></isNotNull>
+		</dynamic>
+		<![CDATA[ where EXPMX_NO = #EXPMX_NO:VARCHAR# ]]>
+	</update>
+	<!-- 加载 -->
+	<select id="loadById" parameterClass="string"
+		resultClass="java.util.HashMap">
+		<![CDATA[ select u.* ,o.REP_NO,o.REP_NAME from ${FINPRO}.REP_EXPMX u 
+					left join ${FINPRO}.REP_MOD o on u.REPMOD_NO = o.REPMOD_NO
+		 			where u.EXPMX_NO = #EXPMX_NO:VARCHAR# ]]>
+	</select>
+	<select id="getZbxx" parameterClass="string" resultClass="java.util.HashMap">
+		<![CDATA[ select u.* from ${FINPRO}.REP_MOD  u
+		 where u.REPMOD_NO = #REPMOD_NO:VARCHAR# ]]>
+	</select>	
+	
+	<!-- 查询 -->
+	<select id="query" parameterClass="map"
+		resultClass="java.util.HashMap">
+		<include refid="coreSql" />
+	</select>
+	<!-- 查询 -->
+	<select id="query1" parameterClass="map"
+		resultClass="java.util.HashMap">
+		<include refid="coreSql" />
+	</select>
+	<!-- 删除 -->
+	<delete id="delete" parameterClass="map">
+		<![CDATA[ delete from ${FINPRO}.REP_EXPMX  where EXPMX_NO = #EXPMX_NO# ]]>
+	</delete>
+
+
+</sqlMap>
+

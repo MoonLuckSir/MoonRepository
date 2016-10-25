@@ -1,0 +1,378 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="plcx">
+
+	<typeAlias type="com.yitong.commons.model.judicial.plcx"
+		alias="plcx" />
+
+	<select resultClass="String" id="getBatchId">
+		SELECT NEXTVAL FOR ${PUB}.BATCHID_SEQ FROM SYSIBM.SYSDUMMY1
+	</select>
+
+	<!-- 新增 BATCH_IMPORT表内容-->
+	<insert id="insert" parameterClass="map">
+		<![CDATA[
+		INSERT INTO ${PUB}.BATCH_IMPORT (BATCH_ID
+		    , IMPORT_TIME
+		    , IMPORT_USER
+		    , IMPORT_ORG
+		    , IMPORT_FILE_NAME
+		    , UPLOAD_FILE_NAME
+		    , RESULT_FILE_NAME
+		    , FLAG
+		   	, IMPORT_ROW_NUM
+		    , IMPORT_STATUS
+		    , BATCH_TYPE)
+		VALUES
+		    ( #batchId:VARCHAR:NULL#
+		    , current timestamp
+		    , #user:VARCHAR :NULL#
+		    , #orgNo:VARCHAR :NULL#
+		    , #importFileName:VARCHAR:NULL#
+		    , #uploadFileName:VARCHAR:NULL#
+		    , #resultFileName:VARCHAR:NULL#
+		    , #flag:VARCHAR :NULL#
+		    , #importRowNum:INTEGER#
+		    , '0'
+		    , #batchType:VARCHAR:NULL#)
+		]]>
+	</insert>
+
+	<!-- 新增  BATCH_IMPORT_DETAIL表内容-->
+	<insert id="addInfo" parameterClass="map">
+		<![CDATA[
+		INSERT INTO ${PUB}.BATCH_IMPORT_DETAIL
+			(
+			BATCH_ID,
+			IMPORT_NO,
+			IMPORT_NO_TYPE,
+			START_DATE_QUERY,
+			END_DATE_QUERY
+			)
+		VALUES 
+			(
+			#batchId:VARCHAR:NULL#,
+			#importNo:VARCHAR:NULL#,
+			#importNoType:VARCHAR:NULL#,
+			#startDate:VARCHAR:NULL#,
+			#endDate:VARCHAR:NULL#
+			)
+		]]>
+	</insert>
+
+
+
+	<!-- 加载       根据上传文件名加载 -->
+	<select id="loadBatchId" parameterClass="map"
+		resultClass="java.util.HashMap">
+		<![CDATA[ select b.* from ${PUB}.BATCH_IMPORT b 
+		 			where b.UPLOAD_FILE_NAME = #saveName:VARCHAR# ]]>
+	</select>
+
+
+	<!-- 动态查询 and 列表分页 -->
+	<sql id="queryDynSql">
+		<isNotEmpty prepend="and" property="importUser">
+			bi.IMPORT_USER = #importUser:VARCHAR:NULL#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="importFileName">
+			bi.IMPORT_FILE_NAME LIKE '%'||#importFileName:VARCHAR:NULL#||'%'
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="importStatus">
+			bi.IMPORT_STATUS = #importStatus:VARCHAR:NULL#
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="batchType">
+			bi.BATCH_TYPE = #batchType:VARCHAR:NULL#
+		</isNotEmpty>
+	</sql>
+	<!-- 查询SQL -->
+	<sql id="coreSqlCommitAudit">
+		<![CDATA[ 
+			select BI.BATCH_ID,BI.IMPORT_TIME,BI.IMPORT_FILE_NAME,BI.UPLOAD_FILE_NAME,
+				   BI.RESULT_FILE_NAME,BI.FLAG,BI.BATCH_TYPE,BIC.BATCH_TYPE_NAME,
+				   BI.IMPORT_STATUS,
+				ROW_NUMBER() OVER(ORDER BY BI.IMPORT_TIME ) AS rn 
+			from ${PUB}.BATCH_IMPORT BI
+			left join ${PUB}.BATCH_IMPORT_CONFIG BIC ON BI.BATCH_TYPE = BIC.BATCH_TYPE
+		]]>
+		<dynamic prepend="where">
+			<include refid="queryDynSql" />
+		</dynamic>
+		<![CDATA[ 
+			AND BIC.IS_VALID = 'Y'
+		]]>
+	</sql>
+	<!-- 分页查询 -->
+	<select id="pageQueryCommitAudit" parameterClass="map"
+		resultClass="java.util.HashMap">
+		<include refid="public.pageBegin" />
+		<include refid="coreSqlCommitAudit" />
+		<include refid="public.pageEnd" />
+	</select>
+
+	<!-- 分页计数 -->
+	<select id="pageCountCommitAudit" parameterClass="map"
+		resultClass="int">
+		<![CDATA[
+			SELECT count(1) cnt 
+			FROM ${PUB}.BATCH_IMPORT BI 
+		]]>
+		<dynamic prepend="where">
+			<include refid="queryDynSql" />
+		</dynamic>
+	</select>
+
+
+	<!-- 提交审核操作 -->
+	<update id="commitAudit" parameterClass="string">
+		<![CDATA[
+			update ${PUB}.BATCH_IMPORT
+			set IMPORT_STATUS='1',COMMIT_AUDIT_TIME = CURRENT TIMESTAMP
+			where BATCH_ID = #batchId:VARCHAR:NULL#
+		]]>
+	</update>
+
+	<!-- 获取批量查询交易名称 -->
+	<select id="getBatchTypes" resultClass="java.util.HashMap">
+		<![CDATA[
+			select BATCH_TYPE,BATCH_TYPE_NAME
+			from ${PUB}.BATCH_IMPORT_CONFIG
+		]]>
+	</select>
+	
+	<!-- 获取有效的批量查询交易名称 -->
+	<select id="getBatchTypesQy" resultClass="java.util.HashMap">
+		<![CDATA[
+			select BATCH_TYPE,BATCH_TYPE_NAME
+			from ${PUB}.BATCH_IMPORT_CONFIG where IS_VALID = 'Y' 
+			ORDER BY BATCH_TYPE
+		]]>
+	</select>
+	
+	<!-- 获取批量查询是否需要查询日期条件 -->
+	<select id="getDateQueryFlag" resultClass="java.util.HashMap">
+		<![CDATA[
+			select NEED_QUERY_DATE
+			from ${PUB}.BATCH_IMPORT_CONFIG
+			where BATCH_TYPE = #batchType# and IS_VALID = 'Y'
+		]]>
+	</select>
+	
+	<!-- 获取批量查询某交易类型对应的证件类型 -->
+	<select id="getQueryNoType" resultClass="java.util.HashMap">
+		<![CDATA[
+			select QUERY_NO_TYPE
+			from ${PUB}.BATCH_IMPORT_CONFIG
+			where BATCH_TYPE = #batchType# and IS_VALID = 'Y'
+		]]>
+	</select>
+	
+	<!-- 获取批量查询某交易类型对应的配置信息 -->
+	<select id="getBatchImportConfigInfo" resultClass="java.util.HashMap" >
+		<![CDATA[
+			select BATCH_TYPE,BATCH_TYPE_NAME,NEED_QUERY_DATE,QUERY_NO_TYPE
+			from ${PUB}.BATCH_IMPORT_CONFIG
+			where BATCH_TYPE = #batchType# and IS_VALID = 'Y'
+		]]>
+	</select>
+	
+	<!-- 获取批量查询excel中的账号类型 -->
+	<select id="getImportNoTypes" resultClass="java.util.HashMap">
+		<![CDATA[
+			select var_name,value
+			from ${PUB}.SYS_VAR
+			where var_type = '003'
+		]]>
+	</select>
+	
+	<select id="getImportNoTypesNamesWithValue" resultClass="java.util.HashMap" parameterClass="java.util.HashMap">
+		<![CDATA[
+			select var_name,value
+			from ${PUB}.SYS_VAR
+			where var_type = '003'
+		]]>
+		<isNotEmpty prepend="and" property="queryNoTypes">
+			value in ($queryNoTypes$)
+		</isNotEmpty>
+	</select>
+	
+	<!-- 获取批量查询excel中的列名 -->
+	<select id="getExcelColumns" resultClass="java.lang.String">
+		<![CDATA[
+			select var_name
+			from ${PUB}.SYS_VAR
+			where var_type = '004'
+			order by value 
+		]]>
+	</select>
+
+
+	<!-- 审核列表 -->
+	<!-- 查询SQL -->
+	<sql id="coreSqlAudit">
+		<![CDATA[ 
+			select BI.BATCH_ID,BI.IMPORT_TIME,BI.IMPORT_FILE_NAME,BI.UPLOAD_FILE_NAME,
+				   BI.RESULT_FILE_NAME,BI.FLAG,BI.BATCH_TYPE,BIC.BATCH_TYPE_NAME,
+				   BI.IMPORT_STATUS,
+				ROW_NUMBER() OVER(ORDER BY BI.IMPORT_TIME DESC) AS rn 
+			from ${PUB}.BATCH_IMPORT BI
+			left join ${PUB}.BATCH_IMPORT_CONFIG BIC ON BI.BATCH_TYPE = BIC.BATCH_TYPE
+			where bi.import_status in ('1','2','3')
+		]]>
+		<dynamic>
+			<include refid="queryDynSql" />
+		</dynamic>
+		<![CDATA[
+			AND BIC.IS_VALID = 'Y'
+		]]>
+	</sql>
+	<!-- 分页查询 -->
+	<select id="pageQueryAudit" parameterClass="map"
+		resultClass="java.util.HashMap">
+		<include refid="public.pageBegin" />
+		<include refid="coreSqlAudit" />
+		<include refid="public.pageEnd" />
+	</select>
+
+	<!-- 分页计数 -->
+	<select id="pageCountAudit" parameterClass="map" resultClass="int">
+		<![CDATA[
+			SELECT count(1) cnt 
+			FROM ${PUB}.BATCH_IMPORT BI 
+			where bi.import_status in ('1','2','3')
+		]]>
+		<dynamic>
+			<include refid="queryDynSql" />
+		</dynamic>
+	</select>
+
+	<!-- 审核操作：更新主表 审核人、审核机构、审核时间、审核意见、状态 -->
+	<update id="auditBatchImport" parameterClass="map" >
+		<![CDATA[
+			update ${PUB}.BATCH_IMPORT
+			set audit_user = #userId:VARCHAR:NULL#,
+				audit_org = #orgId:VARCHAR:NULL#,
+				audit_time = current timestamp,
+				audit_remark = #auditRemark:VARCHAR:NULL#,
+				import_status = #importStatus:VARCHAR:NULL#
+			where batch_id in 
+		]]>
+		<iterate property="batchIds" open="(" close=")"
+			conjunction=",">
+			#batchIds[]#
+		</iterate>
+	</update>
+
+	<!-- 审核操作：审核不通过时，需要删除batch_import_detail相关数据-->
+	<delete id="deleteBatchImportDetail" parameterClass="map">
+		<![CDATA[
+			delete from ${PUB}.BATCH_IMPORT_DETAIL
+			where batch_id in
+		]]>
+		<iterate property="batchIds" open="(" close=")"
+			conjunction=",">
+			#batchIds[]#
+		</iterate>
+	</delete>
+
+	<!-- 提交审核列表：对于未提交、审核不通过的记录，可以进行删除操作 -->
+	<delete id="deleteBatchImport" parameterClass="map">
+		<![CDATA[
+			delete from ${PUB}.BATCH_IMPORT
+			where batch_id in
+		]]>
+		<iterate property="batchIds" open="(" close=")"
+			conjunction=",">
+			#batchIds[]#
+		</iterate>
+	</delete>
+
+
+
+	<!-- 批量查询结果文件列表 -->
+	<!-- 查询SQL -->
+	<sql id="coreSqlDownload">
+		<![CDATA[ 
+			select BI.BATCH_ID,BI.IMPORT_TIME,BI.IMPORT_FILE_NAME,BI.UPLOAD_FILE_NAME,
+				   BI.RESULT_FILE_NAME,BI.FLAG,BI.BATCH_TYPE,BIC.BATCH_TYPE_NAME,
+				   BI.IMPORT_STATUS,BI.START_TIME,BI.END_TIME,
+				ROW_NUMBER() OVER(ORDER BY BI.IMPORT_TIME DESC) AS rn 
+			from ${PUB}.BATCH_IMPORT BI
+			left join ${PUB}.BATCH_IMPORT_CONFIG BIC ON BI.BATCH_TYPE = BIC.BATCH_TYPE
+			where bi.import_status in ('2','3','4','5','6')
+		]]>
+		<dynamic>
+			<include refid="queryDynSql" />
+		</dynamic>
+		<![CDATA[
+			AND IS_VALID = 'Y' 
+		]]>
+	</sql>
+	<!-- 分页查询 -->
+	<select id="pageQueryDownload" parameterClass="map"
+		resultClass="java.util.HashMap">
+		<include refid="public.pageBegin" />
+		<include refid="coreSqlDownload" />
+		<include refid="public.pageEnd" />
+	</select>
+
+	<!-- 分页计数 -->
+	<select id="pageCountDownload" parameterClass="map"
+		resultClass="int">
+		<![CDATA[
+			SELECT count(1) cnt 
+			FROM ${PUB}.BATCH_IMPORT BI 
+			where bi.import_status in ('2','3','4','5','6')
+		]]>
+		<dynamic>
+			<include refid="queryDynSql" />
+		</dynamic>
+	</select>
+
+	<!-- 批量查询结果文件：重新生成 -->
+	<update id="resetImportStatus" parameterClass="string">
+		<![CDATA[
+			update ${PUB}.BATCH_IMPORT
+			set import_status = '2'
+			where batch_id = #batchId:VARCHAR:NULL#
+			and import_status = '6'
+		]]>
+	</update>
+	
+	<!-- 审核通过时，获取立即生成的数目-->
+	<select id="countGenRightNowNum" parameterClass="map"
+		resultClass="int">
+		<![CDATA[
+			SELECT count(1) cnt 
+			FROM ${PUB}.BATCH_IMPORT 
+			where flag='1' and batch_id in
+		]]>
+		<iterate property="batchIds" open="(" close=")"
+			conjunction=",">
+			#batchIds[]#
+		</iterate>
+	</select>
+	
+	<!-- 审核通过时，有立即生成的记录，需要更新HISUSR.SCTJST 的状态值 -->
+	<update id="updateStatusGenRightNow" >
+		<![CDATA[
+			update ${HISUSR}.SCTJST
+			set JSTSTU = '0'
+			where JSTDT=(CURRENT DATE -1 days)
+			and JSTSTU = '5'
+			and JOBID =196013
+		]]>
+	</update>
+	
+	<!-- 审核通过时，获取立即生成的数目-->
+	<select id="viewviewAuditRemark" parameterClass="string"
+		resultClass="java.util.HashMap">
+		<![CDATA[
+			SELECT  bi.import_status,bi.audit_remark,bi.audit_time,ui.user_name audit_user_name
+			FROM ${PUB}.BATCH_IMPORT bi
+			left join ${PUB}.user_info ui on bi.audit_user = ui.user_id
+			where bi.batch_id =#batchId:VARCHAR:NULL#
+		]]>
+	</select>
+</sqlMap>
+

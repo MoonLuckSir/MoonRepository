@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:aop="http://www.springframework.org/schema/aop"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-2.0.xsd
+           http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-2.0.xsd
+           http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-2.0.xsd"
+	default-autowire="byName"> 
+	
+	<bean name="/login"
+		class="com.yitong.app.action.system.LoginAction" scope="singleton">
+	</bean>
+	
+	<bean name="/system/menu"
+		class="com.yitong.app.action.system.MenuAction" scope="singleton">
+	</bean>
+	
+	<bean name="/system/organ"
+		class="com.yitong.app.action.system.OrganAction" scope="singleton">
+	</bean>
+	
+	<bean name="/system/role"
+		class="com.yitong.app.action.system.RoleAction" scope="singleton">
+	</bean>
+	
+	<bean name="/system/user"
+		class="com.yitong.app.action.system.UserAction" scope="singleton">
+	</bean>
+	
+	<bean name="/system/sysvar"
+		class="com.yitong.app.action.system.SysvarAction" scope="singleton">
+	</bean>
+	 
+    <bean name="/system/paramHis"
+		class="com.yitong.app.action.system.ParamHisAction" scope="singleton">
+	</bean>
+	
+	<!-- 批量设置 -->
+	<bean name="/judicial/batchset"
+		class="com.yitong.app.action.judicial.batchset.BatchSetAction" scope="singleton">
+	</bean>
+</beans>

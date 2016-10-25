@@ -1,0 +1,48 @@
+<html>
+<head> 
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="../../styles/theme/css/top.css" />
+</head>
+<body>
+	<table width="100%" height="86" border="0" cellpadding="0" cellspacing="0" >
+		<tr>
+		   <td background="../../styles/theme/images/index/top.gif" width="650"></td>
+		   <td height="80" align="right"  background="../../styles/theme/images/index/top1.gif">      
+		    <table height="100%" border="0" cellpadding="0" cellspacing="0">
+		      <tr>
+		        <td height="40" align="right">
+		        <table width="100%" border="0" cellspacing="0" cellpadding="0" class="white">
+		          <tr>
+		            <td align="right" nowrap="nowrap">欢迎&nbsp;<span id="user"></span>&nbsp;用户！</td>
+		            <td width="85" align="center">
+		            <a id="indexLink" target="mainFrame" href="#">首页</a>
+		            <img src="../../styles/theme/images/index/quit.gif" width="16" height="16" align="absmiddle" /> 
+		            <a href="../../pages/index/logout.jsp" target="_top">注销</a>&nbsp;</td>
+		            </tr>
+		        </table></td>
+		      </tr>
+		      <tr>
+		      <td height="30" align="right" valign="bottom">
+		      <table height="30" border="0" cellpadding="0" cellspacing="0" class="white">
+		          <tr>            
+			        <td align="left">&nbsp;</td>
+			        <td width="18" height="30" align="left" background="../../styles/theme/images/index/top_but_arr.gif">&nbsp;</td>
+			        <script language="javascript">document.write(parent.writeTopMenus());</script>
+		          </tr>
+		        </table></td>
+		      </tr>
+		    </table></td>		    
+		  </tr>		  
+		  <tr>
+		    <td colspan="2" height="8" align="right" background="../../styles/theme/images/index/top2.gif">
+		  </tr>
+	</table>
+</body>
+<script language="javascript">  
+	var init=function(){	
+		document.getElementById("user").innerHTML=parent.user.userName;  
+		var indexLink=document.getElementById("indexLink");
+		indexLink.href=parent.indexUrl();
+	}();
+</script>
+</html>

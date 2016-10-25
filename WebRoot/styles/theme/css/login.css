@@ -1,0 +1,86 @@
+BODY {
+	margin: 0px;
+	font-size: 12px;
+}
+img,image{
+	border: 0;
+}
+form{
+	margin:0;border: 0;
+}
+td.white{
+	font-size: 12px;
+	color: #fff;
+}
+.label{
+	padding:3px 1px;
+	font-size: 12px;
+	color: #000;	
+}
+input.btn { 
+	font-size: 12px;
+	border: 1px solid #6daee2;
+	background-color: #fff;
+	padding: 2px;
+	height: 22px;
+	cursor: hand;
+}
+
+span.validate {
+	color: #f00;
+	text-decoration: none;
+	border-style: none; 
+} 
+
+.fontRed {
+	color: red;
+	font-size: 12px;
+}
+.gridToolbar {
+	background-color: #F0F0F0;
+}
+
+table.lst_toolbar {
+	background-color: #f3f3f3; 
+	border-left: 1 solid #DFDFDF;
+	border-right: 1 solid #DFDFDF;
+	border-bottom: 1 solid #DFDFDF;
+}
+
+table.lst_toolbar td {
+	padding: 5px;
+}
+
+div.loading {
+	padding-left: 30px;
+	line-height: 30px;
+	background: #fbfbfb url(../images/main/wait.gif) no-repeat 5px 5px;
+}
+.mesWindow {
+	border-top: 3px solid #6893cf;
+	border-left: 1px solid #6893cf;
+	border-right: 1px solid #6893cf;
+	border-bottom: 1px solid #6893cf;
+	background: #fff; 
+}
+
+.mesWindowTop {
+	border-bottom: #eee 1px solid;
+	margin: 0px 4px;
+	padding: 3px;
+	font-weight: bold;
+	text-align: left;
+	font-size: 12px;
+}
+
+.mesWindowContent {
+	margin: 4px;
+	font-size: 12px;
+}
+
+/* ¹Ì¶¨±íÍ· */
+.fixedRow {
+	position: relative;
+	top: expression(this . offsetParent . scrollTop);
+	z-index: 10;
+}

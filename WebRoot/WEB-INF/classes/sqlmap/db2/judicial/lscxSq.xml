@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE sqlMap PUBLIC "-//ibatis.apache.org//DTD SQL Map 2.0//EN" "http://ibatis.apache.org/dtd/sql-map-2.dtd" >
+<sqlMap namespace="lscxSq">
+
+	<typeAlias type="com.yitong.commons.model.judicial.lscxSq"
+		alias="lscxSqInfo" />
+
+	<!-- 使用LscxMb装载结果集 -->
+	<resultMap id="lscxSq" class="lscxSqInfo">
+		<result column="REQ_NO" property="REQ_NO" />
+		<result column="REPMOD_NO" property="REPMOD_NO" />
+		<result column="CHECKIN_USER" property="CHECKIN_USER" />
+		<result column="CHECKIN_DEPT" property="CHECKIN_DEPT" />
+		<result column="CHECKIN_ORGAN" property="CHECKIN_ORGAN" />
+		<result column="CHECKIN_TIME" property="CHECKIN_TIME" />
+		<result column="STATE" property="STATE" />
+		<result column="CONS_PAR" property="CONS_PAR" />
+		<result column="REP_DESC" property="REP_DESC" />
+		<result column="REPCON" property="REPCON" />
+		<result column="REP_SQL" property="REP_SQL" />
+		<result column="DQJG" property="DQJG" />
+		<result column="CONJG" property="CONJG" />
+	</resultMap>
+	<update id="updateById" parameterClass="map">
+		<![CDATA[ update ${PUB}.REP_REQ ]]>
+		<!--  -->
+		<dynamic prepend="set">
+			<isNotNull property="REP_DESC" prepend=","><![CDATA[REP_DESC = #REP_DESC#]]></isNotNull>
+			<isNotNull property="CONS_PAR" prepend=","><![CDATA[CONS_PAR = #CONS_PAR#]]></isNotNull>
+			<isNotNull property="REPCON" prepend=","><![CDATA[REPCON = #REPCON#]]></isNotNull>
+			<isNotNull property="DQJG" prepend=","><![CDATA[DQJG = #DQJG#]]></isNotNull>
+			<isNotNull property="STATE" prepend=","><![CDATA[STATE = #STATE#]]></isNotNull>
+			<isNotNull property="REP_SQL" prepend=","><![CDATA[REP_SQL = #REP_SQL#]]></isNotNull>
+			
+		</dynamic>
+		<![CDATA[ where REQ_NO = #REQ_NO:VARCHAR# ]]>
+	</update>
+	<!-- 动态查询 and 列表分页 -->
+	<sql id="queryDynSql">
+	    <isNotEmpty prepend="and" property="REQ_NO">
+			u.REQ_NO like '%$REQ_NO$%'
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="STATE">
+			u.STATE  in ($STATE$)
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="CHECKIN_DEPT">
+			u.CHECKIN_DEPT ='$CHECKIN_DEPT$'
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="CHECKIN_ORGAN">
+			u.CHECKIN_ORGAN ='$CHECKIN_ORGAN$'
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="CHECKIN_USER">
+			u.CHECKIN_USER ='$CHECKIN_USER$'
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="REPMOD_NO">
+			u.REPMOD_NO like '%$REPMOD_NO$%'
+		</isNotEmpty>
+		<isNotEmpty prepend="and" property="CONDITION">
+			 $CONDITION$
+		</isNotEmpty>
+		
+	</sql>
+	
+	
+	<!-- 查询SQL -->
+	<sql id="coreSql">
+		<![CDATA[ select REQ_NO, REPMOD_NO, a.user_name CHECKIN_USER, CHECKIN_DEPT, b.ORG_NAME CHECKIN_ORGAN, CHECKIN_TIME, STATE, CONS_PAR, REP_DESC, REPCON, REP_SQL ,DQJG,CONJG,ROW_NUMBER() OVER(order by REQ_NO) AS rn  from ${PUB}.REP_REQ u left join YTPUB.USER_INFO  a on  u.CHECKIN_USER=a.user_id  left join YTPUB.ORGAN b on   u.CHECKIN_ORGAN =b.ORG_NO ]]>
+		<dynamic prepend="where">
+			<include refid="queryDynSql" />
+		</dynamic>
+	</sql>
+	
+	<!-- 分页查询 -->
+	<select id="pageQuery" parameterClass="map"
+		resultClass="java.util.HashMap">
+		<include refid="public.pageBegin" />
+		<include refid="coreSql" />
+		<include refid="public.pageEnd" />
+	</select>
+
+	<!-- 分页计数 -->
+	<select id="pageCount" parameterClass="map" resultClass="int">
+		<![CDATA[SELECT count(REQ_NO) cnt FROM ${PUB}.REP_REQ u ]]>
+		<dynamic prepend="where">
+			<include refid="queryDynSql" />
+		</dynamic>
+	</select>
+	<!-- 计数记录数量 -->
+	<select id="countRows" parameterClass="string" resultClass="java.util.HashMap">
+		<![CDATA[ select count(1) rows from ${PUB}.REP_REQ u  
+		 			where substr(char(CHECKIN_TIME),1,10) = #CHECKIN_TIME:VARCHAR# ]]>
+	</select>
+	<!-- 新增 -->
+	<insert id="insert" parameterClass="map">
+		<![CDATA[
+		 insert into ${PUB}.REP_REQ(REQ_NO, REPMOD_NO, CHECKIN_USER, CHECKIN_DEPT, CHECKIN_ORGAN,CHECKIN_TIME, STATE, CONS_PAR, REP_DESC, REPCON, REP_SQL,DQJG,CONJG)
+		 values(#REQ_NO#, #REPMOD_NO#, #CHECKIN_USER#,#CHECKIN_DEPT#,#CHECKIN_ORGAN#,#CHECKIN_TIME:TIMESTAMP:NULL#,#STATE:VARCHAR:NULL#,
+		 #CONS_PAR:VARCHAR:NULL#,#REP_DESC:VARCHAR:NULL#,#REPCON:VARCHAR:NULL#,#REP_SQL:VARCHAR:NULL#,#DQJG:VARCHAR:NULL#,#CONJG:VARCHAR:NULL#)
+		]]>
+	</insert>
+
+	<!-- 加载 -->
+	<select id="loadById" parameterClass="string"
+		resultClass="java.util.HashMap">
+		<![CDATA[ select REQ_NO, u.REPMOD_NO, a.user_name CHECKIN_USER, u.CHECKIN_DEPT, b.ORG_NAME CHECKIN_ORGAN, u.CHECKIN_TIME, u.STATE, CONS_PAR, u.REP_DESC, REPCON, REP_SQL ,REP_NO, REP_NAME from ${PUB}.REP_REQ u left join ${PUB}.REP_MOD c on u.REPMOD_NO=c.REPMOD_NO left join YTPUB.USER_INFO  a on  u.CHECKIN_USER=a.user_id  left join YTPUB.ORGAN b on   u.CHECKIN_ORGAN =b.ORG_NO
+		 			where REQ_NO = #REQ_NO:VARCHAR# ]]>
+	</select>
+	
+	
+	<!-- 查询 -->
+	<select id="query" parameterClass="map"
+		resultClass="java.util.HashMap">
+		<include refid="coreSql" />
+	</select>
+	<select id="maxIndex" parameterClass="string" resultClass="java.util.HashMap">
+		<![CDATA[ select (case when max(right(REQ_NO,4)) is null then '' else max(right(REQ_NO,4)) end) maxIndex
+		 			from ${PUB}.REP_REQ u  
+		 			where substr(char(CHECKIN_TIME),1,10) = #CHECKIN_TIME:VARCHAR# ]]>
+	</select>
+	
+	<!-- 删除 -->
+	<delete id="delete" parameterClass="map">
+		<![CDATA[ delete from ${PUB}.REP_REQ  where REQ_NO = #REQ_NO# ]]>
+	</delete>
+	
+	<!-- 加载 -->
+	<select id="loadRoleById" parameterClass="map"
+		resultClass="java.util.HashMap">
+		<![CDATA[ select * from ${PUB}.REP_REQ u where REQ_NO = #REQ_NO:VARCHAR# ]]>
+	</select>
+</sqlMap>
+

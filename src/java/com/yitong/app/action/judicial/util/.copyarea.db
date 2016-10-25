@@ -1,0 +1,8 @@
+ClearCase CopyAreaDB|4
+vobs\judicial\judicial_vob\Judicial\src\java\com\yitong\app\action\judicial\util
+2
+4
+e:CsvWriter.java|1|13aaf8254c5|3ff1|4f3ca04d|3dd9fb621e7c11e28ad13440b5b041b8|0
+d:HisParam.java|1|14201baeb8e|208|518aa5b1|39f23092403811e38cb63440b5b041b8|0
+e:CsvReader.java|1|13aaf82560d|c137|a956e84f|3e19fb7e1e7c11e28ad13440b5b041b8|0
+a:Tools.java|1|14201baee2e|322|a4f4df05|3a12309a403811e38cb63440b5b041b8|0
